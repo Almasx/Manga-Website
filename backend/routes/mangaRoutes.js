@@ -11,8 +11,8 @@ const { protect } = require("../middleware/userMiddleware");
 const { uploadImages } = require("../middleware/uploadMiddleware");
 
 router.route("/").get(getCatalog).post(createManga);
-router.get(":name", getManga);
-router.post(":name/chapter", uploadImages, addChapter);
-router.get(":name/chapter/:chapterID", getChapter);
+router.get("/:manga_id", getManga);
+router.post("/:manga_id/chapter", uploadImages, addChapter);
+router.get("/:manga_id/chapter/:chapter_id", getChapter);
 
 module.exports = router;

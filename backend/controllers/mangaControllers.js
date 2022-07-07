@@ -1,12 +1,15 @@
 const asyncHandler = require("express-async-handler");
-const fs = require("fs");
+
 const Manga = require("../models/mangaModel");
 const Genre = require("../models/genreModel");
 const Chapter = require("../models/chapterModel");
+
+const fs = require("fs");
 const path = require("path");
+const sharp = require("sharp");
 
 // @desc    Get & Filter/Sort Catalog
-// @route   GET /api/mangas
+// @route   GET /api/manga
 // @access  public
 const getCatalog = asyncHandler(async (req, res) => {
   const filters = {};
@@ -16,14 +19,13 @@ const getCatalog = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get information about manga
-// @route   Get /api/mangas/:name/
+// @route   Get /api/manga/:manga_id/
 // @access  public
 const getManga = asyncHandler(async (req, res) => {
-  const { name } = req.body;
+  const { manga_id } = req.params;
+  const manga = await Manga.findById(manga_id);
 
-  const manga = await Manga.findOne({ name });
-
-  // Check for duplicates
+  // Check manga
   if (!manga) {
     res.status(400);
     throw new Error("Manga not found");
@@ -35,41 +37,40 @@ const getManga = asyncHandler(async (req, res) => {
 // @route   POST /api/mangas/
 // @access  private
 const createManga = asyncHandler(async (req, res) => {
-  const { name, genres, description } = req.body;
-  if (!name || !genres || !description) {
+  const { title, genres, description } = req.body;
+  if (!title || !genres || !description) {
     return res.json({ message: "Incomplete request!" });
   }
 
-  const manga = await Manga.findOne({ name });
+  const mangaExist = await Manga.findOne({ title });
 
   // Check for duplicates
-  if (manga) {
+  if (mangaExist) {
     res.status(400);
     throw new Error("Manga already exists");
   }
 
-  // Wire each genre with collection
-  genres = [...genres];
-  genres.forEach((item) => {
-    Genre.findOne({ text: item })._id.toString();
-  });
+  for await (const [index, name] of genres.entries()) {
+    let genre = await Genre.findOne({ text: name });
+    genres[index] = genre._id.toString();
+  }
 
-  manga = await Manga.create({ name, genres, description }, (error) => {
+  const manga = await Manga.create({ title, genres, description }, (error) => {
     console.log(error);
     res.status(500);
     throw new Error("Something went wrong");
   });
 
-  res.status(200).json({ message: `Manga ${manga.name} created!` });
+  res.status(200).json(manga);
 });
 
 // @desc    Open Chapter
-// @route   Get /api/manga/:name/chapter/:chapterID
+// @route   Get /api/manga/:manga_id/chapter/:chapter_id
 // @access  public/private
 const getChapter = asyncHandler(async (req, res) => {
-  const { name, chapterID } = req.body;
+  const { manga_id, chapter_id } = req.params;
 
-  const manga = await Manga.findOne({ name });
+  const manga = await Manga.findById(manga_id);
 
   // Validate manga
   if (!manga) {
@@ -78,7 +79,7 @@ const getChapter = asyncHandler(async (req, res) => {
   }
 
   const chapterExist = manga.chapters.filter((_id) => {
-    _id === chapterID;
+    _id === chapter_id;
   });
 
   // Check for chapter
@@ -87,21 +88,23 @@ const getChapter = asyncHandler(async (req, res) => {
     throw new Error("Chapter not found");
   }
 
-  const chapter = Chapter.findById(chapterID);
+  const chapter = Chapter.findById(chapter_id);
   res.status(200).json(chapter);
 });
 
 // @desc    Add new Chapter
-// @route   POST /api/manga/:name/chapter
+// @route   POST /api/manga/:manga_id/chapter
 // @access  private
 const addChapter = asyncHandler(async (req, res) => {
-  const { volume, name } = req.body;
+  const { volume } = req.body;
+  const { manga_id } = req.params;
+
   if (!req.files || !volume) {
     res.status(400);
     throw new Error("Invalid request to add chapter");
   }
 
-  const manga = await Manga.findOne({ name });
+  const manga = await Manga.findById(manga_id);
 
   // Validate manga
   if (!manga) {
@@ -109,27 +112,40 @@ const addChapter = asyncHandler(async (req, res) => {
     throw new Error("Manga not found");
   }
 
-  const chapterId = await chapterSchema.findOne().index;
-  const uploadPath = path.join(__dirname, UPLOAD_DIR, chapterId + 1);
+  let chapter = new Chapter({ volume });
+  await chapter.save();
+
+  const uploadPath = path.join(
+    __dirname,
+    "../../",
+    process.env.UPLOAD_DIR,
+    chapter._id.toString()
+  );
 
   const images = [];
   fs.mkdirSync(uploadPath);
-  for (let i = 0; i < req.files.length; i++) {
-    let pagePath = path.join(uploadPath, index);
-    await sharp(req.files.buffer)
+  for (let i = 1; i <= req.files.length; i++) {
+    let pagePath = path.join(uploadPath, i.toString() + ".jpeg");
+    let pageURI = `${req.get(
+      "host"
+    )}/uploads/chapter/${chapter._id.toString()}/pages/${i.toString()}`;
+
+    await sharp(req.files[i - 1].buffer)
       .toFormat("jpeg")
       .jpeg({ quality: 90 })
       .toFile(pagePath);
-    images.push(pagePath);
+    images.push(pageURI);
   }
-  const chapter = await new Chapter({ volume, images });
-  chapter.save((error) => {
-    console.log(error);
-    res.status(500);
-    throw new Error("Something went wrong");
-  });
 
+  await Chapter.findByIdAndUpdate(chapter._id.toString(), { images });
+  chapter = await Chapter.findById(chapter._id.toString());
   res.status(200).json(chapter);
 });
 
-module.exports = { getCatalog, getManga, createManga, getChapter, addChapter };
+module.exports = {
+  getCatalog,
+  getManga,
+  createManga,
+  getChapter,
+  addChapter,
+};
