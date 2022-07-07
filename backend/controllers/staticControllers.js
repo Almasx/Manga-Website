@@ -1,6 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const path = require("path");
+
 const Chapter = require("../models/chapterModel");
+const Manga = require("../models/mangaModel");
 
 // @desc    URI for page
 // @route   GET /uploads/chapter/:chapter_id/pages/:page_index
@@ -26,4 +28,22 @@ const getPage = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { getPage };
+// @desc    URI for manga thumbnail
+// @route   GET /uploads/thumbnail/:manga_id
+// @access  public
+const getThumbnail = asyncHandler(async (req, res) => {
+  const { manga_id } = req.params;
+  const manga = await Manga.findById(manga_id);
+
+  // Check manga
+  if (!manga) {
+    res.status(400);
+    throw new Error("manga not found");
+  }
+
+  res.sendFile(`./public/thumbnails/${manga_id}.jpeg`, {
+    root: path.join(__dirname, "../../"),
+  });
+});
+
+module.exports = { getPage, getThumbnail };

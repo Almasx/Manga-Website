@@ -34,11 +34,11 @@ const getManga = asyncHandler(async (req, res) => {
 });
 
 // @desc    Create New Manga
-// @route   POST /api/mangas/
+// @route   POST /api/manga/
 // @access  private
 const createManga = asyncHandler(async (req, res) => {
   const { title, genres, description } = req.body;
-  if (!title || !genres || !description) {
+  if (!title || !genres || !description || !req.file) {
     return res.json({ message: "Incomplete request!" });
   }
 
@@ -50,17 +50,35 @@ const createManga = asyncHandler(async (req, res) => {
     throw new Error("Manga already exists");
   }
 
+  // Get genres _id
   for await (const [index, name] of genres.entries()) {
     let genre = await Genre.findOne({ text: name });
     genres[index] = genre._id.toString();
   }
 
-  const manga = await Manga.create({ title, genres, description }, (error) => {
-    console.log(error);
-    res.status(500);
-    throw new Error("Something went wrong");
-  });
+  let manga = await Manga.create({ title, genres, description });
 
+  // Save file in storage
+  let thumbnailPath = path.join(
+    __dirname,
+    "../../",
+    process.env.UPLOAD_THUMBNAIL,
+    manga._id.toString() + ".jpeg"
+  );
+  let thumbnailURI = `${req.get(
+    "host"
+  )}/uploads/thumbnail/${manga._id.toString()}`;
+
+  await sharp(req.file.buffer)
+    .toFormat("jpeg")
+    .jpeg({ quality: 90 })
+    .toFile(thumbnailPath);
+
+  // Add new thumnail URI to document
+  await Manga.findByIdAndUpdate(manga._id.toString(), {
+    thumbnail: thumbnailURI,
+  });
+  manga = await Manga.findById(manga._id.toString());
   res.status(200).json(manga);
 });
 
@@ -104,7 +122,7 @@ const addChapter = asyncHandler(async (req, res) => {
     throw new Error("Invalid request to add chapter");
   }
 
-  const manga = await Manga.findById(manga_id);
+  let manga = await Manga.findById(manga_id);
 
   // Validate manga
   if (!manga) {
@@ -118,10 +136,11 @@ const addChapter = asyncHandler(async (req, res) => {
   const uploadPath = path.join(
     __dirname,
     "../../",
-    process.env.UPLOAD_DIR,
+    process.env.UPLOAD_CHAPTER,
     chapter._id.toString()
   );
 
+  // Save file in storage
   const images = [];
   fs.mkdirSync(uploadPath);
   for (let i = 1; i <= req.files.length; i++) {
@@ -137,9 +156,20 @@ const addChapter = asyncHandler(async (req, res) => {
     images.push(pageURI);
   }
 
-  await Chapter.findByIdAndUpdate(chapter._id.toString(), { images });
-  chapter = await Chapter.findById(chapter._id.toString());
-  res.status(200).json(chapter);
+  chapter = await Chapter.findByIdAndUpdate(
+    chapter._id.toString(),
+    { images },
+    { new: true }
+  );
+  manga = await Manga.findByIdAndUpdate(
+    manga._id.toString(),
+    {
+      $addToSet: { chapters: chapter._id.toString() },
+    },
+    { new: true }
+  );
+  // res.status(200).json(chapter);
+  res.status(200).json(manga);
 });
 
 module.exports = {
