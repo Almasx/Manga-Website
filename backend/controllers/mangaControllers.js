@@ -12,8 +12,14 @@ const sharp = require("sharp");
 // @route   GET /api/manga
 // @access  public
 const getCatalog = asyncHandler(async (req, res) => {
+  const { genres } = req.query;
   const filters = {};
-  filters.genres = req.query?.genres;
+
+  // Validate query
+  if (genres) {
+    filters.genres = genres;
+  }
+
   const mangas = await Manga.find(filters);
   res.status(200).json(mangas);
 });
@@ -168,8 +174,7 @@ const addChapter = asyncHandler(async (req, res) => {
     },
     { new: true }
   );
-  // res.status(200).json(chapter);
-  res.status(200).json(manga);
+  res.status(200).json(chapter);
 });
 
 module.exports = {
