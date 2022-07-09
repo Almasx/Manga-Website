@@ -6,6 +6,7 @@ const {
   createManga,
   getChapter,
   addChapter,
+  bookmarkManga,
 } = require("../controllers/mangaControllers");
 const { protect } = require("../middleware/userMiddleware");
 const {
@@ -14,7 +15,7 @@ const {
 } = require("../middleware/uploadMiddleware");
 
 router.route("/").get(getCatalog).post(uploadThumbnail, createManga);
-router.get("/:manga_id", getManga);
+router.route("/:manga_id").get(getManga).put(protect, bookmarkManga);
 router.post("/:manga_id/chapter", uploadImages, addChapter);
 router.get("/:manga_id/chapter/:chapter_id", getChapter);
 

@@ -3,6 +3,7 @@ const asyncHandler = require("express-async-handler");
 const Manga = require("../models/mangaModel");
 const Genre = require("../models/genreModel");
 const Chapter = require("../models/chapterModel");
+const User = require("../models/userModel");
 
 const fs = require("fs");
 const path = require("path");
@@ -37,6 +38,33 @@ const getManga = asyncHandler(async (req, res) => {
     throw new Error("Manga not found");
   }
   res.status(200).json(manga);
+});
+
+// @desc    Bookmark Manga
+// @route   UPDATE /api/manga/:manga_id/
+// @access  private
+const bookmarkManga = asyncHandler(async (req, res) => {
+  const { manga_id } = req.params;
+  const manga = await Manga.findById(manga_id);
+
+  // Check manga
+  if (!manga) {
+    res.status(400);
+    throw new Error("Manga not found");
+  }
+
+  const mangaBookmarked = (await User.findById(req.user.id)).bookmarks;
+  if (manga_id in mangaBookmarked) {
+    res.status(400);
+    throw new Error("Manga already bookmarked");
+  }
+
+  const user = await User.findByIdAndUpdate(
+    req.user.id,
+    { $addToSet: { bookmarks: manga_id } },
+    { new: true }
+  ).select("-password");
+  res.json(user);
 });
 
 // @desc    Create New Manga
@@ -183,4 +211,5 @@ module.exports = {
   createManga,
   getChapter,
   addChapter,
+  bookmarkManga,
 };
