@@ -39,7 +39,7 @@ const Button = ({
             "text-primary ", // typography
           ],
         ],
-        "disabled: cursor-not-allowed"
+        disabled && "disabled: cursor-not-allowed"
       )}
     >
       {children}
