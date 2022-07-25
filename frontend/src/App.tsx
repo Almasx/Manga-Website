@@ -1,11 +1,7 @@
-import Button from "./components/atoms/Button";
+import Catalog from "./pages/Catalog";
 
 function App() {
-  return (
-    <div className="">
-      <Button>Читать</Button>
-    </div>
-  );
+  return <Catalog />;
 }
 
 export default App;

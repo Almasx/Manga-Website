@@ -15,7 +15,19 @@ module.exports = {
       surface: "#DCDCFF",
     },
     extend: {
-      fontFamily: ["TT Norms Pro", "sans-serif"],
+      fontFamily: { sans: ["TT Norms Pro", "sans-serif"] },
+      opacity: {
+        66: ".66",
+        33: ".33",
+      },
+      animation: {
+        "ripple-effect": "0.6s linear ripple",
+      },
+      keyframes: {
+        ripple: {
+          to: { transform: "scale(25)", opacity: 0 },
+        },
+      },
     },
   },
   plugins: [],
