@@ -14,13 +14,13 @@ const TabBar = ({ tabs }: TabBarProps) => {
     const width = tabBarRef.current[activeIndex]!.offsetWidth;
     const left = tabBarRef.current[activeIndex]!.offsetLeft;
     console.log(left);
-    indicatorRef.current!.style.width = `${width}px`;
-    indicatorRef.current!.style.left = `${left}px`;
+    indicatorRef.current!.style.width = `${width - 4}px`;
+    indicatorRef.current!.style.left = `${left + 2}px`;
   }, [activeIndex]);
 
   return (
-    <div className="relative pt-5 pb-[10px]">
-      <div className="flex flex-row space-x-5 first:ml-0">
+    <div className="relative pt-5 pb-2 lg:pb-[10px]">
+      <div className="flex flex-row space-x-4 first:ml-0 lg:space-x-5">
         {tabs.map((tab, index) => (
           <Tab
             key={index}
@@ -55,7 +55,7 @@ const Tab = forwardRef<HTMLButtonElement, TabProps>(
         ref={ref}
         onClick={onClick}
         className={clsx(
-          "font-bold duration-300",
+          "text-sm font-bold duration-300 lg:text-base",
           active ? "text-white" : "text-white/33 hover:text-primary"
         )}
       >

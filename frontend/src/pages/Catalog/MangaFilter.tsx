@@ -1,6 +1,8 @@
-import TabBar from "../../components/atoms/atoms/TabBar";
+import Button from "../../components/atoms/Button";
+import TabBar from "../../components/atoms/TabBar";
+import TrendUp from "../../components/icons/TrendUp";
 
-const MangaCategory = () => {
+const MangaFilter = () => {
   const tabs: string[] = [
     "Новые",
     "Рекомедованные",
@@ -9,7 +11,14 @@ const MangaCategory = () => {
     "По рейтингу",
     "По лайкам",
   ];
-  return <TabBar tabs={tabs} />;
+  return (
+    <div className="relative flex w-full flex-row justify-between">
+      <TabBar tabs={tabs} />
+      <Button variant="secondary" content="icon" className="top-4 h-8 w-8">
+        <TrendUp />
+      </Button>
+    </div>
+  );
 };
 
-export default MangaCategory;
+export default MangaFilter;

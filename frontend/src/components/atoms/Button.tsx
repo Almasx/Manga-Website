@@ -1,8 +1,9 @@
 import clsx from "clsx";
 import React, { ReactNode, useEffect, useState } from "react";
 
-interface Props {
+interface ButtonProps {
   variant?: "primary" | "secondary" | "text";
+  content?: "text" | "icon";
   children: ReactNode;
   onClick?: (event?: any) => void;
   disabled?: boolean;
@@ -13,9 +14,10 @@ const Button = ({
   children,
   onClick,
   variant = "primary",
+  content = "text",
   className = "",
   disabled = false,
-}: Props) => {
+}: ButtonProps) => {
   const [coords, setCoords] = useState({ x: -1, y: -1 });
   const [isRippling, setIsRippling] = useState<boolean>(false);
 
@@ -41,22 +43,28 @@ const Button = ({
       disabled={disabled}
       className={clsx(
         className,
-        "box-content rounded-xl px-3 py-2 m-2", // box-model
-        "font-bold text-center", // typography
-        "overflow-hidden relative", // others
+        "rounded-xl",
+        "relative overflow-hidden", // others
+        [
+          content === "text" && [
+            "box-content px-3 py-2",
+            "text-center font-bold",
+          ],
+          content === "icon" && ["box-border grid place-items-center"],
+        ],
         [
           variant === "primary" && [
             "bg-primary", // background
-            "text-white ", // typography
+            content === "text" && "text-white ", // typography
           ],
           variant === "secondary" && [
-            "border-2 border-stroke-200", // box model
+            "border border-stroke-200", // box model
             "bg-transparent hover:bg-surface/5", // background
-            "text-white/66", // typography
+            content === "text" && "text-white/66", // typography
           ],
           variant === "text" && [
             "bg-transparent hover:bg-surface/5", // background
-            "text-primary ", // typography
+            content === "text" && "text-primary ", // typography
           ],
         ],
         disabled && "disabled: cursor-not-allowed"
@@ -64,7 +72,7 @@ const Button = ({
     >
       {isRippling && (
         <span
-          className="w-5 h-5 absolute block rounded-full bg-white/20 opacity-100 animate-ripple-effect"
+          className="absolute block h-5 w-5 animate-ripple-effect rounded-full bg-white/20 opacity-100"
           style={{ left: coords.x, top: coords.y }}
         />
       )}
