@@ -27,7 +27,7 @@ interface MangaCardProps {
 const MangaCard = ({ title, thumbnail, rating }: MangaCardProps) => {
   const { title_en, title_ru } = title;
   return (
-    <div className="flex flex-col space-y-2 rounded-2xl border border-stroke-100 p-3">
+    <div className="flex cursor-pointer flex-col space-y-2 rounded-2xl border border-stroke-100 p-3">
       <img
         src={thumbnail}
         alt="lol"
