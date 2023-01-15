@@ -1,0 +1,146 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+// Necessary for Next auth
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? // @db.Text
+  access_token      String? // @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? // @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model User {
+  id            String     @id @default(cuid())
+  name          String?
+  email         String?    @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  role          Role       @default(USER)
+  bookmarks     Bookmark[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Bookmark {
+  id    Int    @id @default(autoincrement())
+  title String
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  comics    Comics[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Comics {
+  id       Int    @id @default(autoincrement())
+  title    String @unique
+  title_ru String
+
+  thumbnail   Thumbnail?
+  description String
+
+  rating Int    @default(0)
+  saved  Int    @default(0)
+  status Status @default(ongoing)
+  year   Int
+
+  genres    Genre[]
+  bookmarks Bookmark[]
+  chapters  Chapter[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Status {
+  ongoing
+  finished
+  abandoned
+}
+
+model Chapter {
+  id     Int @id @default(autoincrement())
+  volume Int
+
+  comics   Comics @relation(fields: [comicsId], references: [id])
+  comicsId Int
+
+  pages     Page[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([comicsId])
+}
+
+model Genre {
+  id     Int      @id @default(autoincrement())
+  title  String   @unique
+  comics Comics[]
+}
+
+model Thumbnail {
+  id String @id @default(uuid())
+
+  comics   Comics @relation(fields: [comicsId], references: [id])
+  comicsId Int    @unique
+}
+
+model Page {
+  id String @id @default(uuid())
+
+  chapter   Chapter @relation(fields: [chapterId], references: [id])
+  chapterId Int
+
+  @@index([chapterId])
+}
