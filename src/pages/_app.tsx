@@ -8,7 +8,7 @@ import { trpc } from "../utils/trpc";
 import "../styles/globals.css";
 import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
-import MainLayout from "../layout/main";
+import MainLayout from "./layout/main";
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {

@@ -8,7 +8,7 @@ import ComicsList from "../components/organisms/ComicsList";
 
 import TrendUp from "../../public/icons/TrendUp.svg";
 import type { ReactNode } from "react";
-import CatalogLayout from "../layout/catalog";
+import CatalogLayout from "./layout/catalog";
 import { useFilterStore } from "../hooks/useFilterStore";
 import useDebounce from "../hooks/useDebounce";
 

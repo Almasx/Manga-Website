@@ -1,16 +1,20 @@
 import { ImportCurve } from "iconsax-react";
 import type { ReactNode } from "react";
+import { useEffect, useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
 import Button from "../../../components/atoms/Button";
 import Divider from "../../../components/atoms/Divider";
 import RadioGroupField from "../../../components/atoms/RadioGroupField";
 import TextAreaField from "../../../components/atoms/TextAreaField";
 import TextField from "../../../components/atoms/TextField";
-import DashBoardLayout from "../../../layout/dashboard";
 import { zodResolver } from "@hookform/resolvers/zod";
 import SelectGenres from "../../../components/organisms/SelectGenres";
+import DashBoardLayout from "../../layout/dashboard";
+
+import _ from "lodash";
 
 const MAX_FILE_SIZE = 500000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -56,8 +60,21 @@ const AddComics = () => {
     resolver: zodResolver(addComicsSchema),
     defaultValues: { genres: [], genresQuery: "" },
   });
+  const [preview, setPreview] = useState<any>(null);
+  const watchThumbnail = watch("thumbnail");
 
-  const onSubmit: SubmitHandler<AddComicsSchema> = (data) => console.log(data);
+  useEffect(() => {
+    if (watchThumbnail && watchThumbnail[0]) {
+      const objectUrl = window.URL.createObjectURL(watchThumbnail[0]);
+      setPreview(objectUrl);
+
+      return () => window.URL.revokeObjectURL(objectUrl);
+    }
+  }, [watchThumbnail]);
+
+  const onSubmit: SubmitHandler<AddComicsSchema> = (data) => {
+    console.log(data);
+  };
 
   return (
     <>
@@ -65,23 +82,25 @@ const AddComics = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="col-span-full grid grid-cols-4 gap-5 md:grid-cols-6 lg:grid-cols-10"
       >
-        <h3 className="col-span-full mb-5 text-2xl font-bold">
+        <h3 className="col-span-full h-7 text-xl font-medium text-white/40">
           Сведения о манге
         </h3>
+
         <label
           htmlFor="dropzone-file"
           className="relative col-span-2 flex flex-col items-center 
-                    rounded-2xl border border-dashed border-primary bg-primary/10
-                    px-3 py-6"
+                    overflow-clip rounded-2xl border border-dashed border-primary
+                    bg-primary/10 px-3 py-6"
         >
-          <div className="text-bold absolute top-2 right-2 rounded-full bg-surface/5 py-1 px-2 text-xs">
+          <div className="text-bold absolute top-2 right-2 z-20 rounded-full bg-black bg-surface/5 py-1 px-2 text-xs">
             227 x 338
           </div>
           <ImportCurve size="64" className="mt-20 mb-6 text-white/30" />
           <div className="flex flex-col items-center gap-3">
             <h6 className="font-meduim font-base">Залейте обложку манги</h6>
-            <p className="-mt-2 text-xs text-white/30">
-              Поддерживает форматы .jpeg, .png, .jpg
+            <p className="-mt-2 text-center text-xs text-white/30">
+              Поддерживает форматы <br />
+              .jpeg, .png, .jpg
             </p>
             <Divider>или</Divider>
             <Button>Выбрать обложку</Button>
@@ -92,6 +111,13 @@ const AddComics = () => {
             className="hidden"
             {...register("thumbnail", { required: true })}
           />
+          {preview !== null && (
+            <img
+              src={preview}
+              alt="thumbnail image"
+              className="absolute inset-0 z-10 min-h-full object-fill"
+            />
+          )}
         </label>
 
         <div className="col-span-5 col-start-3 flex flex-col gap-5">
@@ -156,8 +182,11 @@ const AddComics = () => {
               );
             }
           }}
-        ></SelectGenres>
+        />
       </form>
+      <Button className="col-span-2 mt-4" type="submit">
+        Добавить мангу
+      </Button>
     </>
   );
 };

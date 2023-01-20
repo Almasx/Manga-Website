@@ -1,11 +1,7 @@
-import { useRouter } from "next/router";
 import type { ReactNode } from "react";
-import DashBoardLayout from "../../../layout/dashboard";
+import DashBoardLayout from "../../layout/dashboard";
 
 const Dashboard = () => {
-  const { query } = useRouter();
-  const { userId } = query;
-
   return <>loll</>;
 };
 

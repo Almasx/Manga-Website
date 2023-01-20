@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import type { ReactNode } from "react";
+import { useState } from "react";
 import Cross from "../../../public/icons/Cross.svg";
 
 interface BadgeProps {
@@ -28,6 +29,7 @@ const Badge = ({ children, active, onClick, className = "" }: BadgeProps) => {
           <Cross className="h-4 w-4 fill-white" />
         </div>
       )}
+
       {children}
     </button>
   );
