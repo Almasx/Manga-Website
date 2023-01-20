@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { ReactNode } from "react";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -34,5 +35,7 @@ const php = () => {
     </form>
   );
 };
+
+php.getLayout = (page: ReactNode) => <>{page}</>;
 
 export default php;

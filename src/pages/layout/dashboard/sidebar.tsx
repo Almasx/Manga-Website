@@ -45,7 +45,10 @@ const AccountBar = () => {
           <SideBar.Section.Header text="Манги" />
           <SideBar.Section.Tab
             active={false}
-            onClick={() => router.push("add-comics")}
+            onClick={() =>
+              !router.asPath.endsWith("/add-comics") &&
+              router.push(router.asPath + "/add-comics")
+            }
           >
             <Book1 size="24" />
             Добавить мангу
