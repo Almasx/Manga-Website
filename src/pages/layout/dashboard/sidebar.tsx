@@ -9,7 +9,6 @@ import { trpc } from "../../../utils/trpc";
 const AccountBar = () => {
   const router = useRouter();
   const session = useSession();
-
   const { data } = trpc.auth.getBookmarks.useQuery();
 
   return (

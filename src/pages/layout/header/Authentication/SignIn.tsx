@@ -22,7 +22,7 @@ const SignIn = ({ visible, setVisible, setHasAccount }: ISignInProps) => {
 
   return (
     <Modal visible={visible} setVisible={setVisible}>
-      <form className="relative flex flex-col items-center p-4 pt-6">
+      <div className="relative flex flex-col items-center p-4 pt-6">
         <div className="absolute -top-0 left-1/2 z-[51] -translate-y-1/2 -translate-x-1/2 transform rounded-full bg-primary px-3 py-2 text-xs font-bold text-white">
           Войти в аккаунт
         </div>
@@ -56,7 +56,7 @@ const SignIn = ({ visible, setVisible, setHasAccount }: ISignInProps) => {
             Зарегистритоваться
           </button>
         </p>
-      </form>
+      </div>
     </Modal>
   );
 };
