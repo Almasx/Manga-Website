@@ -36,17 +36,8 @@ export const postComicsSchema = z.object({
   title_ru: z.string({ required_error: "title_ru is required" }),
   description: z.string({ required_error: "description is required" }),
   status: z.enum(["ongoing", "abandoned", "finished"]).default("ongoing"),
-  genres: z.array(z.string().optional()),
+  genres: z.array(z.number()),
   year: z.number({ required_error: "year is required" }),
-  // thumbnail: any()
-  //   .refine(
-  //     (files) => files?.[0]?.size <= MAX_FILE_SIZE,
-  //     `Max image size is 5MB.`
-  //   )
-  //   .refine(
-  //     (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-  //     "Only .jpg, .jpeg, .png and .webp formats are supported."
-  //   ),
 });
 
 export const postChapterSchema = z.object({

@@ -7,6 +7,12 @@ import type {
 } from "./comics.schema";
 import { TRPCError } from "@trpc/server";
 import type { Context } from "../../context";
+import { AWS } from "../../../../libs/aws";
+import { env } from "../../../../env/server.mjs";
+
+const s3 = new AWS.S3();
+const UPLOADING_TIME_LIMIT = 30;
+const UPLOAD_MAX_FILE_SIZE = 1000000;
 
 // @desc    Get & Filter/Sort Catalog
 // @route   GET /api/comics
@@ -152,45 +158,53 @@ export const postComics = async ({
   ctx: Context;
 }) => {
   const { title, title_ru, status, year, genres, description } = input;
-  try {
-    // Get genres _id
-    for await (const [index, name] of genres.entries()) {
-      const genre = await ctx.prisma.genre.findFirst({
-        where: { title: name },
-      });
-      genres[index] = genre?.id.toString();
-    }
 
-    const comics = await ctx.prisma.comics.create({
-      data: {
-        title,
-        title_ru,
-        status,
-        year,
-        genres: {
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          connect: [...genres.map((genre) => ({ id: parseInt(genre!) }))],
-        },
-        description,
-      },
+  const comicsExist = !!(await ctx.prisma.comics.findUnique({
+    where: { title: title },
+  }));
+
+  // Check for chapter in comics
+  if (comicsExist) {
+    throw new TRPCError({
+      code: "CONFLICT",
+      message: "Comics already exists",
     });
-
-    // Add new thumnail URI to document
-    // comics = await ctx.prisma.comics.update({
-    //   where: { id: comics.id },
-    //   data: { thumbnail: thumbnailURI },
-    // });
-    return comics;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (err: any) {
-    if (err.code === "P2002") {
-      throw new TRPCError({
-        code: "CONFLICT",
-        message: "Comics already exists",
-      });
-    }
-    throw err;
   }
+
+  const comics = await ctx.prisma.comics.create({
+    include: { thumbnail: true },
+    data: {
+      title,
+      title_ru,
+      status,
+      year,
+      genres: {
+        connect: [...genres.map((genreId) => ({ id: genreId }))],
+      },
+      description,
+      thumbnail: { create: {} },
+    },
+  });
+
+  return new Promise((resolve, reject) => {
+    s3.createPresignedPost(
+      {
+        Fields: {
+          key: `thumnails/${comics.thumbnail?.id}`,
+        },
+        Conditions: [
+          ["starts-with", "$Content-Type", "image/"],
+          ["content-length-range", 0, UPLOAD_MAX_FILE_SIZE],
+        ],
+        Expires: UPLOADING_TIME_LIMIT,
+        Bucket: env.AWS_BUCKET_NAME,
+      },
+      (err, signed) => {
+        if (err) return reject(err);
+        resolve(signed);
+      }
+    );
+  });
 };
 
 // @desc    Add new Chapter
