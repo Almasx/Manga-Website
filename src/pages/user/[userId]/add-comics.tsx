@@ -15,6 +15,9 @@ import SelectGenres from "../../../components/organisms/SelectGenres";
 import DashBoardLayout from "../../layout/dashboard";
 
 import _ from "lodash";
+import { trpc } from "../../../utils/trpc";
+import type { PresignedPost } from "aws-sdk/clients/s3";
+import NumberField from "../../../components/atoms/NumberField";
 
 const MAX_FILE_SIZE = 500000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -25,12 +28,16 @@ const ACCEPTED_IMAGE_TYPES = [
 ];
 
 const addComicsSchema = z.object({
-  title: z.string().describe("Name // Введите название манги"),
+  title: z.string().min(1).describe("Name // Введите название манги"),
   title_ru: z
     .string()
+    .min(1)
     .describe("Название // Введите название манги на русском"),
-  description: z.string().describe("Описание // Введите описание манги"),
-  year: z.number().describe("Год // Введите год выпуска манги"),
+  description: z.string().min(1).describe("Описание // Введите описание манги"),
+  year: z
+    .number()
+    .default(new Date().getFullYear())
+    .describe("Год // Введите год выпуска манги"),
   thumbnail: z
     .any()
     .refine((files) => files?.length == 1, "Image is required.")
@@ -62,6 +69,7 @@ const AddComics = () => {
   });
   const [preview, setPreview] = useState<any>(null);
   const watchThumbnail = watch("thumbnail");
+  const comicsMutation = trpc.comics.postComics.useMutation();
 
   useEffect(() => {
     if (watchThumbnail && watchThumbnail[0]) {
@@ -72,8 +80,25 @@ const AddComics = () => {
     }
   }, [watchThumbnail]);
 
-  const onSubmit: SubmitHandler<AddComicsSchema> = (data) => {
+  // const onError = (errors, e) => console.log(errors, e);
+
+  const onSubmit: SubmitHandler<AddComicsSchema> = async (data) => {
     console.log(data);
+    console.log("fv");
+    // const { url, fields } = (await comicsMutation.mutateAsync(
+    //   data
+    // )) as PresignedPost;
+
+    // const formData = new FormData();
+    // formData.append("Content-Type", data.thumbnail.type);
+    // formData.append("file", data.thumbnail);
+
+    // Object.keys(fields).forEach((name) => formData.append(name, fields[name] as string));
+
+    // await fetch(url, {
+    //   method: 'POST',
+    //   body: formData
+    // });
   };
 
   return (
@@ -126,11 +151,13 @@ const AddComics = () => {
               label="Название (на английском)"
               placeholder="Введите название манги"
               {...register("title", { required: true })}
+              error={errors.title?.message}
             />
             <TextField
               label="Название (на русском)"
               placeholder="Введите название манги на рускком"
               {...register("title_ru", { required: true })}
+              error={errors.title_ru?.message}
             />
           </div>
           <TextAreaField
@@ -139,16 +166,18 @@ const AddComics = () => {
             placeholder="Введите описание манги"
             rows={4}
             {...register("description", { required: true })}
+            error={errors.description?.message}
           />
-          <TextField
+          <NumberField
             label="Год"
             placeholder="Введите год выпуска манги"
             {...register("year", { required: true })}
+            error={errors.year?.message}
           />
           <div className="grid grid-cols-3 gap-5">
             <RadioGroupField
               label="Выпускается"
-              active={watch("status") === "ongoing"}
+              active={!watch("status") || watch("status") === "ongoing"}
               value="ongoing"
               {...register("status")}
             />
@@ -183,10 +212,10 @@ const AddComics = () => {
             }
           }}
         />
+        <Button className="col-span-2 mt-4" type="submit">
+          Добавить мангу
+        </Button>
       </form>
-      <Button className="col-span-2 mt-4" type="submit">
-        Добавить мангу
-      </Button>
     </>
   );
 };

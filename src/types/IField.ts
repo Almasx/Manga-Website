@@ -5,4 +5,5 @@ export interface IField<T> {
   onChange?: (e: ChangeEvent<T>) => void;
   onBlur?: (e: FocusEvent<T>) => void;
   name?: string;
+  error?: string;
 }

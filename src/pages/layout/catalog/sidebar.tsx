@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import Button from "../../../components/atoms/Button";
 import CheckBox from "../../../components/atoms/CheckBoxField";
-import CancelCross from "../../../public/icons/CancelCross.svg";
+import CancelCross from "../../../../public/icons/CancelCross.svg";
 import { trpc } from "../../../utils/trpc";
 import { useGenres } from "../../../hooks/useGenres";
 import useScreen from "../../../hooks/useScreen";

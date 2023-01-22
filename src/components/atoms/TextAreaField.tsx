@@ -8,7 +8,10 @@ type ITextAreaFieldProps = {
 
 // eslint-disable-next-line react/display-name
 const TextAreaField = forwardRef<HTMLTextAreaElement, ITextAreaFieldProps>(
-  ({ value, name, onChange, onBlur, label, placeholder, rows = 3 }, ref) => (
+  (
+    { value, name, onChange, onBlur, label, placeholder, error, rows = 3 },
+    ref
+  ) => (
     <>
       <div
         className={clsx(
@@ -29,7 +32,10 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, ITextAreaFieldProps>(
           placeholder={placeholder}
           rows={rows}
           className={clsx(
-            "ease peer w-full grow rounded-2xl border border-stroke-200 bg-surface/5 bg-black px-5 py-3 text-sm text-white duration-300 placeholder:text-white/30 focus:border-primary focus:outline-none focus:ring-2"
+            "ease peer w-full grow rounded-2xl border border-stroke-200 bg-surface/5 bg-black",
+            "px-5 py-3 text-sm text-white duration-300 placeholder:text-white/30 focus:border-primary focus:outline-none",
+            !error && "focus:ring-2",
+            error && "border-red-500"
           )}
         />
         {label !== undefined && (
@@ -49,6 +55,9 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, ITextAreaFieldProps>(
           >
             {label}
           </label>
+        )}
+        {error && (
+          <p className="mt-2 text-sm text-red-600 dark:text-red-500">{error}</p>
         )}
       </div>
     </>

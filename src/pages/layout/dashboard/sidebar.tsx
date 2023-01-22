@@ -9,7 +9,10 @@ import { trpc } from "../../../utils/trpc";
 const AccountBar = () => {
   const router = useRouter();
   const session = useSession();
-  const { data } = trpc.auth.getBookmarks.useQuery();
+  const { data } = trpc.auth.getBookmarks.useQuery(undefined, {
+    enabled: false,
+    staleTime: Infinity,
+  });
 
   return (
     <SideBar.Wrapper className="col-span-2 ">
@@ -46,7 +49,9 @@ const AccountBar = () => {
             active={false}
             onClick={() =>
               !router.asPath.endsWith("/add-comics") &&
-              router.push(router.asPath + "/add-comics")
+              router.push(router.asPath + "/add-comics", undefined, {
+                shallow: true,
+              })
             }
           >
             <Book1 size="24" />
@@ -64,7 +69,9 @@ const AccountBar = () => {
               active={false}
               classNames="rounded-xl"
               onClick={() => {
-                router.push(`bookmarks/${bookmark.id}`);
+                router.push(`bookmarks/${bookmark.id}`, undefined, {
+                  shallow: true,
+                });
               }}
             >
               {bookmark.title}

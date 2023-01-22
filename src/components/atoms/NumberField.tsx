@@ -2,23 +2,19 @@ import clsx from "clsx";
 import { forwardRef } from "react";
 import type { IField } from "../../types/IField";
 
-export type ITextFieldProps<T> = {
+export type INumberFieldProps<T> = {
   className?: string;
-  startIcon?: React.ReactNode;
-  endIcon?: React.ReactNode;
   label?: string;
   placeholder?: string;
 } & IField<T>;
 
-const TextField = forwardRef<
+const NumberField = forwardRef<
   HTMLInputElement,
-  ITextFieldProps<HTMLInputElement>
+  INumberFieldProps<HTMLInputElement>
 >(
   (
     {
       className = "",
-      startIcon = null,
-      endIcon = null,
       value,
       name,
       onChange,
@@ -34,18 +30,12 @@ const TextField = forwardRef<
         className={clsx(
           className,
           "relative",
-          (endIcon !== null ||
-            startIcon !== null ||
-            label !== undefined ||
-            error !== undefined) &&
-            "flex flex-col "
+          (label !== undefined || error !== undefined) && "flex flex-col "
         )}
       >
-        {startIcon !== null && (
-          <div className="absolute left-5 mr-3 ">{startIcon}</div>
-        )}
         <input
           name={name}
+          type="number"
           {...{ value: value }}
           ref={ref}
           onChange={(e) => {
@@ -59,11 +49,9 @@ const TextField = forwardRef<
             "ease peer w-full rounded-2xl border border-stroke-200 bg-surface/5 bg-black",
             "px-5 py-3 text-sm text-white duration-300 placeholder:text-white/30 focus:border-primary focus:outline-none",
             !error && "focus:ring-2",
-            error && "border-red-500",
-            startIcon !== null && "pl-12"
+            error && "border-red-500"
           )}
         />
-        {endIcon !== null && <div className="absolute right-5 ">{endIcon}</div>}
         {label !== undefined && (
           <label
             htmlFor={name}
@@ -92,6 +80,6 @@ const TextField = forwardRef<
   )
 );
 
-TextField.displayName = "TextField";
+NumberField.displayName = "NumberField";
 
-export default TextField;
+export default NumberField;
