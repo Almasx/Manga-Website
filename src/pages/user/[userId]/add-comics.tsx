@@ -1,4 +1,3 @@
-import { ImportCurve } from "iconsax-react";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
@@ -6,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import Button from "../../../components/atoms/Button";
-import Divider from "../../../components/atoms/Divider";
 import RadioGroupField from "../../../components/atoms/RadioGroupField";
 import TextAreaField from "../../../components/atoms/TextAreaField";
 import TextField from "../../../components/atoms/TextField";
@@ -18,14 +16,10 @@ import _ from "lodash";
 import { trpc } from "../../../utils/trpc";
 import type { PresignedPost } from "aws-sdk/clients/s3";
 import NumberField from "../../../components/atoms/NumberField";
+import FileField from "../../../components/molecules/FileField";
 
 const MAX_FILE_SIZE = 500000;
-const ACCEPTED_IMAGE_TYPES = [
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-];
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
 const addComicsSchema = z.object({
   title: z.string().min(1).describe("Name // Введите название манги"),
@@ -47,11 +41,11 @@ const addComicsSchema = z.object({
     )
     .refine(
       (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-      ".jpg, .jpeg, .png and .webp files are accepted."
+      ".jpg, .jpeg, .png files are accepted."
     ),
   status: z.enum(["ongoing", "finished", "abandoned"]),
   genres: z.array(z.number()),
-  genresQuery: z.string().default(""),
+  genresQuery: z.string(),
 });
 
 type AddComicsSchema = z.infer<typeof addComicsSchema>;
@@ -65,40 +59,28 @@ const AddComics = () => {
     formState: { errors },
   } = useForm<AddComicsSchema>({
     resolver: zodResolver(addComicsSchema),
-    defaultValues: { genres: [], genresQuery: "" },
+    defaultValues: { genres: [], genresQuery: "", status: "ongoing" },
   });
-  const [preview, setPreview] = useState<any>(null);
-  const watchThumbnail = watch("thumbnail");
+
   const comicsMutation = trpc.comics.postComics.useMutation();
 
-  useEffect(() => {
-    if (watchThumbnail && watchThumbnail[0]) {
-      const objectUrl = window.URL.createObjectURL(watchThumbnail[0]);
-      setPreview(objectUrl);
-
-      return () => window.URL.revokeObjectURL(objectUrl);
-    }
-  }, [watchThumbnail]);
-
-  // const onError = (errors, e) => console.log(errors, e);
-
   const onSubmit: SubmitHandler<AddComicsSchema> = async (data) => {
-    console.log(data);
-    console.log("fv");
-    // const { url, fields } = (await comicsMutation.mutateAsync(
-    //   data
-    // )) as PresignedPost;
+    const { url, fields } = (await comicsMutation.mutateAsync(
+      data
+    )) as PresignedPost;
 
-    // const formData = new FormData();
-    // formData.append("Content-Type", data.thumbnail.type);
-    // formData.append("file", data.thumbnail);
+    const formData = new FormData();
+    formData.append("Content-Type", data.thumbnail.type);
+    formData.append("file", data.thumbnail);
 
-    // Object.keys(fields).forEach((name) => formData.append(name, fields[name] as string));
+    Object.keys(fields).forEach((name) =>
+      formData.append(name, fields[name] as string)
+    );
 
-    // await fetch(url, {
-    //   method: 'POST',
-    //   body: formData
-    // });
+    await fetch(url, {
+      method: "POST",
+      body: formData,
+    });
   };
 
   return (
@@ -111,53 +93,25 @@ const AddComics = () => {
           Сведения о манге
         </h3>
 
-        <label
-          htmlFor="dropzone-file"
-          className="relative col-span-2 flex flex-col items-center 
-                    overflow-clip rounded-2xl border border-dashed border-primary
-                    bg-primary/10 px-3 py-6"
-        >
-          <div className="text-bold absolute top-2 right-2 z-20 rounded-full bg-black bg-surface/5 py-1 px-2 text-xs">
-            227 x 338
-          </div>
-          <ImportCurve size="64" className="mt-20 mb-6 text-white/30" />
-          <div className="flex flex-col items-center gap-3">
-            <h6 className="font-meduim font-base">Залейте обложку манги</h6>
-            <p className="-mt-2 text-center text-xs text-white/30">
-              Поддерживает форматы <br />
-              .jpeg, .png, .jpg
-            </p>
-            <Divider>или</Divider>
-            <Button>Выбрать обложку</Button>
-          </div>
-          <input
-            id="dropzone-file"
-            type="file"
-            className="hidden"
-            {...register("thumbnail", { required: true })}
-          />
-          {preview !== null && (
-            <img
-              src={preview}
-              alt="thumbnail image"
-              className="absolute inset-0 z-10 min-h-full object-fill"
-            />
-          )}
-        </label>
+        <FileField
+          watchThumbnail={watch("thumbnail")}
+          error={errors.thumbnail?.message as string}
+          {...register("thumbnail", { required: true })}
+        />
 
         <div className="col-span-5 col-start-3 flex flex-col gap-5">
           <div className="grid grid-cols-2 gap-5">
             <TextField
               label="Название (на английском)"
               placeholder="Введите название манги"
-              {...register("title", { required: true })}
               error={errors.title?.message}
+              {...register("title", { required: true })}
             />
             <TextField
               label="Название (на русском)"
               placeholder="Введите название манги на рускком"
-              {...register("title_ru", { required: true })}
               error={errors.title_ru?.message}
+              {...register("title_ru", { required: true })}
             />
           </div>
           <TextAreaField
@@ -171,8 +125,12 @@ const AddComics = () => {
           <NumberField
             label="Год"
             placeholder="Введите год выпуска манги"
-            {...register("year", { required: true })}
             error={errors.year?.message}
+            {...register("year", {
+              required: true,
+              valueAsNumber: true,
+              value: new Date().getFullYear(),
+            })}
           />
           <div className="grid grid-cols-3 gap-5">
             <RadioGroupField
@@ -212,6 +170,7 @@ const AddComics = () => {
             }
           }}
         />
+
         <Button className="col-span-2 mt-4" type="submit">
           Добавить мангу
         </Button>

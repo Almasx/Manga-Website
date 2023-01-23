@@ -59,7 +59,7 @@ const TextField = forwardRef<
             "ease peer w-full rounded-2xl border border-stroke-200 bg-surface/5 bg-black",
             "px-5 py-3 text-sm text-white duration-300 placeholder:text-white/30 focus:border-primary focus:outline-none",
             !error && "focus:ring-2",
-            error && "border-red-500",
+            error && "border-red-500 bg-red-500/10",
             startIcon !== null && "pl-12"
           )}
         />
