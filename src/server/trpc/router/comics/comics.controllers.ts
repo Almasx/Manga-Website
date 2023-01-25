@@ -7,8 +7,8 @@ import type {
 } from "./comics.schema";
 import { TRPCError } from "@trpc/server";
 import type { Context } from "../../context";
-import { AWS } from "../../../../libs/aws";
 import { env } from "../../../../env/server.mjs";
+import { AWS } from "../../../../libs/aws-config";
 
 const s3 = new AWS.S3();
 const UPLOADING_TIME_LIMIT = 30;
@@ -31,9 +31,8 @@ export const getCatalog = async ({
 
   // Decontruct query
   const { cursor, query, status, sort, order } = input;
-  const genres = input.genres ?? genre_db;
+  const genres = input.genres.length === 0 ? genre_db : input.genres;
   const limit = input.limit ?? 10;
-  input.genres;
 
   const catalog = await ctx.prisma.comics.findMany({
     select: {
@@ -158,6 +157,7 @@ export const postComics = async ({
   ctx: Context;
 }) => {
   const { title, title_ru, status, year, genres, description } = input;
+  console.log([...genres.map((genreId) => ({ id: genreId }))]);
 
   const comicsExist = !!(await ctx.prisma.comics.findUnique({
     where: { title: title },
@@ -171,26 +171,28 @@ export const postComics = async ({
     });
   }
 
-  const comics = await ctx.prisma.comics.create({
-    include: { thumbnail: true },
-    data: {
-      title,
-      title_ru,
-      status,
-      year,
-      genres: {
-        connect: [...genres.map((genreId) => ({ id: genreId }))],
-      },
-      description,
-      thumbnail: { create: {} },
-    },
-  });
+  // const comics = await ctx.prisma.comics.create({
+  //   include: { thumbnail: true },
+  //   data: {
+  //     title,
+  //     title_ru,
+  //     status,
+  //     year,
+  //     genres: {
+  //       connect: [...genres.map((genreId) => ({ id: genreId }))],
+  //     },
+  //     description,
+  //     thumbnail: { create: {} },
+  //   },
+  // });
+  // console.log(comics.thumbnail?.id);
+  ctx.prisma.thumbnail.deleteMany({});
 
   return new Promise((resolve, reject) => {
     s3.createPresignedPost(
       {
         Fields: {
-          key: `thumnails/${comics.thumbnail?.id}`,
+          key: `thumnails/${1}`, //comics.thumbnail?.id
         },
         Conditions: [
           ["starts-with", "$Content-Type", "image/"],

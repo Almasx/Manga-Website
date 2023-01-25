@@ -17,6 +17,7 @@ import { trpc } from "../../../utils/trpc";
 import type { PresignedPost } from "aws-sdk/clients/s3";
 import NumberField from "../../../components/atoms/NumberField";
 import FileField from "../../../components/molecules/FileField";
+import { useRouter } from "next/router";
 
 const MAX_FILE_SIZE = 500000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
@@ -30,7 +31,8 @@ const addComicsSchema = z.object({
   description: z.string().min(1).describe("Описание // Введите описание манги"),
   year: z
     .number()
-    .default(new Date().getFullYear())
+    .min(1990)
+    .max(new Date().getFullYear())
     .describe("Год // Введите год выпуска манги"),
   thumbnail: z
     .any()
@@ -62,31 +64,46 @@ const AddComics = () => {
     defaultValues: { genres: [], genresQuery: "", status: "ongoing" },
   });
 
+  useEffect(() => {
+    register("genres");
+    register("genresQuery");
+  }, []);
+  const genresValue = watch("genres");
+
   const comicsMutation = trpc.comics.postComics.useMutation();
+  const router = useRouter();
 
   const onSubmit: SubmitHandler<AddComicsSchema> = async (data) => {
     const { url, fields } = (await comicsMutation.mutateAsync(
       data
     )) as PresignedPost;
+    console.log(url);
 
     const formData = new FormData();
+    console.log(formData);
     formData.append("Content-Type", data.thumbnail.type);
+    console.log(formData);
     formData.append("file", data.thumbnail);
 
-    Object.keys(fields).forEach((name) =>
-      formData.append(name, fields[name] as string)
-    );
-
-    await fetch(url, {
-      method: "POST",
-      body: formData,
+    Object.keys(fields).forEach((name) => {
+      formData.append(name, fields[name] as string);
     });
+
+    console.log(url, formData, fields);
+    console.log(formData);
+
+    // await fetch(url, {
+    //   method: "POST",
+    //   body: formData,
+    // }).then(() => router.push("/catalog"));
   };
 
   return (
     <>
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onSubmit, (errors) =>
+          console.log(watch("genres"))
+        )}
         className="col-span-full grid grid-cols-4 gap-5 md:grid-cols-6 lg:grid-cols-10"
       >
         <h3 className="col-span-full h-7 text-xl font-medium text-white/40">
@@ -156,16 +173,16 @@ const AddComics = () => {
 
         <SelectGenres
           className="col-span-3 col-start-8"
-          selected={watch("genres")}
+          selected={genresValue}
           query={watch("genresQuery")}
           onQuery={(query) => setValue("genresQuery", query)}
           onToggleGenre={(targetId) => {
-            if (!watch("genres").includes(targetId)) {
-              setValue("genres", [...watch("genres"), targetId]);
+            if (!genresValue.includes(targetId)) {
+              setValue("genres", [...genresValue, targetId]);
             } else {
               setValue(
                 "genres",
-                watch("genres").filter((id) => id !== targetId)
+                genresValue.filter((id) => id !== targetId)
               );
             }
           }}

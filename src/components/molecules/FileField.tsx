@@ -30,7 +30,7 @@ const FileField = forwardRef<HTMLInputElement, IFileFieldProps>(
             "relative flex flex-col items-center overflow-clip",
             "border border-dashed border-primary",
             "rounded-2xl bg-primary/10 px-3 py-6 duration-300",
-            error && "!border-red-500 bg-red-500/10"
+            error && "!border-red-500 !bg-red-500/10"
           )}
         >
           <div className="text-bold absolute top-2 right-2 z-20 rounded-full bg-black bg-surface/5 py-1 px-2 text-xs">

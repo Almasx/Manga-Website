@@ -23,7 +23,7 @@ const SelectGenres = ({
   onToggleGenre,
   className = "",
 }: ISelectGenresProps) => {
-  const genres = trpc.comics.getGenres.useQuery({});
+  const genres = trpc.comics.getGenres.useQuery();
   const sortedAndSearchedGenres = useGenres(genres.data ?? [], selected, query);
   const debounce = useDebounce();
 
@@ -32,7 +32,7 @@ const SelectGenres = ({
       <TextField
         placeholder="пр: детектив, драма..."
         endIcon={<SearchNormal size="20" className="text-white/30 " />}
-        onChange={(event) => debounce(event.target.value, onQuery)}
+        onChange={(event) => onQuery(event.target.value)} // debounce(event.target.value, onQuery)
       />
       <div className="mt-4 mb-auto flex flex-row flex-wrap items-center justify-start overflow-y-auto">
         {sortedAndSearchedGenres.map((genre) => (

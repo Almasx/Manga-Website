@@ -130,14 +130,14 @@ model Genre {
 }
 
 model Thumbnail {
-  id String @id @default(uuid())
+  id String @id @default(cuid())
 
   comics   Comics @relation(fields: [comicsId], references: [id])
   comicsId Int    @unique
 }
 
 model Page {
-  id String @id @default(uuid())
+  id String @id @default(cuid())
 
   chapter   Chapter @relation(fields: [chapterId], references: [id])
   chapterId Int

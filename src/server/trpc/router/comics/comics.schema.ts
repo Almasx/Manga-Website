@@ -18,7 +18,7 @@ export const getCatalogSchema = z.object({
       propertyOf<Comics>("rating"),
     ])
     .default("year"),
-  genres: z.array(z.number()).optional(),
+  genres: z.array(z.number()).default([]),
   order: z.enum(["asc", "desc"]).default("asc"),
 });
 

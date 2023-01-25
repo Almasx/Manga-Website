@@ -19,9 +19,7 @@ const comicsRouter = router({
   getCatalog: publicProcedure
     .input(getCatalogSchema)
     .query(({ input, ctx }) => getCatalog({ input, ctx })),
-  getGenres: publicProcedure
-    .input(z.object({}))
-    .query(({ ctx }) => ctx.prisma.genre.findMany()),
+  getGenres: publicProcedure.query(({ ctx }) => ctx.prisma.genre.findMany()),
   getComics: publicProcedure
     .input(getComicsSchema)
     .query(({ input, ctx }) => getComics({ input, ctx })),
