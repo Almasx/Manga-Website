@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -77,33 +77,37 @@ const AddComics = () => {
     const { url, fields } = (await comicsMutation.mutateAsync(
       data
     )) as PresignedPost;
-    console.log(url);
 
     const formData = new FormData();
-    console.log(formData);
-    formData.append("Content-Type", data.thumbnail.type);
-    console.log(formData);
-    formData.append("file", data.thumbnail);
-
     Object.keys(fields).forEach((name) => {
       formData.append(name, fields[name] as string);
     });
 
-    console.log(url, formData, fields);
-    console.log(formData);
+    formData.append("Content-Type", data.thumbnail[0].type);
+    formData.append("file", data.thumbnail[0]);
 
-    // await fetch(url, {
-    //   method: "POST",
-    //   body: formData,
-    // }).then(() => router.push("/catalog"));
+    for (const pair of formData.keys()) {
+      console.log(pair);
+    }
+
+    await fetch(url, {
+      method: "POST",
+      body: formData,
+    }).then(async (res) => {
+      if (res.ok) {
+        return router.push("/catalog");
+      }
+      const text = await res.text();
+      throw new Error(text);
+    });
   };
 
   return (
     <>
       <form
-        onSubmit={handleSubmit(onSubmit, (errors) =>
-          console.log(watch("genres"))
-        )}
+        onSubmit={handleSubmit(onSubmit, (errors) => {
+          throw errors;
+        })}
         className="col-span-full grid grid-cols-4 gap-5 md:grid-cols-6 lg:grid-cols-10"
       >
         <h3 className="col-span-full h-7 text-xl font-medium text-white/40">

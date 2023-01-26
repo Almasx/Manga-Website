@@ -171,28 +171,26 @@ export const postComics = async ({
     });
   }
 
-  // const comics = await ctx.prisma.comics.create({
-  //   include: { thumbnail: true },
-  //   data: {
-  //     title,
-  //     title_ru,
-  //     status,
-  //     year,
-  //     genres: {
-  //       connect: [...genres.map((genreId) => ({ id: genreId }))],
-  //     },
-  //     description,
-  //     thumbnail: { create: {} },
-  //   },
-  // });
-  // console.log(comics.thumbnail?.id);
-  ctx.prisma.thumbnail.deleteMany({});
+  const comics = await ctx.prisma.comics.create({
+    include: { thumbnail: true },
+    data: {
+      title,
+      title_ru,
+      status,
+      year,
+      genres: {
+        connect: [...genres.map((genreId) => ({ id: genreId }))],
+      },
+      description,
+      thumbnail: { create: {} },
+    },
+  });
 
   return new Promise((resolve, reject) => {
     s3.createPresignedPost(
       {
         Fields: {
-          key: `thumnails/${1}`, //comics.thumbnail?.id
+          key: `thumbnails/${comics.thumbnail?.id}`,
         },
         Conditions: [
           ["starts-with", "$Content-Type", "image/"],

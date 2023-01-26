@@ -23,7 +23,10 @@ const SelectGenres = ({
   onToggleGenre,
   className = "",
 }: ISelectGenresProps) => {
-  const genres = trpc.comics.getGenres.useQuery();
+  const genres = trpc.comics.getGenres.useQuery(undefined, {
+    staleTime: Infinity,
+    cacheTime: Infinity,
+  });
   const sortedAndSearchedGenres = useGenres(genres.data ?? [], selected, query);
   const debounce = useDebounce();
 

@@ -9,7 +9,10 @@ import { trpc } from "../../../utils/trpc";
 const AccountBar = () => {
   const router = useRouter();
   const session = useSession();
-  const { data } = trpc.auth.getBookmarks.useQuery();
+  const { data } = trpc.auth.getBookmarks.useQuery(undefined, {
+    staleTime: Infinity,
+    cacheTime: Infinity,
+  });
 
   return (
     <SideBar.Wrapper className="col-span-2 ">
