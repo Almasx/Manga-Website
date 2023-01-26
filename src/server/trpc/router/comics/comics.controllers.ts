@@ -76,6 +76,10 @@ export const getComics = async ({
   const comics = await ctx.prisma.comics
     .findUnique({
       select: {
+        title: true,
+        title_ru: true,
+        description: true,
+        status: true,
         genres: true,
         chapters: {
           select: {
