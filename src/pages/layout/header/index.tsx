@@ -6,6 +6,7 @@ import AccountModal from "./AccountModal";
 import SignIn from "./Authentication/SignIn";
 import Registration from "./Authentication/Registration";
 import Image from "next/image";
+import { useHideOnScroll } from "../../../hooks/useHideOnScroll";
 
 interface NavigationProps {
   className?: string;
@@ -18,28 +19,11 @@ const Navigation = ({
   children = null,
   dynamicHide = false,
 }: NavigationProps) => {
-  const [modal, setModal] = useState<boolean>(false);
-  const navigationBar = useRef<HTMLDivElement | null>(null);
-  const [hasAccount, setHasAccount] = useState<boolean>(true);
   const { status, data } = useSession();
+  const navigationBar = useHideOnScroll<HTMLDivElement>(dynamicHide);
 
-  useEffect(() => {
-    let prevScrollpos = window.pageYOffset;
-    window.onscroll = () => {
-      if (dynamicHide) {
-        const currentScrollPos = window.pageYOffset;
-
-        if (prevScrollpos > currentScrollPos) {
-          navigationBar.current!.style.top = "0px";
-        } else {
-          navigationBar.current!.style.top = `${-navigationBar.current!
-            .offsetHeight}px`;
-        }
-
-        prevScrollpos = currentScrollPos;
-      }
-    };
-  }, [dynamicHide]);
+  const [modal, setModal] = useState<boolean>(false);
+  const [hasAccount, setHasAccount] = useState<boolean>(true);
 
   return (
     <>
