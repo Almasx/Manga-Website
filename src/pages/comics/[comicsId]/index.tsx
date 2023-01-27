@@ -11,26 +11,19 @@ import type {
   GetServerSidePropsContext,
   InferGetStaticPropsType,
 } from "next/types";
-import { createContextInner } from "../../../server/trpc/context";
-import { createProxySSGHelpers } from "@trpc/react-query/ssg";
-import { appRouter } from "../../../server/trpc/router/_app";
-import { trpc } from "../../../utils/trpc";
+
+import { ssgHelper, trpc } from "../../../utils/trpc";
 import Badge from "../../../components/atoms/Badge";
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext<{ comicsId: string }>
 ) {
-  const ssg = createProxySSGHelpers({
-    router: appRouter,
-    ctx: await createContextInner({ session: null }),
-    transformer: superjson, // optional - adds superjson serialization
-  });
   const comicsId = parseInt(context.params?.comicsId as string);
 
-  await ssg.comics.getComics.prefetch({ comicsId });
+  await ssgHelper.comics.getComics.prefetch({ comicsId });
   return {
     props: {
-      trpcState: ssg.dehydrate(),
+      trpcState: ssgHelper.dehydrate(),
       comicsId,
     },
   };
