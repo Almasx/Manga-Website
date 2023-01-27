@@ -5,13 +5,16 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 
 const ChapterCard = ({
-  chapter,
+  id,
+  volume,
+  createdAt,
   packed = false,
 }: {
-  chapter: Chapter;
+  id: number;
+  volume: number;
+  createdAt: Chapter["createdAt"];
   packed?: boolean;
 }) => {
-  const { id, volume, createdAt } = chapter;
   const [liked, setLiked] = useState<boolean>(false);
   const router = useRouter();
 

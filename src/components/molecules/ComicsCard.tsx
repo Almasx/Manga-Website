@@ -42,7 +42,7 @@ const ComicsCard = ({
         )}
       >
         <img
-          src={thumbnail.id}
+          // src={thumbnail.id}
           alt="lol"
           className="h-full w-full rounded-2xl text-white"
         />

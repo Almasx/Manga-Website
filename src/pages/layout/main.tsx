@@ -10,7 +10,7 @@ export default function MainLayout({
       <Navigation />
       <main
         className="relative mx-auto grid
-       w-full  grid-cols-4 gap-5 px-4 text-white md:grid-cols-8 lg:grid-cols-12 lg:px-0"
+       w-full grid-cols-4 gap-5 px-4 text-white md:grid-cols-8 lg:grid-cols-12"
       >
         {children}
       </main>
