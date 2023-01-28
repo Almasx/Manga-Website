@@ -48,7 +48,7 @@ const ComicsList = () => {
         fetchNextPage();
       }}
       hasMore={!!hasNextPage}
-      loader={<></>}
+      loader={<>gg</>}
       className="mt-5 grid grid-cols-2 gap-5 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-6 "
     >
       {data &&

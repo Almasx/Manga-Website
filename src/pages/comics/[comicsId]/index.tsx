@@ -18,6 +18,8 @@ import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 import { appRouter } from "../../../server/trpc/router/_app";
 import ComicsCard from "../../../components/molecules/ComicsCard";
 import ChapterCard from "../../../components/molecules/ChapterCard";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext<{ comicsId: string }>
@@ -41,34 +43,40 @@ export async function getServerSideProps(
 const Comics = ({
   comicsId,
 }: InferGetStaticPropsType<typeof getServerSideProps>) => {
-  const { data: comics, isLoading } = trpc.comics.getComics.useQuery({
+  const { data: comics } = trpc.comics.getComics.useQuery({
     comicsId,
   });
+  const session = useSession();
+  const { asPath } = useRouter();
 
   return (
     <>
       <section className="grid grid-cols-8 gap-5 pt-8 lg:col-span-8">
         <div className="lg:col-span-2">
           <div className="flex flex-col gap-5">
-            {/* {(
             <img
-              src={comics.thumbnail}
+              src={`https://darkfraction.s3.eu-north-1.amazonaws.com/thumbnails/${comics?.thumbnail?.id}`}
               alt="lol"
               className="w-full rounded-2xl text-white"
             />
-          )} */}
-            <div className="relative flex flex-row gap-5">
-              <Button className="flex-grow">Начать читать</Button>
-              <Button
-                variant="text"
-                content="icon"
-                className="aspect-square w-10 "
-              >
-                <div className="scale-125">
-                  <Save2 />
-                </div>
-              </Button>
-              {/* <DropDown
+            {session.data?.user?.role === "ADMIN" && (
+              <Link href={`${asPath}/chapter/add-chapter`} className="flex">
+                <Button className="flex-grow">Добавить Главу</Button>
+              </Link>
+            )}
+            {session.data?.user?.role === "USER" && (
+              <div className="relative flex flex-row gap-5">
+                <Button className="flex-grow">Начать читать</Button>
+                <Button
+                  variant="text"
+                  content="icon"
+                  className="aspect-square w-10 "
+                >
+                  <div className="scale-125">
+                    <Save2 />
+                  </div>
+                </Button>
+                {/* <DropDown
               header={
                 
               }
@@ -80,15 +88,17 @@ const Comics = ({
                 )
               )}
             ></DropDown> */}
-            </div>
+              </div>
+            )}
           </div>
         </div>
+
         <div className="relative flex flex-col gap-5 pr-10  lg:col-span-6">
           <div className="">
             <h1 className="pb-1 text-4xl font-bold text-white">
               {comics?.title_ru}
             </h1>
-            <h3 className="text-white/33 text-2xl font-bold">
+            <h3 className="text-2xl font-bold text-white/30">
               {comics?.title}
             </h3>
           </div>
@@ -100,28 +110,28 @@ const Comics = ({
           <p className="text-sm text-white">{comics?.description}</p>
           <div className="mt-auto grid grid-cols-4">
             <div>
-              <h4 className="text-white/33 text-base font-medium">Статус</h4>
+              <h4 className="text-base font-medium text-white/30">Статус</h4>
               <h3 className="text-lg font-bold text-white">{comics?.status}</h3>
             </div>
             <div>
-              <h4 className="text-white/33 text-base font-medium">Выпуск</h4>
+              <h4 className="text-base font-medium text-white/30">Выпуск</h4>
               <h3 className="text-lg font-bold text-white">{comics?.year}</h3>
             </div>
             <div>
-              <h4 className="text-white/33 text-base font-medium">
+              <h4 className="text-base font-medium text-white/30">
                 Просмотренно
               </h4>
               <h3 className="flex items-center gap-2 text-lg font-bold text-white">
-                13.4k <Eye size="24" className="text-white/33" />
+                13.4k <Eye size="24" className="text-white/30" />
               </h3>
             </div>
             <div>
-              <h4 className="text-white/33 text-base font-medium">
+              <h4 className="text-base font-medium text-white/30">
                 Сохранённые
               </h4>
               <h3 className="flex items-center gap-2 text-lg font-bold text-white">
                 {comics?.saved}
-                <Save2 size="24" className="text-white/33" />
+                <Save2 size="24" className="text-white/30" />
               </h3>
             </div>
           </div>

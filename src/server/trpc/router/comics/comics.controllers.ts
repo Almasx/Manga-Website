@@ -81,6 +81,7 @@ export const getComics = async ({
         description: true,
         status: true,
         genres: true,
+        thumbnail: true,
         chapters: {
           select: {
             id: true,

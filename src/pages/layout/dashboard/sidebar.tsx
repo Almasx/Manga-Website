@@ -5,9 +5,10 @@ import CheckBox from "../../../components/atoms/CheckBoxField";
 import SideBar from "../../../components/organisms/SideBar";
 import { useRouter } from "next/router";
 import { trpc } from "../../../utils/trpc";
+import Link from "next/link";
 
 const AccountBar = () => {
-  const router = useRouter();
+  const { asPath } = useRouter();
   const session = useSession();
   const { data } = trpc.auth.getBookmarks.useQuery(undefined, {
     staleTime: Infinity,
@@ -45,18 +46,12 @@ const AccountBar = () => {
       {session.data?.user?.role === "ADMIN" && (
         <SideBar.Section.Wrapper>
           <SideBar.Section.Header text="Манги" />
-          <SideBar.Section.Tab
-            active={false}
-            onClick={() =>
-              !router.asPath.endsWith("/add-comics") &&
-              router.push(router.asPath + "/add-comics", undefined, {
-                shallow: true,
-              })
-            }
-          >
-            <Book1 size="24" />
-            Добавить мангу
-          </SideBar.Section.Tab>
+          <Link href={`${asPath}/add-comics`}>
+            <SideBar.Section.Tab active={false}>
+              <Book1 size="24" />
+              Добавить мангу
+            </SideBar.Section.Tab>
+          </Link>
         </SideBar.Section.Wrapper>
       )}
 
@@ -64,23 +59,11 @@ const AccountBar = () => {
         <SideBar.Section.Wrapper>
           <SideBar.Section.Header text="Сохранённые" />
           {data?.bookmarks.map((bookmark, index: number) => (
-            <SideBar.Section.Tab
-              key={index}
-              active={false}
-              classNames="rounded-xl"
-              onClick={() => {
-                !router.asPath.includes("/bookmarks/") &&
-                  router.push(
-                    router.asPath + `/bookmarks/${bookmark.id}`,
-                    undefined,
-                    {
-                      shallow: true,
-                    }
-                  );
-              }}
-            >
-              {bookmark.title}
-            </SideBar.Section.Tab>
+            <Link href={`${asPath}/bookmarks/${bookmark.id}`} key={index}>
+              <SideBar.Section.Tab active={false} classNames="rounded-xl">
+                {bookmark.title}
+              </SideBar.Section.Tab>
+            </Link>
           ))}
         </SideBar.Section.Wrapper>
       )}

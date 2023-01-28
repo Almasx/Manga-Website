@@ -37,16 +37,16 @@ const ComicsCard = ({
     >
       <div
         className={clsx(
-          "relative grow ",
+          "relative grow",
           variant === "recomendation" && "aspect-square w-2/5"
         )}
       >
         <img
-          // src={thumbnail.id}
+          src={`https://darkfraction.s3.eu-north-1.amazonaws.com/thumbnails/${thumbnail?.id}`}
           alt="lol"
           className="h-full w-full rounded-2xl text-white"
         />
-        {rating && (
+        {rating !== undefined && (
           <div
             className={clsx(
               "flex flex-row items-center gap-x-1 bg-black/80 px-[6px] py-1 backdrop-blur-2xl",
@@ -54,7 +54,7 @@ const ComicsCard = ({
             )}
           >
             <Star />
-            <p className="text-[10px] text-white/60 ">{rating.toFixed(1)}</p>
+            <p className="text-xs text-white/60 ">{rating.toFixed(1)}</p>
           </div>
         )}
       </div>
