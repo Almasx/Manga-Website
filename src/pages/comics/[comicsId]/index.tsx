@@ -3,7 +3,7 @@ import CommentField from "../../../components/molecules/CommentField";
 import Comments from "../../../components/molecules/Comments";
 import superjson from "superjson";
 
-import { Eye, Save2, Star1 } from "iconsax-react";
+import { Edit, Eye, Save2, Star1 } from "iconsax-react";
 import TrendUpBulk from "../../../../public/icons/TrendUpBulk.svg";
 import Button from "../../../components/atoms/Button";
 import type {
@@ -53,12 +53,23 @@ const Comics = ({
     <>
       <section className="grid grid-cols-8 gap-5 pt-8 lg:col-span-8">
         <div className="lg:col-span-2">
-          <div className="flex flex-col gap-5">
+          <div className="relative flex flex-col gap-5">
             <img
               src={`https://darkfraction.s3.eu-north-1.amazonaws.com/thumbnails/${comics?.thumbnail?.id}`}
               alt="lol"
               className="w-full rounded-2xl text-white"
             />
+            {session.data?.user?.role === "ADMIN" && (
+              <Link
+                href={`${asPath}/edit`}
+                className="absolute top-0 right-0 flex "
+              >
+                <Button className="flex-grow rounded-tl-none rounded-br-none bg-primary/80 px-3 py-3 backdrop-blur-2xl">
+                  <Edit size="20" />
+                </Button>
+              </Link>
+            )}
+
             {session.data?.user?.role === "ADMIN" && (
               <Link href={`${asPath}/chapter/add-chapter`} className="flex">
                 <Button className="flex-grow">Добавить Главу</Button>
