@@ -20,7 +20,7 @@ const SideBar = ({ show, setShow }: SideBarProps) => {
   return (
     <aside
       className={clsx(
-        "fixed top-0 z-10 -ml-[15px] flex h-screen flex-col gap-y-10 bg-black/80 px-[15px] pt-8 pb-5 md:mx-0 ",
+        "fixed top-0 z-10 -ml-[15px] flex h-[calc(100vh-64px)] flex-col gap-y-10 bg-black/80 px-[15px] pt-8 pb-5 md:mx-0 ",
         "backdrop-blur-2xl md:sticky md:col-span-4 md:col-start-9 md:border-l md:border-stroke-100 md:px-5 lg:col-start-10",
         show && "hidden"
       )}
