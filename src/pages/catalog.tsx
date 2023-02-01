@@ -1,9 +1,6 @@
 import { SearchNormal } from "iconsax-react";
 import clsx from "clsx";
 
-import TextField from "../components/atoms/TextField";
-import Button from "../components/atoms/Button";
-import TabBar from "../components/atoms/TabBar";
 import ComicsList from "../components/organisms/ComicsList";
 
 import TrendUp from "../../public/icons/TrendUp.svg";
@@ -11,6 +8,9 @@ import type { ReactNode } from "react";
 import CatalogLayout from "./layout/catalog";
 import { useFilterStore } from "../hooks/useFilterStore";
 import useDebounce from "../hooks/useDebounce";
+import TextField from "components/ui/fields/TextField";
+import Button from "components/ui/primitives/Button";
+import TabBar from "components/ui/primitives/TabBar";
 
 const Catalog = () => {
   const { filter, setSort, setQuery, toggleOrder } = useFilterStore(
@@ -24,7 +24,9 @@ const Catalog = () => {
       <TextField
         className="pt-3"
         placeholder="пр: ванпачмен"
-        onChange={(event) => debounce(event.target.value, setQuery)}
+        onChange={(event: { target: { value: string } }) =>
+          debounce(event.target.value, setQuery)
+        }
         endIcon={<SearchNormal size="20" className="text-white/33 " />}
       />
       <div className="relative flex w-full flex-row justify-between">

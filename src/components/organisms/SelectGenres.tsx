@@ -1,12 +1,10 @@
 import { SearchNormal } from "iconsax-react";
-import { trpc } from "../../utils/trpc";
-
-import TextField from "../atoms/TextField";
-import Badge from "../atoms/Badge";
-
-import useDebounce from "../../hooks/useDebounce";
-import { useGenres } from "../../hooks/useGenres";
 import clsx from "clsx";
+import TextField from "components/ui/fields/TextField";
+import Badge from "components/ui/primitives/Badge";
+import useDebounce from "hooks/useDebounce";
+import { useGenres } from "hooks/useGenres";
+import { trpc } from "utils/trpc";
 
 interface ISelectGenresProps {
   selected: IFilter["genres"]["selected"];
@@ -35,7 +33,9 @@ const SelectGenres = ({
       <TextField
         placeholder="пр: детектив, драма..."
         endIcon={<SearchNormal size="20" className="text-white/30 " />}
-        onChange={(event) => onQuery(event.target.value)} // debounce(event.target.value, onQuery)
+        onChange={(event: { target: { value: string } }) =>
+          onQuery(event.target.value)
+        } // debounce(event.target.value, onQuery)
       />
       <div className="mt-4 mb-auto flex flex-row flex-wrap items-center justify-start overflow-y-auto">
         {sortedAndSearchedGenres.map((genre) => (

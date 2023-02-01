@@ -1,5 +1,6 @@
+import GridLayout from "components/ui/templates/GridLayout";
+import Navigation from "components/ui/templates/Navigation";
 import type { ReactNode } from "react";
-import Navigation from "../header";
 import SideBar from "./sidebar";
 
 const DashBoardLayout = ({ children }: { children: ReactNode }) => {
@@ -9,14 +10,9 @@ const DashBoardLayout = ({ children }: { children: ReactNode }) => {
         <Navigation.Links />
       </Navigation.Wrapper>
 
-      <main
-        className="relative mx-auto grid w-full grid-cols-4 gap-5 px-4 
-                   md:grid-cols-8 lg:grid-cols-12 lg:px-0"
-      >
+      <main className="relative mx-auto flex w-full flex-row ">
         <SideBar />
-        <div className="col-span-full col-start-3 grid grid-cols-4 gap-5 py-8 pr-5 md:grid-cols-6 lg:grid-cols-10">
-          {children}
-        </div>
+        <GridLayout>{children}</GridLayout>
       </main>
     </div>
   );

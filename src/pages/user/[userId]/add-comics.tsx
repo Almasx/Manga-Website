@@ -6,7 +6,7 @@ import { z } from "zod";
 
 import Button from "../../../components/atoms/Button";
 import RadioGroupField from "../../../components/atoms/RadioGroupField";
-import TextAreaField from "../../../components/atoms/TextAreaField";
+import TextAreaField from "../../../components/ui/fields/TextAreaField";
 import TextField from "../../../components/atoms/TextField";
 import { zodResolver } from "@hookform/resolvers/zod";
 import SelectGenres from "../../../components/organisms/SelectGenres";
@@ -16,7 +16,7 @@ import _ from "lodash";
 import { trpc } from "../../../utils/trpc";
 import type { PresignedPost } from "aws-sdk/clients/s3";
 import NumberField from "../../../components/atoms/NumberField";
-import FileField from "../../../components/molecules/FileField";
+import FileField from "../../../components/ui/fields/FileField";
 import { useRouter } from "next/router";
 
 const MAX_FILE_SIZE = 500000;

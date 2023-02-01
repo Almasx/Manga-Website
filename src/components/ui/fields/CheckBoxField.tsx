@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import type { ReactNode } from "react";
-import Tick from "../../../public/icons/Tick.svg";
+import Tick from "../../../../public/icons/Tick.svg";
 
 interface ICheckBoxFieldProps {
   children: ReactNode;

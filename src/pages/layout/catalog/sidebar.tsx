@@ -1,13 +1,11 @@
 import clsx from "clsx";
-import Button from "../../../components/atoms/Button";
-import CheckBox from "../../../components/atoms/CheckBoxField";
 import CancelCross from "../../../../public/icons/CancelCross.svg";
-import { trpc } from "../../../utils/trpc";
-import { useGenres } from "../../../hooks/useGenres";
 import useScreen from "../../../hooks/useScreen";
 import { useFilterStore } from "../../../hooks/useFilterStore";
 import shallow from "zustand/shallow";
 import SelectGenres from "../../../components/organisms/SelectGenres";
+import CheckBoxField from "components/ui/fields/CheckBoxField";
+import Button from "components/ui/primitives/Button";
 
 interface SideBarProps {
   show: boolean;
@@ -50,27 +48,27 @@ const SideBar = ({ show, setShow }: SideBarProps) => {
         <h3 className="mb-3 text-xl font-bold text-white md:text-2xl">
           Статус
         </h3>
-        <CheckBox
+        <CheckBoxField
           onClick={() => setStatus("ongoing")}
           active={filter.status === "ongoing"}
           key="ongoing"
         >
           Выпускается
-        </CheckBox>
-        <CheckBox
+        </CheckBoxField>
+        <CheckBoxField
           onClick={() => setStatus("abandoned")}
           active={filter.status === "abandoned"}
           key="abandoned"
         >
           Заброшён
-        </CheckBox>
-        <CheckBox
+        </CheckBoxField>
+        <CheckBoxField
           onClick={() => setStatus("finished")}
           active={filter.status === "finished"}
           key="finished"
         >
           Завершён
-        </CheckBox>
+        </CheckBoxField>
       </section>
 
       <Button

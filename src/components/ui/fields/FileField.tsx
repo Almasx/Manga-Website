@@ -1,9 +1,9 @@
 import clsx from "clsx";
 import { ImportCurve } from "iconsax-react";
 import React, { forwardRef, useEffect, useState } from "react";
-import type { IField } from "../../types/IField";
-import Button from "../atoms/Button";
-import Divider from "../atoms/Divider";
+import type { IField } from "../../../types/IField";
+import Button from "../primitives/Button";
+import Divider from "../primitives/Divider";
 
 export type IFileFieldProps = {
   watchThumbnail: any;

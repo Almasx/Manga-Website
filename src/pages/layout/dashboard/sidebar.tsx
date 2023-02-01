@@ -1,11 +1,11 @@
 import { signOut, useSession } from "next-auth/react";
 import { Book1, Logout, Notification, Setting2 } from "iconsax-react";
 
-import CheckBox from "../../../components/atoms/CheckBoxField";
-import SideBar from "../../../components/organisms/SideBar";
 import { useRouter } from "next/router";
 import { trpc } from "../../../utils/trpc";
 import Link from "next/link";
+import SideBar from "components/ui/templates/SideBar";
+import CheckBoxField from "components/ui/fields/CheckBoxField";
 
 const AccountBar = () => {
   const { asPath } = useRouter();
@@ -72,8 +72,8 @@ const AccountBar = () => {
         <SideBar.Section.Wrapper>
           <SideBar.Section.Header text="Сортировка" />
           <ul className="flex flex-col px-5 pb-3">
-            <CheckBox active={true}>По дате добавления</CheckBox>
-            <CheckBox active={false}>По дате обновления</CheckBox>
+            <CheckBoxField active={true}>По дате добавления</CheckBoxField>
+            <CheckBoxField active={false}>По дате обновления</CheckBoxField>
           </ul>
         </SideBar.Section.Wrapper>
       )}

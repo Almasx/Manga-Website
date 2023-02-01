@@ -1,4 +1,5 @@
-import Navigation from "./header";
+import GridLayout from "components/ui/templates/GridLayout";
+import Navigation from "components/ui/templates/Navigation";
 
 export default function MainLayout({
   children,
@@ -10,12 +11,7 @@ export default function MainLayout({
       <Navigation.Wrapper auth={true}>
         <Navigation.Links />
       </Navigation.Wrapper>
-      <main
-        className="relative mx-auto grid
-       w-full grid-cols-4 gap-5 px-4  md:grid-cols-8 lg:grid-cols-12"
-      >
-        {children}
-      </main>
+      <GridLayout>{children}</GridLayout>
     </div>
   );
 }

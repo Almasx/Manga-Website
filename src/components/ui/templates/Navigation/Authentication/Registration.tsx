@@ -1,8 +1,7 @@
-import { signIn } from "next-auth/react";
-import Button from "../../../../components/atoms/Button";
-import Modal from "../../../../components/atoms/Modal";
+import Form from "components/ui/templates/Form";
+import Button from "components/ui/primitives/Button";
+import Modal from "components/ui/primitives/Modal";
 import { z } from "zod";
-import Form from "../../../../components/organisms/Form";
 import OAuth from "./OAuth";
 
 const SignUpSchema = z.object({

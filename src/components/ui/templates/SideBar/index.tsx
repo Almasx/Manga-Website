@@ -10,7 +10,10 @@ interface IWrapperProps {
 const Wrapper = ({ children, className = "" }: IWrapperProps) => {
   return (
     <aside
-      className={clsx(" flex flex-col border-r border-stroke-100 ", className)}
+      className={clsx(
+        "flex w-72 flex-col border-r border-stroke-100",
+        className
+      )}
     >
       {children}
     </aside>

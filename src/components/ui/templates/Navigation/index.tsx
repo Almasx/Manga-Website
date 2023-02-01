@@ -5,8 +5,8 @@ import { useState } from "react";
 import AccountModal from "./AccountModal";
 import SignIn from "./Authentication/SignIn";
 import Registration from "./Authentication/Registration";
-import { useHideOnScroll } from "../../../hooks/useHideOnScroll";
 import Links from "./Links";
+import { useHideOnScroll } from "hooks/useHideOnScroll";
 
 interface IWrapperProps {
   className?: string;

@@ -1,8 +1,8 @@
+import Button from "components/ui/primitives/Button";
+import Divider from "components/ui/primitives/Divider";
 import { Google } from "iconsax-react";
 import { signIn } from "next-auth/react";
 import React from "react";
-import Button from "../../../../components/atoms/Button";
-import Divider from "../../../../components/atoms/Divider";
 
 const OAuth = () => {
   return (

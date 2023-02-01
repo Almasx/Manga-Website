@@ -5,14 +5,13 @@ import superjson from "superjson";
 
 import { Edit, Eye, Save2, Star1 } from "iconsax-react";
 import TrendUpBulk from "../../../../public/icons/TrendUpBulk.svg";
-import Button from "../../../components/atoms/Button";
 import type {
   GetServerSidePropsContext,
   InferGetStaticPropsType,
 } from "next/types";
 
 import { trpc } from "../../../utils/trpc";
-import Badge from "../../../components/atoms/Badge";
+import Badge from "../../../components/ui/primitives/Badge";
 import { createContextInner } from "../../../server/trpc/context";
 import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 import { appRouter } from "../../../server/trpc/router/_app";
@@ -20,6 +19,7 @@ import ComicsCard from "../../../components/molecules/ComicsCard";
 import ChapterCard from "../../../components/molecules/ChapterCard";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import Button from "components/ui/primitives/Button";
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext<{ comicsId: string }>

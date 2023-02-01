@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import type { ReactNode } from "react";
-import { useState } from "react";
-import Cross from "../../../public/icons/Cross.svg";
+import Cross from "../../../../public/icons/Cross.svg";
 
 interface BadgeProps {
   children: ReactNode;
