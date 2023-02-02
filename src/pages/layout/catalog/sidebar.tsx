@@ -7,12 +7,12 @@ import SelectGenres from "../../../components/organisms/SelectGenres";
 import CheckBoxField from "components/ui/fields/CheckBoxField";
 import Button from "components/ui/primitives/Button";
 
-interface SideBarProps {
+interface IFilterSideBarProps {
   show: boolean;
   setShow: (event?: any) => void;
 }
 
-const SideBar = ({ show, setShow }: SideBarProps) => {
+const FilterSideBar = ({ show, setShow }: IFilterSideBarProps) => {
   const { filter, resetFilter, toggleGenre, setStatus, setGenreQuery } =
     useFilterStore((state) => state, shallow);
   const { isDesktop } = useScreen();
@@ -83,4 +83,4 @@ const SideBar = ({ show, setShow }: SideBarProps) => {
   );
 };
 
-export default SideBar;
+export default FilterSideBar;

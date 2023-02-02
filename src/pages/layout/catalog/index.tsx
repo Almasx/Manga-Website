@@ -2,7 +2,7 @@ import useScreen from "../../../hooks/useScreen";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { FilterSearch } from "iconsax-react";
-import SideBar from "./sidebar";
+import FilterSideBar from "./sidebar";
 import Button from "components/ui/primitives/Button";
 import Navigation from "components/ui/templates/Navigation";
 
@@ -20,7 +20,7 @@ export default function CatalogLayout({ children }: { children: ReactNode }) {
                   md:grid-cols-8 lg:grid-cols-12 lg:px-0"
       >
         {children}
-        <SideBar show={showSideBar} setShow={setShowSideBar} />
+        <FilterSideBar show={showSideBar} setShow={setShowSideBar} />
 
         {isDesktop && (
           <div className="fixed bottom-[15px] right-[15px] z-10">

@@ -71,7 +71,25 @@ const Comics = ({
             )}
 
             {session.data?.user?.role === "ADMIN" && (
-              <Link href={`${asPath}/chapter/add-chapter`} className="flex">
+              <Link
+                href={{
+                  pathname: `${asPath}/chapter/add-chapter`,
+                  query: {
+                    title: comics?.title,
+                    title_ru: comics?.title_ru,
+                    new_chapter: comics?.chapters
+                      ? comics?.chapters[comics?.chapters?.length - 1]?.id
+                      : 1,
+                    volume: comics?.chapters
+                      ? comics?.chapters[comics?.chapters?.length - 1]?.volume
+                      : 1,
+                    thumbnail:
+                      `https://darkfraction.s3.eu-north-1.amazonaws.com/thumbnails/${comics?.thumbnail?.id}` ??
+                      "",
+                  },
+                }}
+                className="flex"
+              >
                 <Button className="flex-grow">Добавить Главу</Button>
               </Link>
             )}
