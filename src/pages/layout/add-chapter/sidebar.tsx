@@ -15,7 +15,7 @@ const FormSideBar = () => {
         />
 
         <SideBar.Section.Header text="Том \ глава" />
-        <div className="flex flex-row gap-5 px-5">
+        <div className="flex flex-row gap-3 px-5">
           <NumberField placeholder={`${query.new_chapter} том`} />
           <NumberField placeholder={`${query.new_chapter} глава`} />
         </div>

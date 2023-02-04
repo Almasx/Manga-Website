@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { forwardRef } from "react";
-import type { IField } from "../../types/IField";
+import type { IField } from "types/IField";
 
 export type ITextFieldProps<T> = {
   className?: string;
@@ -42,7 +42,9 @@ const TextField = forwardRef<
         )}
       >
         {startIcon !== null && (
-          <div className="absolute left-5 mr-3 ">{startIcon}</div>
+          <div className="absolute left-5 top-1/2 mr-3 -translate-y-1/2">
+            {startIcon}
+          </div>
         )}
         <input
           name={name}
@@ -64,7 +66,11 @@ const TextField = forwardRef<
             startIcon !== null && "pl-12"
           )}
         />
-        {endIcon !== null && <div className="absolute right-5 ">{endIcon}</div>}
+        {endIcon !== null && (
+          <div className="absolute right-5 top-1/2 -translate-y-1/2">
+            {endIcon}
+          </div>
+        )}
         {label !== undefined && (
           <label
             htmlFor={name}
