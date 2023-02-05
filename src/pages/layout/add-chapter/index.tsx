@@ -9,7 +9,7 @@ const AddChapterLayout = ({ children }: { children: ReactNode }) => {
       <Header />
       <div className="flex flex-row">
         <FormSideBar />
-        <GridLayout>{children}</GridLayout>
+        <div className="flex w-full flex-col py-4 px-4">{children}</div>
       </div>
     </div>
   );

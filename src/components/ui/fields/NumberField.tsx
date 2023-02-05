@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { forwardRef } from "react";
-import type { IField } from "../../types/IField";
+import type { IField } from "types/IField";
 
 export type INumberFieldProps<T> = {
   className?: string;
@@ -28,7 +28,6 @@ const NumberField = forwardRef<
     <>
       <div
         className={clsx(
-          className,
           "relative",
           (label !== undefined || error !== undefined) && "flex flex-col "
         )}
@@ -49,7 +48,8 @@ const NumberField = forwardRef<
             "ease peer w-full rounded-2xl border border-stroke-200 bg-surface/5 bg-black",
             "px-5 py-3 text-sm text-white duration-300 placeholder:text-white/30 focus:border-primary focus:outline-none",
             !error && "focus:ring-2",
-            error && "border-red-500 bg-red-500/10"
+            error && "border-red-500 bg-red-500/10",
+            className
           )}
         />
         {label !== undefined && (

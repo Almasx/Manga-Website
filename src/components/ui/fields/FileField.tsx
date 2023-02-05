@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { ImportCurve } from "iconsax-react";
+import { FolderCloud, ImportCurve } from "iconsax-react";
 import React, { forwardRef, useEffect, useState } from "react";
 import type { IField } from "../../../types/IField";
 import Button from "../primitives/Button";
@@ -7,10 +7,16 @@ import Divider from "../primitives/Divider";
 
 export type IFileFieldProps = {
   watchThumbnail: any;
+  showPreview?: boolean;
+  className?: string;
 } & IField<HTMLInputElement>;
 
 const FileField = forwardRef<HTMLInputElement, IFileFieldProps>(
-  ({ watchThumbnail, name, onChange, onBlur, error }, ref) => {
+  (
+    { watchThumbnail, name, onChange, onBlur, error, className, showPreview },
+    ref
+  ) => {
+    showPreview ||= true;
     const [preview, setPreview] = useState<any>(null);
 
     useEffect(() => {
@@ -30,24 +36,25 @@ const FileField = forwardRef<HTMLInputElement, IFileFieldProps>(
             "relative flex flex-col items-center overflow-clip",
             "border border-dashed border-primary",
             "rounded-2xl bg-primary/10 px-3 py-6 duration-300",
-            error && "!border-red-500 !bg-red-500/10"
+            error && "!border-red-500 !bg-red-500/10",
+            className
           )}
         >
           <div className="text-bold absolute top-2 right-2 z-20 rounded-full bg-black bg-surface/5 py-1 px-2 text-xs">
             227 x 338
           </div>
-          <ImportCurve size="64" className="mt-20 mb-6 text-white/30" />
+          <FolderCloud size="24" variant="Bold" className="mb-4 text-primary" />
           <div className="flex flex-col items-center gap-3">
-            <h6 className="font-meduim font-base">Залейте обложку манги</h6>
+            <h6 className="font-base font-medium">
+              Перетащите или <span className="text-primary">Выберите файл</span>{" "}
+              для загрузки
+            </h6>
             <p className="-mt-2 text-center text-xs text-white/30">
-              Поддерживает форматы <br />
-              .jpeg, .png, .jpg
+              Поддерживает форматы .jpeg, .png, .jpg
             </p>
-            <Divider>или</Divider>
-            <Button>Выбрать обложку</Button>
           </div>
 
-          {preview !== null && (
+          {preview !== null && showPreview === true && (
             <img
               src={preview}
               alt="thumbnail image"

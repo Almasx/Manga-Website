@@ -78,10 +78,11 @@ const Comics = ({
                     title: comics?.title,
                     title_ru: comics?.title_ru,
                     new_chapter: comics?.chapters
-                      ? comics?.chapters[comics?.chapters?.length - 1]?.id
+                      ? comics?.chapters[comics?.chapters?.length - 1]?.id || 1
                       : 1,
                     volume: comics?.chapters
-                      ? comics?.chapters[comics?.chapters?.length - 1]?.volume
+                      ? comics?.chapters[comics?.chapters?.length - 1]
+                          ?.volume || 1
                       : 1,
                     thumbnail:
                       `https://darkfraction.s3.eu-north-1.amazonaws.com/thumbnails/${comics?.thumbnail?.id}` ??

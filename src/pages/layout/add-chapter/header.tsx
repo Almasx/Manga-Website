@@ -5,12 +5,12 @@ import { useRouter } from "next/router";
 import React from "react";
 
 const Header = () => {
-  const { query } = useRouter();
+  const { query, back } = useRouter();
 
   return (
     <Navigation.Wrapper>
       <div className="flex flex-row items-center gap-5">
-        <ArrowLeft2 size="18" />
+        <ArrowLeft2 size="18" onClick={() => back()} />
         Загрузка глав {query.title}
       </div>
 

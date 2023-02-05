@@ -1,4 +1,3 @@
-import GridLayout from "components/ui/templates/GridLayout";
 import Navigation from "components/ui/templates/Navigation";
 import type { ReactNode } from "react";
 import SideBar from "./sidebar";
@@ -12,7 +11,7 @@ const DashBoardLayout = ({ children }: { children: ReactNode }) => {
 
       <main className="relative mx-auto flex w-full flex-row ">
         <SideBar />
-        <GridLayout>{children}</GridLayout>
+        <div className="flex flex-col py-3 px-4">{children}</div>
       </main>
     </div>
   );
