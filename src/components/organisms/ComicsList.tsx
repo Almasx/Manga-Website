@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
 import { trpc } from "../../utils/trpc";
-import Spinner from "../../../public/icons/Spinner.svg";
 import ComicsCard from "../../components/molecules/ComicsCard";
 import { useMemo } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useFilterStore } from "../../hooks/useFilterStore";
+import Spinner from "components/ui/primitives/Spinner";
 
 const ComicsList = () => {
   const router = useRouter();
