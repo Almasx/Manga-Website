@@ -41,20 +41,10 @@ export const postComicsSchema = z.object({
 });
 
 export const postChapterSchema = z.object({
-  comicsId: z.number({ required_error: "Comics id is required" }),
-  volume: z.number({ required_error: "Volume is required" }),
-  pages: z.array(
-    z
-      .any()
-      .refine(
-        (files) => files?.[0]?.size <= MAX_FILE_SIZE,
-        `Max image size is 5MB.`
-      )
-      .refine(
-        (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-        "Only .jpg, .jpeg, .png and .webp formats are supported."
-      )
-  ),
+  comicsId: z.string({ required_error: "Comics id is required" }),
+  volumeIndex: z.number({ required_error: "Volume is required" }),
+  chapterIndex: z.number({ required_error: "Volume is required" }),
+  pagesLenght: z.number(),
 });
 
 export type GetCatalogSchema = TypeOf<typeof getCatalogSchema>;

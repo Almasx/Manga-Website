@@ -11,7 +11,7 @@ import { env } from "../../../../env/server.mjs";
 import { AWS } from "../../../../libs/aws-config";
 
 const s3 = new AWS.S3();
-const UPLOADING_TIME_LIMIT = 30;
+const UPLOADING_TIME_LIMIT = 600;
 const UPLOAD_MAX_FILE_SIZE = 1000000;
 
 // @desc    Get & Filter/Sort Catalog
@@ -84,8 +84,8 @@ export const getComics = async ({
         thumbnail: true,
         chapters: {
           select: {
-            id: true,
-            volume: true,
+            chapterIndex: true,
+            volumeIndex: true,
             createdAt: true,
           },
         },
@@ -136,22 +136,22 @@ export const getChapter = async ({
     });
   }
 
-  const chapterExist = comics.chapters.some(
-    (chapter) => chapter.id === chapterId
-  );
+  // const chapterExist = comics.chapters.some(
+  //   (chapter) => chapter.id === chapterId
+  // );
 
-  // Check for chapter in comics
-  if (chapterExist) {
-    throw new TRPCError({
-      code: "NOT_FOUND",
-      message: "Chapter not found",
-    });
-  }
+  // // Check for chapter in comics
+  // if (chapterExist) {
+  //   throw new TRPCError({
+  //     code: "NOT_FOUND",
+  //     message: "Chapter not found",
+  //   });
+  // }
 
-  const chapter = await ctx.prisma.chapter.findUnique({
-    where: { id: chapterId },
-  });
-  return chapter;
+  // const chapter = await ctx.prisma.chapter.findUnique({
+  //   where: { id: chapterId },
+  // });
+  // return chapter;
 };
 
 // @desc    Create New Comics
@@ -225,9 +225,9 @@ export const postChapter = async ({
   input: PostChapterSchema;
   ctx: Context;
 }) => {
-  const { volume, comicsId, pages } = input;
+  const { volumeIndex, chapterIndex, comicsId, pagesLenght } = input;
 
-  let comics = await ctx.prisma.comics.findUnique({
+  const comics = await ctx.prisma.comics.findUnique({
     where: { id: comicsId },
     select: { chapters: true },
   });
@@ -240,47 +240,38 @@ export const postChapter = async ({
     });
   }
 
-  // eslint-disable-next-line prefer-const
-  let chapter = await ctx.prisma.chapter.create({
+  const chapter = await ctx.prisma.chapter.create({
+    include: { pages: true },
     data: {
-      volume: volume,
-      comicsId: comicsId,
+      volumeIndex,
+      chapterIndex,
+      comicsId,
+      pages: { createMany: { data: Array(pagesLenght).fill({}) } },
     },
   });
 
-  // const uploadPath = path.join(
-  //   __dirname,
-  //   "../../",
-  //   process.env.UPLOAD_CHAPTER,
-  //   chapter.id.toString()
-  // );
-
-  // Save file in storage
-  // const images = [];
-  // fs.mkdirSync(uploadPath);
-  // for (let i = 1; i <= pages.length; i++) {
-  //   const pagePath = path.join(uploadPath, i.toString() + ".jpeg");
-  //   const pageURI = `http://localhost:3000/uploads/chapter/${chapter.id.toString()}/pages/${i.toString()}`;
-
-  //   await sharp(pages[i - 1].buffer)
-  //     .toFormat("jpeg")
-  //     .jpeg({ quality: 90 })
-  //     .toFile(pagePath);
-  //   images.push(pageURI);
-  // }
-
-  // chapter = await ctx.prisma.chapter.update({
-  //   where: { id: chapter.id },
-  //   data: { images: { set: images } },
-  // });
-  comics = await ctx.prisma.comics.update({
-    select: { chapters: true },
-    where: { id: comicsId },
-    data: {
-      chapters: {
-        set: [...comics.chapters, chapter],
-      },
-    },
-  });
-  return chapter;
+  return Promise.all(
+    chapter.pages.map(
+      (page) =>
+        new Promise((resolve, reject) => {
+          s3.createPresignedPost(
+            {
+              Fields: {
+                key: `${comicsId}/volume_${chapter.volumeIndex}_chapter_${chapter.chapterIndex}/${page.id}`,
+              },
+              Conditions: [
+                ["starts-with", "$Content-Type", "image/"],
+                ["content-length-range", 0, UPLOAD_MAX_FILE_SIZE],
+              ],
+              Expires: UPLOADING_TIME_LIMIT,
+              Bucket: env.AWS_BUCKET_NAME,
+            },
+            (err, signed) => {
+              if (err) return reject(err);
+              resolve(signed);
+            }
+          );
+        })
+    )
+  );
 };

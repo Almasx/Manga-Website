@@ -110,8 +110,9 @@ enum Status {
 }
 
 model Chapter {
-  id     Int @id @default(autoincrement())
-  volume Int
+  id           String @id @default(cuid())
+  chapterIndex Int
+  volumeIndex  Int
 
   comics   Comics @relation(fields: [comicsId], references: [id])
   comicsId Int
@@ -120,6 +121,7 @@ model Chapter {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@unique([chapterIndex, volumeIndex])
   @@index([comicsId])
 }
 
@@ -140,7 +142,7 @@ model Page {
   id String @id @default(cuid())
 
   chapter   Chapter @relation(fields: [chapterId], references: [id])
-  chapterId Int
+  chapterId String
 
   @@index([chapterId])
 }
