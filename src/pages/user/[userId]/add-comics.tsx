@@ -108,13 +108,10 @@ const AddComics = () => {
         Сведения о манге
       </h3>
       <form
-        onSubmit={handleSubmit(onSubmit, (errors) => {
-          throw errors;
-        })}
+        onSubmit={handleSubmit(onSubmit)}
         className="pb- col-span-full grid grid-cols-4 gap-5 md:grid-cols-6 lg:grid-cols-10"
       >
         <FileField
-          watchThumbnail={watch("thumbnail")}
           error={errors.thumbnail?.message as string}
           {...register("thumbnail", { required: true })}
         />

@@ -1,32 +1,17 @@
 import clsx from "clsx";
-import { FolderCloud, ImportCurve } from "iconsax-react";
-import React, { forwardRef, useEffect, useState } from "react";
+import { FolderCloud } from "iconsax-react";
+import type { ChangeEvent } from "react";
+import React, { forwardRef, useState } from "react";
 import type { IField } from "../../../types/IField";
-import Button from "../primitives/Button";
-import Divider from "../primitives/Divider";
 
 export type IFileFieldProps = {
-  watchThumbnail: any;
-  showPreview?: boolean;
   className?: string;
+  onPreview?: (e: ChangeEvent<HTMLInputElement>) => void;
 } & IField<HTMLInputElement>;
 
 const FileField = forwardRef<HTMLInputElement, IFileFieldProps>(
-  (
-    { watchThumbnail, name, onChange, onBlur, error, className, showPreview },
-    ref
-  ) => {
-    showPreview ||= true;
+  ({ name, onChange, onBlur, error, className, onPreview }, ref) => {
     const [preview, setPreview] = useState<any>(null);
-
-    useEffect(() => {
-      if (watchThumbnail && watchThumbnail[0]) {
-        const objectUrl = window.URL.createObjectURL(watchThumbnail[0]);
-        setPreview(objectUrl);
-
-        return () => window.URL.revokeObjectURL(objectUrl);
-      }
-    }, [watchThumbnail]);
 
     return (
       <div className="col-span-2 flex flex-col">
@@ -40,7 +25,7 @@ const FileField = forwardRef<HTMLInputElement, IFileFieldProps>(
             className
           )}
         >
-          <div className="text-bold absolute top-2 right-2 z-20 rounded-full bg-black bg-surface/5 py-1 px-2 text-xs">
+          <div className="text-bold absolute top-2 right-2 z-20 rounded-full bg-black/80  py-1 px-2 text-xs">
             227 x 338
           </div>
           <FolderCloud size="24" variant="Bold" className="mb-4 text-primary" />
@@ -54,7 +39,7 @@ const FileField = forwardRef<HTMLInputElement, IFileFieldProps>(
             </p>
           </div>
 
-          {preview !== null && showPreview === true && (
+          {preview !== null && (
             <img
               src={preview}
               alt="thumbnail image"
@@ -71,6 +56,12 @@ const FileField = forwardRef<HTMLInputElement, IFileFieldProps>(
           ref={ref}
           onChange={(e) => {
             onChange && onChange(e);
+
+            onPreview
+              ? onPreview(e)
+              : e.target.files &&
+                e.target.files[0] &&
+                setPreview(window.URL.createObjectURL(e.target.files[0]));
           }}
           onBlur={(e) => {
             onBlur && onBlur(e);
