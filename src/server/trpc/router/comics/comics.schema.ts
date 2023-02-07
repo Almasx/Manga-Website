@@ -1,10 +1,8 @@
 import type { Comics } from "@prisma/client";
 import { Status } from "@prisma/client";
 import type { TypeOf } from "zod";
+import { propertyOf } from "../../../../utils/property-of";
 import z from "zod";
-import { propertyOf } from "../../../../utils/propertyOf";
-const MAX_FILE_SIZE = 500000;
-const ACCEPTED_IMAGE_TYPES = ["image/jpeg"];
 
 export const getCatalogSchema = z.object({
   limit: z.number().min(2).max(30).nullish(),

@@ -7,7 +7,7 @@ const FormSideBar = () => {
   const { query } = useRouter();
 
   return (
-    <SideBar.Wrapper className="">
+    <SideBar.Wrapper className="w-72">
       <img
         src={query.thumbnail as string | undefined}
         alt="lol"

@@ -1,18 +1,18 @@
-import { useRouter } from "next/router";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { trpc } from "utils/trpc";
-
-import { useState } from "react";
-import type { ReactNode } from "react";
-import type { SubmitHandler } from "react-hook-form";
-import type { PresignedPost } from "aws-sdk/clients/s3";
-import { zodResolver } from "@hookform/resolvers/zod";
-
+import AddChapterLayout from "../../../layout/add-chapter";
 import FileField from "components/ui/fields/FileField";
 import NumberField from "components/ui/fields/NumberField";
+import type { PresignedPost } from "aws-sdk/clients/s3";
+import type { ReactNode } from "react";
+import type { SubmitHandler } from "react-hook-form";
 import TextField from "components/ui/fields/TextField";
-import AddChapterLayout from "../../../layout/add-chapter";
+import { getDefaultVolumeAndChapterIndex } from "utils/get-default-index";
+import { getKeys } from "utils/get-keys";
+import { trpc } from "utils/trpc";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const MAX_FILE_SIZE = 500000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
@@ -49,6 +49,9 @@ const AddChapter = () => {
   const chapterMutation = trpc.comics.postChapter.useMutation();
   const { query } = useRouter();
 
+  const { defaultVolumeIndex, defaultChapterIndex } =
+    getDefaultVolumeAndChapterIndex(query.chapters as string);
+
   const onSubmit: SubmitHandler<AddChapterSchema> = async (data) => {
     // const presignedPages = (await chapterMutation.mutateAsync({
     //   ...data,
@@ -82,18 +85,18 @@ const AddChapter = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="mx-auto flex w-3/4 flex-col py-7 px-4 pt-8"
+      className="mx-auto flex w-4/5 flex-col py-7 px-4 pt-8"
     >
       <div className="mb-3 flex flex-row gap-3">
         <NumberField
           className="w-24 px-4"
           label="Том"
-          placeholder={`${query.new_chapter} том`}
+          placeholder={`${defaultVolumeIndex} том`}
         />
         <NumberField
           className="w-24 px-4"
           label="Глава"
-          placeholder={`${query.new_chapter} глава`}
+          placeholder={`${defaultChapterIndex} глава`}
         />
         <TextField
           className="grow"
@@ -115,7 +118,7 @@ const AddChapter = () => {
         error={errors.pages?.message as string}
         {...register("pages", { required: true })}
       />
-      <div className="relative mx-auto grid w-full grid-cols-6 gap-5">
+      <div className="relative mx-auto grid w-full grid-cols-5 gap-5">
         {previewPages.map((image) => (
           <img
             className="h-80 w-full cursor-pointer 

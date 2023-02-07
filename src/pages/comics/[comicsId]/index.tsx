@@ -1,25 +1,24 @@
-import { useRouter } from "next/router";
-import CommentField from "../../../components/molecules/CommentField";
-import Comments from "../../../components/molecules/Comments";
-import superjson from "superjson";
-
 import { Edit, Eye, Save2, Star1 } from "iconsax-react";
-import TrendUpBulk from "../../../../public/icons/TrendUpBulk.svg";
 import type {
   GetServerSidePropsContext,
   InferGetStaticPropsType,
 } from "next/types";
 
-import { trpc } from "../../../utils/trpc";
 import Badge from "../../../components/ui/primitives/Badge";
+import Button from "components/ui/primitives/Button";
+import ChapterCard from "../../../components/molecules/ChapterCard";
+import ComicsCard from "../../../components/molecules/ComicsCard";
+import CommentField from "../../../components/molecules/CommentField";
+import Comments from "../../../components/molecules/Comments";
+import Link from "next/link";
+import TrendUpBulk from "../../../../public/icons/TrendUpBulk.svg";
+import { appRouter } from "../../../server/trpc/router/_app";
 import { createContextInner } from "../../../server/trpc/context";
 import { createProxySSGHelpers } from "@trpc/react-query/ssg";
-import { appRouter } from "../../../server/trpc/router/_app";
-import ComicsCard from "../../../components/molecules/ComicsCard";
-import ChapterCard from "../../../components/molecules/ChapterCard";
+import superjson from "superjson";
+import { trpc } from "../../../utils/trpc";
+import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
-import Button from "components/ui/primitives/Button";
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext<{ comicsId: string }>
@@ -77,13 +76,11 @@ const Comics = ({
                   query: {
                     title: comics?.title,
                     title_ru: comics?.title_ru,
-                    new_chapter: comics?.chapters
-                      ? comics?.chapters[comics?.chapters?.length - 1]?.id || 1
-                      : 1,
-                    volume: comics?.chapters
-                      ? comics?.chapters[comics?.chapters?.length - 1]
-                          ?.volumeIndex || 1
-                      : 1,
+                    chapters: JSON.stringify([
+                      { chapterIndex: 1, volumeIndex: 1 },
+                      { chapterIndex: 2, volumeIndex: 1 },
+                      { chapterIndex: 1, volumeIndex: 2 },
+                    ]),
                     thumbnail:
                       `https://darkfraction.s3.eu-north-1.amazonaws.com/thumbnails/${comics?.thumbnail?.id}` ??
                       "",
