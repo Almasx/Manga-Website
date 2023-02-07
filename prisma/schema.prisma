@@ -69,7 +69,7 @@ model VerificationToken {
 }
 
 model Bookmark {
-  id    Int    @id @default(autoincrement())
+  id    String @id @default(cuid())
   title String
 
   user   User   @relation(fields: [userId], references: [id])
@@ -83,7 +83,7 @@ model Bookmark {
 }
 
 model Comics {
-  id       Int    @id @default(autoincrement())
+  id       String @id @default(cuid())
   title    String @unique
   title_ru String
 
@@ -115,7 +115,7 @@ model Chapter {
   volumeIndex  Int
 
   comics   Comics @relation(fields: [comicsId], references: [id])
-  comicsId Int
+  comicsId String
 
   pages     Page[]
   createdAt DateTime @default(now())
@@ -135,7 +135,7 @@ model Thumbnail {
   id String @id @default(cuid())
 
   comics   Comics @relation(fields: [comicsId], references: [id])
-  comicsId Int    @unique
+  comicsId String @unique
 }
 
 model Page {

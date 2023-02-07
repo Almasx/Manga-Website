@@ -8,7 +8,7 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg"];
 
 export const getCatalogSchema = z.object({
   limit: z.number().min(2).max(30).nullish(),
-  cursor: z.number().nullish(),
+  cursor: z.string().nullish(),
   query: z.string().default(""),
   status: z.nativeEnum(Status).default("ongoing"),
   sort: z
@@ -23,12 +23,12 @@ export const getCatalogSchema = z.object({
 });
 
 export const getComicsSchema = z.object({
-  comicsId: z.number({ required_error: "Comics id is required" }),
+  comicsId: z.string({ required_error: "Comics id is required" }),
 });
 
 export const getChapterSchema = z.object({
-  chapterId: z.number({ required_error: "Chapter id is required" }),
-  comicsId: z.number({ required_error: "Comics id is required" }),
+  chapterId: z.string({ required_error: "Chapter id is required" }),
+  comicsId: z.string({ required_error: "Comics id is required" }),
 });
 // title, title_ru, status, year, genres, description
 export const postComicsSchema = z.object({

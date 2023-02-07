@@ -29,7 +29,7 @@ export async function getServerSideProps(
     ctx: createContextInner({ session: null }),
     transformer: superjson,
   });
-  const comicsId = parseInt(context.params?.comicsId as string);
+  const comicsId = context.params?.comicsId as string;
 
   await ssgHelper.comics.getComics.prefetch({ comicsId });
   return {
@@ -82,7 +82,7 @@ const Comics = ({
                       : 1,
                     volume: comics?.chapters
                       ? comics?.chapters[comics?.chapters?.length - 1]
-                          ?.volume || 1
+                          ?.volumeIndex || 1
                       : 1,
                     thumbnail:
                       `https://darkfraction.s3.eu-north-1.amazonaws.com/thumbnails/${comics?.thumbnail?.id}` ??

@@ -6,13 +6,15 @@ import { useState } from "react";
 
 const ChapterCard = ({
   id,
-  volume,
+  chapterIndex,
+  volumeIndex,
   createdAt,
   packed = false,
 }: {
-  id: number;
-  volume: number;
-  createdAt: Chapter["createdAt"];
+  id: string;
+  chapterIndex: number;
+  volumeIndex: number;
+  createdAt: Date;
   packed?: boolean;
 }) => {
   const [liked, setLiked] = useState<boolean>(false);
@@ -32,9 +34,11 @@ const ChapterCard = ({
     >
       {!packed && <Lock1 size="24" className="mr-4 text-white/30" />}
       <p className="mr-2 text-sm font-medium uppercase text-white/60">
-        Том {volume}
+        Том {volumeIndex}
       </p>
-      <p className="mr-2 text-base font-bold text-white">Глава {id}</p>
+      <p className="mr-2 text-base font-bold text-white">
+        Глава {chapterIndex}
+      </p>
       <p className="mr-4 text-sm text-white/60">{createdAt.getMonth()}</p>
 
       {/* VIP */}

@@ -18,6 +18,8 @@ import FileField from "components/ui/fields/FileField";
 import NumberField from "components/ui/fields/NumberField";
 import RadioGroupField from "components/ui/fields/RadioGroupField";
 import Button from "components/ui/primitives/Button";
+import { useMutation } from "@tanstack/react-query";
+import Spinner from "components/ui/primitives/Spinner";
 
 const MAX_FILE_SIZE = 500000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
@@ -71,6 +73,18 @@ const AddComics = () => {
   const genresValue = watch("genres");
 
   const comicsMutation = trpc.comics.postComics.useMutation();
+  const { mutate: s3Mutate, isLoading: isUploading } = useMutation({
+    mutationFn: ({ url, formData }: { url: string; formData: FormData }) => {
+      return fetch(url, {
+        method: "POST",
+        body: formData,
+      });
+    },
+    onSuccess: () => {
+      router.push("/catalog");
+    },
+  });
+
   const router = useRouter();
 
   const onSubmit: SubmitHandler<AddComicsSchema> = async (data) => {
@@ -86,22 +100,16 @@ const AddComics = () => {
     formData.append("Content-Type", data.thumbnail[0].type);
     formData.append("file", data.thumbnail[0]);
 
-    for (const pair of formData.keys()) {
-      console.log(pair);
-    }
-
-    await fetch(url, {
-      method: "POST",
-      body: formData,
-    }).then(async (res) => {
-      if (res.ok) {
-        return router.push("/catalog");
-      }
-      const text = await res.text();
-      throw new Error(text);
-    });
+    s3Mutate({ url, formData });
   };
 
+  if (isUploading) {
+    return (
+      <div className="my-auto">
+        <Spinner />
+      </div>
+    );
+  }
   return (
     <>
       <h3 className="mb-5 text-xl font-medium text-white/40 ">
@@ -109,7 +117,7 @@ const AddComics = () => {
       </h3>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="pb- col-span-full grid grid-cols-4 gap-5 md:grid-cols-6 lg:grid-cols-10"
+        className="grid grid-cols-4 gap-5 md:grid-cols-6 lg:grid-cols-10"
       >
         <FileField
           error={errors.thumbnail?.message as string}

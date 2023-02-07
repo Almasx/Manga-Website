@@ -11,7 +11,7 @@ const DashBoardLayout = ({ children }: { children: ReactNode }) => {
 
       <main className="relative mx-auto flex w-full flex-row ">
         <SideBar />
-        <div className="flex flex-col py-3 px-4">{children}</div>
+        <div className="flex grow flex-col py-3 px-4">{children}</div>
       </main>
     </div>
   );
