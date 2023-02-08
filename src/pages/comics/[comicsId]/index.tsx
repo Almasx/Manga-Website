@@ -77,11 +77,7 @@ const Comics = ({
                     title: comics?.title,
                     title_ru: comics?.title_ru,
                     chapters: encodeURIComponent(
-                      JSON.stringify([
-                        { chapterIndex: 1, volumeIndex: 1 },
-                        { chapterIndex: 2, volumeIndex: 1 },
-                        { chapterIndex: 1, volumeIndex: 2 },
-                      ])
+                      JSON.stringify(comics?.chapters)
                     ),
                     thumbnail:
                       `https://darkfraction.s3.eu-north-1.amazonaws.com/thumbnails/${comics?.thumbnail?.id}` ??

@@ -14,18 +14,20 @@ export const getAddChapterSchema = (
       volumeIndex: z.number().min(1),
       pages: z
         .any()
-        .refine((files) => files?.length == 1, "Chapter image is required.")
-        .refine(
-          (files) => files.every((file: File) => file.size <= MAX_FILE_SIZE),
-          `Max file size is 5MB.`
-        )
-        .refine(
-          (files) =>
-            files.every((file: File) =>
-              ACCEPTED_IMAGE_TYPES.includes(file.type)
-            ),
-          "Only .jpg, .jpeg, .png files are accepted."
-        ),
+        .refine((files) => files?.length > 0, "Chapter image is required."),
+      // .refine(
+      //   (files) => files.every((file: File) => console.log(file)),
+      //   `Max file size is 5MB.`
+      // ),
+      // .refine(
+      //   (files) =>
+      //     files &&
+      //     files?.length > 0 &&
+      //     files.every((file: File) =>
+      //       ACCEPTED_IMAGE_TYPES.includes(file.type)
+      //     ),
+      //   "Only .jpg, .jpeg, .png files are accepted."
+      // ),
     })
     .refine(
       ({ chapterIndex, volumeIndex }) =>

@@ -37,39 +37,41 @@ const AddChapter = () => {
 
   const onSubmit: SubmitHandler<AddChapterSchema> = async (data) => {
     console.log(data);
-    // const presignedPages = (await chapterMutation.mutateAsync({
-    //   ...data,
-    //   comicsId: query.comicsId as string,
-    //   pagesLenght: previewPages.length,
-    // })) as PresignedPost[];
-    // for (const pageIndex in presignedPages) {
-    //   const { url, fields } = presignedPages[pageIndex]!;
-    //   const formData = new FormData();
-    //   Object.keys(fields).forEach((name) => {
-    //     formData.append(name, fields[name] as string);
-    //   });
-    //   formData.append("Content-Type", data.pages[pageIndex].type);
-    //   formData.append("file", data.pages[pageIndex]);
-    //   for (const pair of formData.keys()) {
-    //     console.log(pair);
-    //   }
-    //   // await fetch(url, {
-    //   //   method: "POST",
-    //   //   body: formData,
-    //   // }).then(async (res) => {
-    //   //   if (res.ok) {
-    //   //     return router.push("/catalog");
-    //   //   }
-    //   //   const text = await res.text();
-    //   //   throw new Error(text);
-    //   // });
-    // }
+    const presignedPages = (await chapterMutation.mutateAsync({
+      ...data,
+      comicsId: query.comicsId as string,
+      pagesLenght: previewPages.length,
+    })) as PresignedPost[];
+    for (const pageIndex in presignedPages) {
+      const { url, fields } = presignedPages[pageIndex]!;
+      const formData = new FormData();
+      Object.keys(fields).forEach((name) => {
+        formData.append(name, fields[name] as string);
+      });
+      formData.append("Content-Type", data.pages[pageIndex].type);
+      formData.append("file", data.pages[pageIndex]);
+      for (const pair of formData.keys()) {
+        console.log(pair);
+      }
+      // await fetch(url, {
+      //   method: "POST",
+      //   body: formData,
+      // }).then(async (res) => {
+      //   if (res.ok) {
+      //     return router.push("/catalog");
+      //   }
+      //   const text = await res.text();
+      //   throw new Error(text);
+      // });
+    }
   };
 
   return (
     <form
       id="chapter-form"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onSubmit, (error) => {
+        throw Error(error[""].message);
+      })}
       className="mx-auto flex w-4/5 flex-col py-7 px-4 pt-8"
     >
       <div className="mb-3 flex flex-row gap-3">
