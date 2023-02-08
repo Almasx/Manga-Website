@@ -5,8 +5,8 @@ type queryChapter = {
   volumeIndex: number;
 }[];
 
-const preprocessQueryObject = (chapters: string) => {
-  const queryObject = JSON.parse(chapters) as queryChapter;
+export const preprocessQueryObject = (chapters: string) => {
+  const queryObject = JSON.parse(decodeURIComponent(chapters)) as queryChapter;
   return queryObject.reduce((acc, obj) => {
     const { volumeIndex, chapterIndex } = obj;
     if (volumeIndex in acc) {
@@ -28,5 +28,5 @@ export const getDefaultVolumeAndChapterIndex = (chapters: string) => {
     defaultVolumeIndex = +(latestVolume as string | number);
     defaultChapterIndex = Math.max(...(chapterObject[latestVolume] ?? [0])) + 1;
   }
-  return { defaultVolumeIndex, defaultChapterIndex };
+  return { defaultVolumeIndex, defaultChapterIndex, chapterObject };
 };

@@ -5,54 +5,38 @@ import type { PresignedPost } from "aws-sdk/clients/s3";
 import type { ReactNode } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import TextField from "components/ui/fields/TextField";
+import { getAddChapterSchema } from "types/schemas/getAddChapterSchema";
 import { getDefaultVolumeAndChapterIndex } from "utils/get-default-index";
-import { getKeys } from "utils/get-keys";
 import { trpc } from "utils/trpc";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { z } from "zod";
+import type { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const MAX_FILE_SIZE = 500000;
-const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
-
-const addChapterSchema = z.object({
-  title: z.string().min(1).describe("Name // Введите название манги"),
-  chapterIndex: z.number().min(1),
-  volumeIndex: z.number().min(1),
-  pages: z
-    .any()
-    .refine((files) => files?.length == 1, "Chapter image is required.")
-    .refine(
-      (files) => files.every((file: File) => file.size <= MAX_FILE_SIZE),
-      `Max file size is 5MB.`
-    )
-    .refine(
-      (files) =>
-        files.every((file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type)),
-      "Only .jpg, .jpeg, .png files are accepted."
-    ),
-});
-
-type AddChapterSchema = z.infer<typeof addChapterSchema>;
-
 const AddChapter = () => {
+  const [previewPages, setPreviewPages] = useState<string[]>([]);
+  const chapterMutation = trpc.comics.postChapter.useMutation();
+  const { query } = useRouter();
+
+  const { defaultVolumeIndex, defaultChapterIndex, chapterObject } =
+    getDefaultVolumeAndChapterIndex((query.chapters ?? "[]") as string);
+  const addChapterSchema = getAddChapterSchema(chapterObject);
+  type AddChapterSchema = z.infer<typeof addChapterSchema>;
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<AddChapterSchema>({
     resolver: zodResolver(addChapterSchema),
+    defaultValues: {
+      chapterIndex: defaultChapterIndex,
+      volumeIndex: defaultVolumeIndex,
+    },
   });
-  const [previewPages, setPreviewPages] = useState<string[]>([]);
-  const chapterMutation = trpc.comics.postChapter.useMutation();
-  const { query } = useRouter();
-
-  const { defaultVolumeIndex, defaultChapterIndex } =
-    getDefaultVolumeAndChapterIndex(query.chapters as string);
 
   const onSubmit: SubmitHandler<AddChapterSchema> = async (data) => {
+    console.log(data);
     // const presignedPages = (await chapterMutation.mutateAsync({
     //   ...data,
     //   comicsId: query.comicsId as string,
@@ -84,6 +68,7 @@ const AddChapter = () => {
 
   return (
     <form
+      id="chapter-form"
       onSubmit={handleSubmit(onSubmit)}
       className="mx-auto flex w-4/5 flex-col py-7 px-4 pt-8"
     >
@@ -91,17 +76,21 @@ const AddChapter = () => {
         <NumberField
           className="w-24 px-4"
           label="Том"
-          placeholder={`${defaultVolumeIndex} том`}
+          error={errors.volumeIndex?.message as string}
+          {...register("volumeIndex", { required: true })}
         />
         <NumberField
           className="w-24 px-4"
           label="Глава"
-          placeholder={`${defaultChapterIndex} глава`}
+          error={errors.chapterIndex?.message as string}
+          {...register("chapterIndex", { required: true })}
         />
         <TextField
           className="grow"
           placeholder="пр: Вот это поворот"
           label="Название"
+          error={errors.title?.message as string}
+          {...register("title", { required: true })}
         />
       </div>
       <h3 className="mb-2 px-3 text-sm text-white/30">Страницы</h3>

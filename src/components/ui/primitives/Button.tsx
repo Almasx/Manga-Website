@@ -1,10 +1,10 @@
-import clsx from "clsx";
-import type { ReactNode } from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { useEffect, useState } from "react";
 
-export interface ButtonProps {
+import clsx from "clsx";
+
+export interface ButtonProps extends ComponentPropsWithoutRef<"button"> {
   variant?: "primary" | "secondary" | "text";
-  type?: "button" | "submit" | "reset";
   content?: "text" | "icon";
   ripple?: boolean;
   children: ReactNode;
@@ -17,11 +17,11 @@ const Button = ({
   children,
   onClick,
   variant = "primary",
-  type = "button",
   content = "text",
   ripple = true,
   className = "",
   disabled = false,
+  ...props
 }: ButtonProps) => {
   const [coords, setCoords] = useState({ x: -1, y: -1 });
   const [isRippling, setIsRippling] = useState<boolean>(false);
@@ -39,7 +39,6 @@ const Button = ({
 
   return (
     <button
-      type={type}
       onClick={(event: React.MouseEvent<HTMLElement>) => {
         const { left, top } = event.currentTarget.getBoundingClientRect();
         setCoords({ x: event.clientX - left, y: event.clientY - top });
@@ -60,22 +59,23 @@ const Button = ({
             content === "text" && "text-white ", // typography
           ],
           variant === "secondary" && [
-            "border-stroke-200 border", // box model
-            "hover:bg-surface/5 bg-transparent", // background
+            "border border-stroke-200", // box model
+            "bg-transparent hover:bg-surface/5", // background
             content === "text" && "text-white/60", // typography
           ],
           variant === "text" && [
-            "hover:bg-surface/5 bg-transparent", // background
+            "bg-transparent hover:bg-surface/5", // background
             content === "text" && "text-primary ", // typography
           ],
         ],
         disabled && "disabled: cursor-not-allowed"
       )}
+      {...props}
     >
       {isRippling && (
         <span
           className={clsx(
-            "animate-ripple-effect absolute block h-5 w-5 rounded-full bg-white/20 opacity-100",
+            "absolute block h-5 w-5 animate-ripple-effect rounded-full bg-white/20 opacity-100",
             !ripple && "hidden"
           )}
           style={{ left: coords.x, top: coords.y }}

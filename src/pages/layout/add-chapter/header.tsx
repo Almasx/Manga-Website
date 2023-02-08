@@ -1,8 +1,8 @@
+import { ArrowLeft2 } from "iconsax-react";
 import Button from "components/ui/primitives/Button";
 import Navigation from "components/ui/templates/Navigation";
-import { ArrowLeft2 } from "iconsax-react";
-import { useRouter } from "next/router";
 import React from "react";
+import { useRouter } from "next/router";
 
 const Header = () => {
   const { query, back } = useRouter();
@@ -18,7 +18,13 @@ const Header = () => {
         <button>Одиночное</button> <button>Множественное</button>
       </div>
 
-      <Button className="w-24 rounded-lg py-1">Загрузить</Button>
+      <Button
+        className="w-24 rounded-lg py-1"
+        type="submit"
+        form="chapter-form"
+      >
+        Загрузить
+      </Button>
     </Navigation.Wrapper>
   );
 };
