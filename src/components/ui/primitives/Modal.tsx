@@ -7,7 +7,7 @@ interface ModalProps {
   backgroundBlur?: boolean;
   backgroundBlack?: boolean;
   visible: boolean;
-  setVisible: (event?: unknown) => void;
+  setVisible: (event?: any) => void;
 }
 
 const Modal = ({
@@ -32,13 +32,13 @@ const Modal = ({
     >
       <div
         className={clsx(
-          "border-stroke-200 rounded-2xl border bg-black",
+          "rounded-2xl border border-stroke-200 bg-black",
           className
         )}
       >
         <div
           className={clsx(
-            "bg-surface/5 h-full w-full rounded-2xl",
+            "h-full w-full rounded-2xl bg-surface/5",
             classNameInner
           )}
           onClick={(e) => e.stopPropagation()}

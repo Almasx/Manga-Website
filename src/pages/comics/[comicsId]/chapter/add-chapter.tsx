@@ -9,6 +9,7 @@ import { getAddChapterSchema } from "types/schemas/getAddChapterSchema";
 import { getDefaultVolumeAndChapterIndex } from "utils/get-default-index";
 import { trpc } from "utils/trpc";
 import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import type { z } from "zod";
@@ -35,6 +36,18 @@ const AddChapter = () => {
     },
   });
 
+  const { mutate: s3Mutate, isLoading: isUploading } = useMutation({
+    mutationFn: ({ url, formData }: { url: string; formData: FormData }) => {
+      return fetch(url, {
+        method: "POST",
+        body: formData,
+      });
+    },
+    onSuccess: () => {
+      console.log("lol");
+    },
+  });
+
   const onSubmit: SubmitHandler<AddChapterSchema> = async (data) => {
     console.log(data);
     const presignedPages = (await chapterMutation.mutateAsync({
@@ -45,6 +58,7 @@ const AddChapter = () => {
     for (const pageIndex in presignedPages) {
       const { url, fields } = presignedPages[pageIndex]!;
       const formData = new FormData();
+
       Object.keys(fields).forEach((name) => {
         formData.append(name, fields[name] as string);
       });
@@ -53,16 +67,8 @@ const AddChapter = () => {
       for (const pair of formData.keys()) {
         console.log(pair);
       }
-      // await fetch(url, {
-      //   method: "POST",
-      //   body: formData,
-      // }).then(async (res) => {
-      //   if (res.ok) {
-      //     return router.push("/catalog");
-      //   }
-      //   const text = await res.text();
-      //   throw new Error(text);
-      // });
+
+      s3Mutate({ url, formData });
     }
   };
 

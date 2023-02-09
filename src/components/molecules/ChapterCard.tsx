@@ -1,24 +1,23 @@
+import { Heart, Lock1 } from "iconsax-react";
+
 import type { Chapter } from "@prisma/client";
 import clsx from "clsx";
-import { Heart, Lock1 } from "iconsax-react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 const ChapterCard = ({
-  id,
   chapterIndex,
   volumeIndex,
   createdAt,
   packed = false,
 }: {
-  id: string;
   chapterIndex: number;
   volumeIndex: number;
   createdAt: Date;
   packed?: boolean;
 }) => {
   const [liked, setLiked] = useState<boolean>(false);
-  const router = useRouter();
+  const { push, asPath } = useRouter();
 
   return (
     <button
@@ -28,9 +27,6 @@ const ChapterCard = ({
         !packed && "-ml-10 bg-black hover:scale-105",
         packed && "border-stroke-200 bg-black/40 hover:border-white/30"
       )}
-      onClick={() => {
-        router.push(`chapter/${id}`);
-      }}
     >
       {!packed && <Lock1 size="24" className="mr-4 text-white/30" />}
       <p className="mr-2 text-sm font-medium uppercase text-white/60">

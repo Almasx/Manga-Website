@@ -183,7 +183,19 @@ const Comics = ({
         </div>
         <div className="flex flex-col gap-4">
           {comics?.chapters?.map((chapter) => (
-            <ChapterCard key={chapter.id} {...chapter} />
+            <Link
+              href={{
+                pathname: `${asPath}/chapter/${chapter.id}`,
+                query: {
+                  chapters: encodeURIComponent(
+                    JSON.stringify(comics?.chapters)
+                  ),
+                },
+              }}
+              key={chapter.id}
+            >
+              <ChapterCard {...chapter} />
+            </Link>
           ))}
         </div>
       </aside>
@@ -197,7 +209,7 @@ const Comics = ({
               thumbnail={null}
               title={{ title_ru: "Элисед", title_en: "Eliceed" }}
               variant="recomendation"
-            ></ComicsCard>
+            />
           )}
         </div>
       </section>

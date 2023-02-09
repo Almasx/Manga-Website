@@ -9,6 +9,7 @@ import "../styles/globals.css";
 import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
 import MainLayout from "./layout/main";
+import { Provider } from "jotai";
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -27,7 +28,11 @@ const MyApp: AppType<{ session: Session | null }> = ({
     Component.getLayout || ((page) => <MainLayout>{page}</MainLayout>);
   const layout = getLayout(<Component {...pageProps} />);
 
-  return <SessionProvider session={session}>{layout}</SessionProvider>;
+  return (
+    <Provider>
+      <SessionProvider session={session}>{layout}</SessionProvider>
+    </Provider>
+  );
 };
 
 const TRPCApp = trpc.withTRPC(MyApp);

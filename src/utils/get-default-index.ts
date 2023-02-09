@@ -1,6 +1,6 @@
 import { getKeys } from "./get-keys";
 
-type queryChapter = {
+export type queryChapter = {
   chapterIndex: number;
   volumeIndex: number;
 }[];
