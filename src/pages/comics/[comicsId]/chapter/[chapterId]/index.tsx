@@ -4,18 +4,51 @@ import Button from "components/ui/primitives/Button";
 import { Messages1 } from "iconsax-react";
 import React from "react";
 import type { ReactNode } from "react";
+import Spinner from "components/ui/primitives/Spinner";
+import { trpc } from "utils/trpc";
+import { useRouter } from "next/router";
 import { useSetAtom } from "jotai";
 
 const Chapter = () => {
+  const { query } = useRouter();
   const setShowComments = useSetAtom(showCommentsAtom);
+  const { data: chapter, isLoading } = trpc.comics.getChapter.useQuery({
+    chapterId: query.chapterId as string,
+    comicsId: query.comicsId as string,
+  });
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
   return (
     <>
-      {/* <div className={clsx(" flex grow flex-col items-center px-[15px] ")}>
-        {isSuccess &&
-          chapter.images.map((image: string, index: number) => (
-            <img src={image} alt="image" key={index} className="max-w-3xl" />
-          ))}
-      </div> */}
+      <div className="flex grow flex-col items-center px-[15px] ">
+        {chapter?.pages.map((page) => (
+          <img
+            src={`https://darkfraction.s3.eu-north-1.amazonaws.com/${chapter.comicsId}/volume_${chapter.volumeIndex}_chapter_${chapter.chapterIndex}/${page.id}`}
+            alt="image"
+            key={page.id}
+            className="max-w-3xl"
+          />
+        ))}
+        {chapter?.pages.map((page) => (
+          <img
+            src={`https://darkfraction.s3.eu-north-1.amazonaws.com/${chapter.comicsId}/volume_${chapter.volumeIndex}_chapter_${chapter.chapterIndex}/${page.id}`}
+            alt="image"
+            key={page.id}
+            className="max-w-3xl"
+          />
+        ))}
+        {chapter?.pages.map((page) => (
+          <img
+            src={`https://darkfraction.s3.eu-north-1.amazonaws.com/${chapter.comicsId}/volume_${chapter.volumeIndex}_chapter_${chapter.chapterIndex}/${page.id}`}
+            alt="image"
+            key={page.id}
+            className="max-w-3xl"
+          />
+        ))}
+      </div>
       <Button
         variant="secondary"
         content="icon"

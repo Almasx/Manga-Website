@@ -4,7 +4,7 @@ import SideBar from "components/ui/templates/SideBar";
 
 const CommentsSection = () => {
   return (
-    <SideBar.Wrapper className="w-96">
+    <SideBar.Wrapper className="sticky top-16 !w-96 flex-shrink-0">
       <SideBar.Section.Wrapper>
         <SideBar.Section.Header text="Комментарий" />
         <div className="flex flex-col gap-5 px-5">

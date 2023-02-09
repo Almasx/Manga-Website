@@ -5,10 +5,11 @@ import type {
   PostChapterSchema,
   PostComicsSchema,
 } from "./comics.schema";
-import { TRPCError } from "@trpc/server";
-import type { Context } from "../../context";
-import { env } from "../../../../env/server.mjs";
+
 import { AWS } from "../../../../libs/aws-config";
+import type { Context } from "../../context";
+import { TRPCError } from "@trpc/server";
+import { env } from "../../../../env/server.mjs";
 
 const s3 = new AWS.S3();
 const UPLOADING_TIME_LIMIT = 600;
@@ -133,22 +134,23 @@ export const getChapter = async ({
     });
   }
 
-  // const chapterExist = comics.chapters.some(
-  //   (chapter) => chapter.id === chapterId
-  // );
+  const chapterExist = comics.chapters.some(
+    (chapter) => chapter.id === chapterId
+  );
 
-  // // Check for chapter in comics
-  // if (chapterExist) {
-  //   throw new TRPCError({
-  //     code: "NOT_FOUND",
-  //     message: "Chapter not found",
-  //   });
-  // }
+  // Check for chapter in comics
+  if (!chapterExist) {
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: "Chapter not found",
+    });
+  }
 
-  // const chapter = await ctx.prisma.chapter.findUnique({
-  //   where: { id: chapterId },
-  // });
-  // return chapter;
+  const chapter = await ctx.prisma.chapter.findUnique({
+    where: { id: chapterId },
+    include: { pages: true },
+  });
+  return chapter;
 };
 
 // @desc    Create New Comics
