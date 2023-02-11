@@ -187,9 +187,7 @@ const Comics = ({
               href={{
                 pathname: `${asPath}/chapter/${chapter.id}`,
                 query: {
-                  chapters: encodeURIComponent(
-                    JSON.stringify(comics?.chapters)
-                  ),
+                  chapters: encodeURIComponent(JSON.stringify(chapter)),
                 },
               }}
               key={chapter.id}
@@ -200,19 +198,7 @@ const Comics = ({
         </div>
       </aside>
 
-      <section className="col-span-2">
-        <h3 className="pb-5 text-2xl font-bold text-white">Похожие</h3>
-        <div className="flex flex-col gap-4">
-          {Array(5).fill(
-            <ComicsCard
-              rating={4.6}
-              thumbnail={null}
-              title={{ title_ru: "Элисед", title_en: "Eliceed" }}
-              variant="recomendation"
-            />
-          )}
-        </div>
-      </section>
+      <RecomendedList />
 
       <section className="col-span-6 flex flex-col gap-5 pr-10 text-white">
         <h3 className="text-2xl font-bold text-white">Комментарий</h3>
@@ -222,5 +208,21 @@ const Comics = ({
     </>
   );
 };
+
+const RecomendedList = () => (
+  <section className="col-span-2">
+    <h3 className="pb-5 text-2xl font-bold text-white">Похожие</h3>
+    <div className="flex flex-col gap-4">
+      {Array(5).fill(
+        <ComicsCard
+          rating={4.6}
+          thumbnail={null}
+          title={{ title_ru: "Элисед", title_en: "Eliceed" }}
+          variant="recomendation"
+        />
+      )}
+    </div>
+  </section>
+);
 
 export default Comics;
