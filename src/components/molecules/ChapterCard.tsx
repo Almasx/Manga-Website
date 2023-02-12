@@ -22,7 +22,7 @@ const ChapterCard = ({
   return (
     <button
       className={clsx(
-        " flex flex-row items-center rounded-2xl border border-stroke-100  px-5",
+        " flex grow flex-row items-center rounded-2xl border  border-stroke-100 px-5",
         "py-3 text-white duration-100  hover:border-stroke-200",
         !packed && "-ml-10 bg-black hover:scale-105",
         packed && "border-stroke-200 bg-black/40 hover:border-white/30"

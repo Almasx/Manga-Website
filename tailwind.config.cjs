@@ -28,7 +28,7 @@ module.exports = {
       },
       fontFamily: { sans: ["TT Norms Pro", "sans-serif"] },
       backgroundImage: {
-        gradient: "url('/public/images/gradient.png')",
+        gradient: "url('../../public/images/gradient.png')",
       },
       animation: {
         "ripple-effect": "0.6s linear ripple",

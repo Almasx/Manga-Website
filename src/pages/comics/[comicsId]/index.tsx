@@ -89,19 +89,36 @@ const Comics = ({
                 <Button className="flex-grow">Добавить Главу</Button>
               </Link>
             )}
-            {session.data?.user?.role === "USER" && (
-              <div className="relative flex flex-row gap-5">
-                <Button className="flex-grow">Начать читать</Button>
-                <Button
-                  variant="text"
-                  content="icon"
-                  className="aspect-square w-10 "
-                >
-                  <div className="scale-125">
-                    <Save2 />
-                  </div>
-                </Button>
-                {/* <DropDown
+            {session.data?.user?.role !== "ADMIN" &&
+              comics?.chapters &&
+              comics.chapters.length > 0 && (
+                <div className="relative flex flex-row gap-5">
+                  <Link
+                    className="flex grow"
+                    href={{
+                      pathname: `${asPath}/chapter/${comics?.chapters[0]}`,
+                      query: {
+                        chapters: encodeURIComponent(
+                          JSON.stringify(comics?.chapters[0])
+                        ),
+                      },
+                    }}
+                  >
+                    <Button className="flex-grow">Начать читать</Button>
+                  </Link>
+
+                  {session.data?.user?.role === "USER" && (
+                    <Button
+                      variant="text"
+                      content="icon"
+                      className="aspect-square w-10 "
+                    >
+                      <div className="scale-125">
+                        <Save2 />
+                      </div>
+                    </Button>
+                  )}
+                  {/* <DropDown
               header={
                 
               }
@@ -113,8 +130,8 @@ const Comics = ({
                 )
               )}
             ></DropDown> */}
-              </div>
-            )}
+                </div>
+              )}
           </div>
         </div>
 
@@ -184,6 +201,7 @@ const Comics = ({
         <div className="flex flex-col gap-4">
           {comics?.chapters?.map((chapter) => (
             <Link
+              className="flex"
               href={{
                 pathname: `${asPath}/chapter/${chapter.id}`,
                 query: {
