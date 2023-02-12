@@ -1,11 +1,12 @@
 import type { GetBookmarkSchema, PostBookmarkSchema } from "./bookmark.schema";
-import { TRPCError } from "@trpc/server";
+
 import type { Context } from "../../context";
+import { TRPCError } from "@trpc/server";
 
 // @desc    Get Users bookmarks
 // @route   GET /api/user/account/bookmarks/:bookmarks_id
 // @access  private
-export const getBookmarks = async ({
+export const getBookmark = async ({
   input,
   ctx,
 }: {

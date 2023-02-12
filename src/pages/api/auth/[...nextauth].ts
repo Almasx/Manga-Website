@@ -61,7 +61,6 @@ export const authOptions: NextAuthOptions = {
           },
         },
       });
-      console.log(bookmarks);
     },
   },
 };
