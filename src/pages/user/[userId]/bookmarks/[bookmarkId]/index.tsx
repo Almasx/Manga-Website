@@ -1,3 +1,4 @@
+import ComicsCard from "components/molecules/ComicsCard";
 import DashBoardLayout from "pages/layout/dashboard";
 import type { ReactNode } from "react";
 import { SearchNormal } from "iconsax-react";
@@ -7,11 +8,10 @@ import { trpc } from "utils/trpc";
 import { useRouter } from "next/router";
 
 const Bookmark = () => {
-  const { query } = useRouter();
+  const { query, push } = useRouter();
   const { data: bookmark, isLoading } = trpc.bookmark.getBookmark.useQuery({
     bookmarkId: query.bookmarkId as string,
   });
-  console.log(bookmark, query.bookmarkId);
 
   if (isLoading) {
     return <Spinner></Spinner>;
@@ -29,7 +29,16 @@ const Bookmark = () => {
           endIcon={<SearchNormal size="20" className="text-white/30 " />}
         />
       </div>
-      {/* <ComicsList /> */}
+      {bookmark?.comics?.map((comics) => (
+        <ComicsCard
+          onClick={() => {
+            push(`/comics/${comics.id}`);
+          }}
+          title={{ title_en: comics.title, title_ru: comics.title_ru }}
+          key={comics.title}
+          thumbnail={comics.thumbnail}
+        />
+      ))}
     </div>
   );
 };

@@ -42,6 +42,7 @@ export const getBookmark = async ({
       title: true,
       comics: {
         select: {
+          id: true,
           title: true,
           title_ru: true,
           thumbnail: true,

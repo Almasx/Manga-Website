@@ -19,25 +19,37 @@ import superjson from "superjson";
 import { trpc } from "../../../utils/trpc";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import { withCSR } from "HOC/withCSR";
 
-export async function getServerSideProps(
-  context: GetServerSidePropsContext<{ comicsId: string }>
-) {
-  const ssgHelper = createProxySSGHelpers({
-    router: appRouter,
-    ctx: createContextInner({ session: null }),
-    transformer: superjson,
-  });
-  const comicsId = context.params?.comicsId as string;
+export const getServerSideProps = withCSR(
+  async (context: GetServerSidePropsContext<{ comicsId: string }>) => {
+    const ssgHelper = createProxySSGHelpers({
+      router: appRouter,
+      ctx: createContextInner({ session: null }),
+      transformer: superjson,
+    });
 
-  await ssgHelper.comics.getComics.prefetch({ comicsId });
-  return {
-    props: {
-      trpcState: ssgHelper.dehydrate(),
-      comicsId,
-    },
-  };
-}
+    const comicsId = context.params?.comicsId as string;
+
+    try {
+      await ssgHelper.comics.getComics.fetch({ comicsId });
+    } catch (error) {
+      return {
+        redirect: {
+          destination: "/404",
+          permanent: false,
+        },
+      };
+    }
+
+    return {
+      props: {
+        trpcState: ssgHelper.dehydrate(),
+        comicsId,
+      },
+    };
+  }
+);
 
 const Comics = ({
   comicsId,

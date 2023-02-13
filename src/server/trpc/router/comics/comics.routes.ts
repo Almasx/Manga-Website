@@ -14,8 +14,6 @@ import {
 } from "./comics.schema";
 import { protectedProcedure, publicProcedure, router } from "../../trpc";
 
-import { z } from "zod";
-
 const comicsRouter = router({
   getCatalog: publicProcedure
     .input(getCatalogSchema)

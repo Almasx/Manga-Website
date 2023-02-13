@@ -48,7 +48,7 @@ export const authOptions: NextAuthOptions = {
         "Любимые",
       ];
 
-      const bookmarks = await prisma.user.update({
+      await prisma.user.update({
         select: { bookmarks: true },
         where: {
           email: message.user.email!,

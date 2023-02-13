@@ -74,30 +74,21 @@ export const getComics = async ({
   ctx: Context;
 }) => {
   const { comicsId } = input;
-  const comics = await ctx.prisma.comics
-    .findUnique({
-      include: {
-        chapters: {
-          select: {
-            chapterIndex: true,
-            volumeIndex: true,
-            createdAt: true,
-            id: true,
-          },
+  const comics = await ctx.prisma.comics.findUnique({
+    include: {
+      chapters: {
+        select: {
+          chapterIndex: true,
+          volumeIndex: true,
+          createdAt: true,
+          id: true,
         },
-        genres: true,
-        thumbnail: true,
       },
-      where: { id: comicsId },
-    })
-    .then((comics) => ({
-      ...comics,
-      year: 2000,
-      rating: 3,
-      saved: 10000,
-      genres: comics && comics.genres.map((genre) => genre.title),
-    }));
-
+      genres: true,
+      thumbnail: true,
+    },
+    where: { id: comicsId },
+  });
   // Check comics
   if (!comics) {
     throw new TRPCError({
@@ -106,7 +97,13 @@ export const getComics = async ({
     });
   }
 
-  return comics;
+  return {
+    ...comics,
+    year: 2000,
+    rating: 3,
+    saved: 10000,
+    genres: comics && comics.genres.map((genre) => genre.title),
+  };
 };
 
 // @desc    Open Chapter
