@@ -1,6 +1,6 @@
+import type { IField } from "types/IField";
 import clsx from "clsx";
 import { forwardRef } from "react";
-import type { IField } from "types/IField";
 
 export type ITextFieldProps<T> = {
   className?: string;
@@ -58,7 +58,7 @@ const TextField = forwardRef<
           }}
           placeholder={placeholder}
           className={clsx(
-            "ease peer w-full rounded-2xl border border-stroke-200 bg-surface/5 bg-black",
+            "ease peer w-full rounded-2xl border border-stroke-200 bg-surface/5 ",
             "px-5 py-3 text-sm text-white duration-300 placeholder:text-white/30",
             "focus:border-primary focus:!bg-black focus:outline-none",
             !error && "focus:ring-2",

@@ -1,11 +1,11 @@
-import { signOut, useSession } from "next-auth/react";
 import { Book1, Logout, Notification, Setting2 } from "iconsax-react";
+import { signOut, useSession } from "next-auth/react";
 
-import { useRouter } from "next/router";
-import { trpc } from "../../../utils/trpc";
+import CheckBoxField from "components/ui/fields/CheckBoxField";
 import Link from "next/link";
 import SideBar from "components/ui/templates/SideBar";
-import CheckBoxField from "components/ui/fields/CheckBoxField";
+import { trpc } from "../../../utils/trpc";
+import { useRouter } from "next/router";
 
 const AccountBar = () => {
   const { asPath } = useRouter();
