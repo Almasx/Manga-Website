@@ -1,12 +1,12 @@
-import clsx from "clsx";
-import { useSession } from "next-auth/react";
-import Link from "next/link";
-import { useState } from "react";
 import AccountModal from "./AccountModal";
-import SignIn from "./Authentication/SignIn";
-import Registration from "./Authentication/Registration";
+import Link from "next/link";
 import Links from "./Links";
-import { useHideOnScroll } from "hooks/useHideOnScroll";
+import Registration from "./Authentication/Registration";
+import SignIn from "./Authentication/SignIn";
+import clsx from "clsx";
+import { useHideOnScroll } from "lib/hooks/useHideOnScroll";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
 
 interface IWrapperProps {
   className?: string;

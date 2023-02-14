@@ -19,7 +19,7 @@ import superjson from "superjson";
 import { trpc } from "../../../utils/trpc";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import { withCSR } from "HOC/withCSR";
+import { withCSR } from "lib/helpers/withCSR";
 
 export const getServerSideProps = withCSR(
   async (context: GetServerSidePropsContext<{ comicsId: string }>) => {

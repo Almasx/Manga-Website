@@ -16,7 +16,7 @@ export const getCatalogSchema = z.object({
       propertyOf<Comics>("rating"),
     ])
     .default("year"),
-  genres: z.array(z.number()).default([]),
+  genres: z.array(z.string()).default([]),
   order: z.enum(["asc", "desc"]).default("asc"),
 });
 
@@ -34,7 +34,7 @@ export const postComicsSchema = z.object({
   title_ru: z.string({ required_error: "title_ru is required" }),
   description: z.string({ required_error: "description is required" }),
   status: z.enum(["ongoing", "abandoned", "finished"]).default("ongoing"),
-  genres: z.array(z.number()),
+  genres: z.array(z.string()),
   year: z.number({ required_error: "year is required" }),
 });
 

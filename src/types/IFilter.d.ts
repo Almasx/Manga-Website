@@ -3,7 +3,7 @@ interface IFilter {
   sort: "saved" | "year" | "rating";
   order: "asc" | "desc";
   genres: {
-    selected: number[];
+    selected: string[];
     query: string;
   };
   status: "ongoing" | "finished" | "abandoned";

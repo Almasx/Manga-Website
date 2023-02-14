@@ -5,7 +5,7 @@ import type { PresignedPost } from "aws-sdk/clients/s3";
 import type { ReactNode } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import TextField from "components/ui/fields/TextField";
-import { getAddChapterSchema } from "types/schemas/getAddChapterSchema";
+import { getAddChapterSchema } from "lib/schemas/getAddChapterSchema";
 import { getDefaultVolumeAndChapterIndex } from "utils/get-default-index";
 import { trpc } from "utils/trpc";
 import { useForm } from "react-hook-form";

@@ -1,25 +1,23 @@
-import _ from "lodash";
-import { z } from "zod";
-import { trpc } from "../../../utils/trpc";
-
-import type { ReactNode } from "react";
-import { useEffect } from "react";
-import type { SubmitHandler } from "react-hook-form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import type { PresignedPost } from "aws-sdk/clients/s3";
-import { useRouter } from "next/router";
-
+import Button from "components/ui/primitives/Button";
 import DashBoardLayout from "../../layout/dashboard";
-import TextField from "components/ui/fields/TextField";
-import TextAreaField from "components/ui/fields/TextAreaField";
-import SelectGenres from "components/organisms/SelectGenres";
 import FileField from "components/ui/fields/FileField";
 import NumberField from "components/ui/fields/NumberField";
+import type { PresignedPost } from "aws-sdk/clients/s3";
 import RadioGroupField from "components/ui/fields/RadioGroupField";
-import Button from "components/ui/primitives/Button";
-import { useMutation } from "@tanstack/react-query";
+import type { ReactNode } from "react";
+import SelectGenres from "components/organisms/SelectGenres";
 import Spinner from "components/ui/primitives/Spinner";
+import type { SubmitHandler } from "react-hook-form";
+import TextAreaField from "components/ui/fields/TextAreaField";
+import TextField from "components/ui/fields/TextField";
+import _ from "lodash";
+import { trpc } from "../../../utils/trpc";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/router";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const MAX_FILE_SIZE = 500000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
@@ -116,10 +114,13 @@ const AddComics = () => {
         Сведения о манге
       </h3>
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onSubmit, (error) => {
+          throw error;
+        })}
         className="grid grid-cols-4 gap-5 md:grid-cols-6 lg:grid-cols-10"
       >
         <FileField
+          className="h-full"
           error={errors.thumbnail?.message as string}
           {...register("thumbnail", { required: true })}
         />

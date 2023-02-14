@@ -6,7 +6,7 @@ import type {
   PostComicsSchema,
 } from "./comics.schema";
 
-import { AWS } from "../../../../libs/aws-config";
+import { AWS } from "../../../../lib/aws/aws-config";
 import type { Context } from "../../context";
 import { TRPCError } from "@trpc/server";
 import { env } from "../../../../env/server.mjs";

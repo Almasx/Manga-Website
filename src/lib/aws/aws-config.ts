@@ -1,5 +1,6 @@
 import * as aws from "aws-sdk";
-import { env } from "../env/server.mjs";
+
+import { env } from "../../env/server.mjs";
 
 aws.config.update({
   accessKeyId: env.AWS_ACCESS_KEY,

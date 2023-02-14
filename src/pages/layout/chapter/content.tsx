@@ -6,7 +6,7 @@ import type { queryChapter } from "utils/get-default-index";
 import { showContentAtom } from ".";
 import { useAtom } from "jotai";
 import { useRouter } from "next/router";
-import useScreen from "hooks/useScreen";
+import useScreen from "lib/hooks/useScreen";
 
 const ContentSection = () => {
   const { isPhone } = useScreen();

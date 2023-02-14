@@ -1,16 +1,14 @@
-import { SearchNormal } from "iconsax-react";
-import clsx from "clsx";
-
-import ComicsList from "../components/organisms/ComicsList";
-
-import TrendUp from "../../public/icons/TrendUp.svg";
-import type { ReactNode } from "react";
-import CatalogLayout from "./layout/catalog";
-import { useFilterStore } from "../hooks/useFilterStore";
-import useDebounce from "../hooks/useDebounce";
-import TextField from "components/ui/fields/TextField";
 import Button from "components/ui/primitives/Button";
+import CatalogLayout from "./layout/catalog";
+import ComicsList from "../components/organisms/ComicsList";
+import type { ReactNode } from "react";
+import { SearchNormal } from "iconsax-react";
 import TabBar from "components/ui/primitives/TabBar";
+import TextField from "components/ui/fields/TextField";
+import TrendUp from "../../public/icons/TrendUp.svg";
+import clsx from "clsx";
+import useDebounce from "../lib/hooks/useDebounce";
+import { useFilterStore } from "../lib/hooks/useFilterStore";
 
 const Catalog = () => {
   const { filter, setSort, setQuery, toggleOrder } = useFilterStore(

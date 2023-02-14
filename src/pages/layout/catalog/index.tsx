@@ -1,10 +1,10 @@
-import useScreen from "../../../hooks/useScreen";
-import type { ReactNode } from "react";
-import { useState } from "react";
+import Button from "components/ui/primitives/Button";
 import { FilterSearch } from "iconsax-react";
 import FilterSideBar from "./sidebar";
-import Button from "components/ui/primitives/Button";
 import Navigation from "components/ui/templates/Navigation";
+import type { ReactNode } from "react";
+import useScreen from "../../../lib/hooks/useScreen";
+import { useState } from "react";
 
 export default function CatalogLayout({ children }: { children: ReactNode }) {
   const [showSideBar, setShowSideBar] = useState<boolean>(false);

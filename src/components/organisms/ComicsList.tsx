@@ -1,10 +1,10 @@
-import { useRouter } from "next/router";
-import { trpc } from "../../utils/trpc";
 import ComicsCard from "../../components/molecules/ComicsCard";
-import { useMemo } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useFilterStore } from "../../hooks/useFilterStore";
 import Spinner from "components/ui/primitives/Spinner";
+import { trpc } from "../../utils/trpc";
+import { useFilterStore } from "../../lib/hooks/useFilterStore";
+import { useMemo } from "react";
+import { useRouter } from "next/router";
 
 const ComicsList = () => {
   const router = useRouter();

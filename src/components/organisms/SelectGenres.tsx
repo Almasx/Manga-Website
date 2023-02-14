@@ -1,10 +1,10 @@
-import { SearchNormal } from "iconsax-react";
-import clsx from "clsx";
-import TextField from "components/ui/fields/TextField";
 import Badge from "components/ui/primitives/Badge";
-import useDebounce from "hooks/useDebounce";
-import { useGenres } from "hooks/useGenres";
+import { SearchNormal } from "iconsax-react";
+import TextField from "components/ui/fields/TextField";
+import clsx from "clsx";
 import { trpc } from "utils/trpc";
+import useDebounce from "lib/hooks/useDebounce";
+import { useGenres } from "lib/hooks/useGenres";
 
 interface ISelectGenresProps {
   selected: IFilter["genres"]["selected"];
