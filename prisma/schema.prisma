@@ -126,7 +126,7 @@ model Chapter {
 }
 
 model Genre {
-  id     Int      @id @default(autoincrement())
+  id     String   @id @default(cuid())
   title  String   @unique
   comics Comics[]
 }
