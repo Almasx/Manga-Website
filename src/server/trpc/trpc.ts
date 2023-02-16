@@ -16,6 +16,7 @@ export const router = t.router;
  * Unprotected procedure
  **/
 export const publicProcedure = t.procedure;
+export const middleware = t.middleware;
 
 /**
  * Reusable middleware to ensure

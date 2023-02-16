@@ -1,7 +1,13 @@
 import type { GetBookmarkSchema, PostBookmarkSchema } from "./bookmark.schema";
 
+import { Bookmark } from "@prisma/client";
+import type { Comics } from "@prisma/client";
 import type { Context } from "../../context";
 import { TRPCError } from "@trpc/server";
+import { checkBookmark } from "lib/queries/checkBookmark";
+import { checkComics } from "lib/queries/checkComics";
+import { handleQuery } from "server/common/handle-query";
+import { isUserBookmark } from "lib/queries/isUserBookmark";
 
 // @desc    Get Users bookmarks
 // @route   GET /api/user/account/bookmarks/:bookmarks_id
@@ -76,49 +82,11 @@ export const bookmarkComics = async ({
   const { bookmarkId, comicsId } = input;
 
   try {
-    // Check comics
-    let comics = await ctx.prisma.comics.findUnique({
-      select: { bookmarks: true },
-      where: { id: comicsId },
-    });
-
-    if (!comics) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "Comics not found",
-      });
-    }
-
-    // Check bookmarks
-    let bookmark = await ctx.prisma.bookmark.findUnique({
-      select: { comics: true },
-      where: { id: bookmarkId },
-    });
-
-    if (!bookmark) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "Bookmark not found",
-      });
-    }
-
-    // Check if bookmarks owned by user
-    const userBookmarks = await ctx.prisma.user
-      .findUnique({
-        where: { id: ctx.session?.user?.id as string },
-        include: { bookmarks: true },
-      })
-      .then((user) => ({
-        ...user,
-        bookmarks: user?.bookmarks.map((bookmark) => bookmark.id) ?? [],
-      }));
-
-    if (!userBookmarks.bookmarks.includes(bookmarkId)) {
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "Bookmarks isn't users one",
-      });
-    }
+    const comics = await handleQuery(checkComics(comicsId));
+    const bookmark = await handleQuery(checkBookmark(bookmarkId));
+    const userBookmarks = await handleQuery(
+      isUserBookmark(ctx.session?.user?.id as string, bookmarkId)
+    );
 
     // Unsubscribe Dublicate at comics & bookmarks
     const comics_bookmarks = comics.bookmarks.map((bookmark) => bookmark.id);
@@ -126,7 +94,7 @@ export const bookmarkComics = async ({
       userBookmarks.bookmarks.includes(value)
     );
     for await (const bookmarkId of intersection) {
-      bookmark = await ctx.prisma.bookmark.update({
+      await ctx.prisma.bookmark.update({
         select: { comics: true },
         where: { id: bookmarkId },
         data: {
@@ -138,7 +106,7 @@ export const bookmarkComics = async ({
         },
       });
 
-      comics = await ctx.prisma.comics.update({
+      await ctx.prisma.comics.update({
         select: { bookmarks: true },
         where: { id: comicsId },
         data: {
@@ -153,17 +121,21 @@ export const bookmarkComics = async ({
 
     const fresh_bookmark = await ctx.prisma.bookmark.findUnique({
       where: { id: bookmarkId },
+      include: { comics: true },
     });
 
     const fresh_comics = await ctx.prisma.comics.findUnique({
       where: { id: comicsId },
+      include: { bookmarks: true },
     });
 
     // To notify users at new publication
-    comics = await ctx.prisma.comics.update({
+    await ctx.prisma.comics.update({
       select: { bookmarks: true },
       where: { id: comicsId },
-      data: { bookmarks: { set: [...comics.bookmarks, fresh_bookmark] } },
+      data: {
+        bookmarks: { set: [...fresh_comics.bookmarks, fresh_bookmark?.id] },
+      },
     });
     await ctx.prisma.bookmark.update({
       select: { comics: true },

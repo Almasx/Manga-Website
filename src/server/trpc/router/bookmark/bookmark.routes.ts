@@ -1,13 +1,24 @@
 import { bookmarkComics, getBookmark } from "./bookmark.controllers";
-import { getBookmarkSchema, postBookmarkSchema } from "./bookmark.schema";
 import { protectedProcedure, router } from "../../trpc";
+
+import { z } from "zod";
 
 const bookmarkRouter = router({
   addBookmark: protectedProcedure
-    .input(postBookmarkSchema)
+    .input(
+      z.object({
+        bookmarkId: z.string({ required_error: "Bookmark id is required" }),
+        comicsId: z.string({ required_error: "Comics id is required" }),
+      })
+    )
     .mutation(({ input, ctx }) => bookmarkComics({ input, ctx })),
+
   getBookmark: protectedProcedure
-    .input(getBookmarkSchema)
+    .input(
+      z.object({
+        bookmarkId: z.string({ required_error: "Bookmark id is required" }),
+      })
+    )
     .query(({ input, ctx }) => getBookmark({ input, ctx })),
 });
 
