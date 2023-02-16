@@ -15,7 +15,7 @@ export type queryResponce<T> = Promise<
     }
 >;
 
-type queryResponceData<T> = T extends Promise<infer U>
+export type queryResponceData<T> = T extends Promise<infer U>
   ? U extends { status: "success"; data: infer D }
     ? D
     : never

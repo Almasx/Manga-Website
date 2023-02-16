@@ -1,8 +1,12 @@
+import type { Prisma } from "@prisma/client";
 import prisma from "server/db/client";
 
-export async function checkBookmark(bookmarkId: string) {
+export async function checkBookmark(
+  bookmarkId: string,
+  BookMarkSelect?: Prisma.BookmarkSelect
+) {
   const bookmark = await prisma.bookmark.findUnique({
-    select: { comics: true },
+    select: { comics: true, ...BookMarkSelect },
     where: { id: bookmarkId },
   });
 

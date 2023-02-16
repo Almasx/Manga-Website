@@ -1,7 +1,7 @@
-import { router } from "../trpc";
 import { authRouter } from "./auth";
+import bookmarkRouter from "./bookmark";
 import comicsRouter from "./comics/comics.routes";
-import bookmarkRouter from "./bookmark/bookmark.routes";
+import { router } from "../trpc";
 
 export const appRouter = router({
   auth: authRouter,
