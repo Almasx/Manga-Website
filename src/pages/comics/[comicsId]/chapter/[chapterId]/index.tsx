@@ -32,22 +32,6 @@ const Chapter = () => {
             className="max-w-3xl"
           />
         ))}
-        {chapter?.pages.map((page) => (
-          <img
-            src={`https://darkfraction.s3.eu-north-1.amazonaws.com/${chapter.comicsId}/volume_${chapter.volumeIndex}_chapter_${chapter.chapterIndex}/${page.id}`}
-            alt="image"
-            key={page.id}
-            className="max-w-3xl"
-          />
-        ))}
-        {chapter?.pages.map((page) => (
-          <img
-            src={`https://darkfraction.s3.eu-north-1.amazonaws.com/${chapter.comicsId}/volume_${chapter.volumeIndex}_chapter_${chapter.chapterIndex}/${page.id}`}
-            alt="image"
-            key={page.id}
-            className="max-w-3xl"
-          />
-        ))}
       </div>
       <Button
         variant="secondary"

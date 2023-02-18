@@ -16,7 +16,7 @@ const AccountBar = () => {
   });
 
   return (
-    <SideBar.Wrapper className="col-span-2 ">
+    <SideBar.Wrapper className="col-span-2 !w-80">
       <section className="flex flex-row items-center gap-4 px-5 py-8">
         {session.data?.user?.image && (
           <img

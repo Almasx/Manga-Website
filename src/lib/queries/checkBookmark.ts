@@ -1,7 +1,7 @@
 import type { Prisma } from "@prisma/client";
 import prisma from "server/db/client";
 
-export const defaultCheckBookmark = {
+export const defaultCheckBookmark: Prisma.BookmarkSelect = {
   userId: false,
   title: true,
   comics: {
@@ -9,9 +9,9 @@ export const defaultCheckBookmark = {
       id: true,
       title: true,
       title_ru: true,
-      thumbnail: true,
       updatedAt: true,
       createdAt: true,
+      thumbnail: true,
     },
   },
 };

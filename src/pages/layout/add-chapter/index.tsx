@@ -8,7 +8,7 @@ const AddChapterLayout = ({ children }: { children: ReactNode }) => {
       <Header />
       <div className="flex flex-row">
         <FormSideBar />
-        <div className="grow">{children}</div>
+        <div className="flex grow">{children}</div>
       </div>
     </div>
   );

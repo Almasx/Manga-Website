@@ -10,7 +10,7 @@ export const s3CreatePresignedUrl = (key: string) =>
     s3.createPresignedPost(
       {
         Fields: {
-          key: `thumbnails/${key}`,
+          key: `${key}`,
         },
         Conditions: [
           ["starts-with", "$Content-Type", "image/"],

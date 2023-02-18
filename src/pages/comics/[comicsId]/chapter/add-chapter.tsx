@@ -55,6 +55,7 @@ const AddChapter = () => {
       comicsId: query.comicsId as string,
       pagesLenght: previewPages.length,
     })) as PresignedPost[];
+    console.log(presignedPages);
     for (const pageIndex in presignedPages) {
       const { url, fields } = presignedPages[pageIndex]!;
       const formData = new FormData();
@@ -75,10 +76,8 @@ const AddChapter = () => {
   return (
     <form
       id="chapter-form"
-      onSubmit={handleSubmit(onSubmit, (error) => {
-        throw Error(error[""].message);
-      })}
-      className="mx-auto flex w-4/5 flex-col py-7 px-4 pt-8"
+      onSubmit={handleSubmit(onSubmit)}
+      className="mx-auto flex w-[80vw] flex-col py-7 px-4 pt-8"
     >
       <div className="mb-3 flex flex-row gap-3">
         <NumberField
@@ -115,7 +114,7 @@ const AddChapter = () => {
         error={errors.pages?.message as string}
         {...register("pages", { required: true })}
       />
-      <div className="relative mx-auto grid w-full grid-cols-5 gap-5">
+      <div className="relative grid w-full grid-cols-5 gap-5">
         {previewPages.map((image) => (
           <img
             className="h-80 w-full cursor-pointer 

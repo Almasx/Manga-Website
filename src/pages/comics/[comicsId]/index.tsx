@@ -54,9 +54,7 @@ export const getServerSideProps = withCSR(
 const Comics = ({
   comicsId,
 }: InferGetStaticPropsType<typeof getServerSideProps>) => {
-  const { data: comics } = trpc.comics.getComics.useQuery({
-    comicsId,
-  });
+  const { data: comics } = trpc.comics.getComics.useQuery({ comicsId });
   const session = useSession();
   const { asPath } = useRouter();
 

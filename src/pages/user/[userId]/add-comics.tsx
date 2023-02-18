@@ -1,5 +1,6 @@
 import Button from "core/ui/primitives/Button";
 import DashBoardLayout from "../../layout/dashboard";
+import { DevTool } from "@hookform/devtools";
 import FileField from "core/ui/fields/FileField";
 import NumberField from "core/ui/fields/NumberField";
 import type { PresignedPost } from "aws-sdk/clients/s3";
@@ -46,7 +47,7 @@ const addComicsSchema = z.object({
       ".jpg, .jpeg, .png files are accepted."
     ),
   status: z.enum(["ongoing", "finished", "abandoned"]),
-  genres: z.array(z.number()),
+  genres: z.array(z.string()),
   genresQuery: z.string(),
 });
 
@@ -58,6 +59,7 @@ const AddComics = () => {
     handleSubmit,
     watch,
     setValue,
+    control,
     formState: { errors },
   } = useForm<AddComicsSchema>({
     resolver: zodResolver(addComicsSchema),
@@ -67,7 +69,8 @@ const AddComics = () => {
   useEffect(() => {
     register("genres");
     register("genresQuery");
-  }, []);
+  }, [register]);
+
   const genresValue = watch("genres");
 
   const comicsMutation = trpc.comics.postComics.useMutation();
@@ -201,6 +204,8 @@ const AddComics = () => {
           Добавить мангу
         </Button>
       </form>
+
+      <DevTool control={control} />
     </>
   );
 };

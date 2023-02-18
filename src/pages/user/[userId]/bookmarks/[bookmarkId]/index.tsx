@@ -17,12 +17,12 @@ const Bookmark = () => {
     return <Spinner></Spinner>;
   }
   return (
-    <div className="flex flex-col">
-      <div className="relative  mb-12 flex h-52 flex-col justify-center bg-gradient bg-cover px-5 ">
+    <div className="-mx-4 -my-3 flex flex-col">
+      <div className="relative mb-12 flex h-52 flex-col justify-center bg-gradient bg-cover px-5 ">
         <h2 className="text-5xl font-bold text-white">{bookmark?.title}</h2>
         <TextField
           name="search"
-          className="!absolute bottom-0 left-5 right-5 translate-y-1/2  pt-3"
+          className="bg-b !absolute bottom-0 left-5 right-5 translate-y-1/2"
           placeholder="пр: боко на херо академия"
           // value={filter.query}
           // onChange={(e) => setFilter({ ...filter, query: e.target.value })}

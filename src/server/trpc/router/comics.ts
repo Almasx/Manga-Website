@@ -1,4 +1,8 @@
-import { checkComics, defaultCheckComicsSelect } from "lib/queries/checkComics";
+import {
+  checkComics,
+  defaultCheckComicsSelect,
+  notExistComics,
+} from "lib/queries/checkComics";
 import { protectedProcedure, publicProcedure, router } from "../trpc";
 
 import type { Comics } from "@prisma/client";
@@ -75,7 +79,7 @@ const comicsRouter = router({
         comicsId: z.string({ required_error: "Comics id is required" }),
       })
     )
-    .query(async ({ input, ctx }) => {
+    .query(async ({ input }) => {
       const { comicsId } = input;
       const comics = await handleQuery(
         checkComics(defaultCheckComicsSelect, { id: comicsId })
@@ -102,9 +106,8 @@ const comicsRouter = router({
     )
     .mutation(async ({ input, ctx }) => {
       const { title, title_ru, status, year, genres, description } = input;
-      console.log([...genres.map((genreId) => ({ id: genreId }))]);
 
-      await handleQuery(checkComics(defaultCheckComicsSelect, { title }));
+      await handleQuery(notExistComics(defaultCheckComicsSelect, { title }));
       const comics = await ctx.prisma.comics.create({
         include: { thumbnail: true },
         data: {
@@ -120,7 +123,9 @@ const comicsRouter = router({
         },
       });
 
-      return s3CreatePresignedUrl(comics.thumbnail?.id as string);
+      return s3CreatePresignedUrl(
+        `thumbnail/${comics.thumbnail?.id as string}`
+      );
     }),
 });
 

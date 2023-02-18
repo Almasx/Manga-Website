@@ -10,7 +10,7 @@ interface ISelectGenresProps {
   selected: IFilter["genres"]["selected"];
   query: IFilter["query"];
   onQuery: (query: string) => void;
-  onToggleGenre: (target_id: number) => void;
+  onToggleGenre: (target_id: string) => void;
   className?: string;
 }
 
