@@ -1,10 +1,10 @@
 import ChapterLayout, { showCommentsAtom } from "pages/layout/chapter";
 
-import Button from "components/ui/primitives/Button";
+import Button from "core/ui/primitives/Button";
 import { Messages1 } from "iconsax-react";
 import React from "react";
 import type { ReactNode } from "react";
-import Spinner from "components/ui/primitives/Spinner";
+import Spinner from "core/ui/primitives/Spinner";
 import { trpc } from "utils/trpc";
 import { useRouter } from "next/router";
 import { useSetAtom } from "jotai";

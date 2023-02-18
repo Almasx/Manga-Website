@@ -1,6 +1,21 @@
 import type { Prisma } from "@prisma/client";
 import prisma from "server/db/client";
 
+export const defaultCheckBookmark = {
+  userId: false,
+  title: true,
+  comics: {
+    select: {
+      id: true,
+      title: true,
+      title_ru: true,
+      thumbnail: true,
+      updatedAt: true,
+      createdAt: true,
+    },
+  },
+};
+
 export async function checkBookmark(
   bookmarkId: string,
   BookMarkSelect?: Prisma.BookmarkSelect

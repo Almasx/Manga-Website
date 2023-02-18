@@ -1,10 +1,10 @@
-import Button from "components/ui/primitives/Button";
+import Button from "core/ui/primitives/Button";
 import CatalogLayout from "./layout/catalog";
 import ComicsList from "../components/organisms/ComicsList";
 import type { ReactNode } from "react";
 import { SearchNormal } from "iconsax-react";
-import TabBar from "components/ui/primitives/TabBar";
-import TextField from "components/ui/fields/TextField";
+import TabBar from "core/ui/primitives/TabBar";
+import TextField from "core/ui/fields/TextField";
 import TrendUp from "../../public/icons/TrendUp.svg";
 import clsx from "clsx";
 import useDebounce from "../lib/hooks/useDebounce";

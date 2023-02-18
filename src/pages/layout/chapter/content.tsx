@@ -1,6 +1,6 @@
 import CancelCross from "../../../../public/icons/CancelCross.svg";
 import ChapterCard from "components/molecules/ChapterCard";
-import Modal from "components/ui/primitives/Modal";
+import Modal from "core/ui/primitives/Modal";
 import React from "react";
 import type { queryChapter } from "utils/get-default-index";
 import { showContentAtom } from ".";

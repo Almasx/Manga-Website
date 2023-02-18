@@ -1,6 +1,6 @@
 import { ArrowLeft2 } from "iconsax-react";
-import Button from "components/ui/primitives/Button";
-import Navigation from "components/ui/templates/Navigation";
+import Button from "core/ui/primitives/Button";
+import Navigation from "core/ui/templates/Navigation";
 import React from "react";
 import { useRouter } from "next/router";
 

@@ -1,8 +1,8 @@
-import Form from "components/ui/templates/Form";
-import Button from "components/ui/primitives/Button";
-import Modal from "components/ui/primitives/Modal";
-import { z } from "zod";
+import Button from "core/ui/primitives/Button";
+import Form from "core/ui/templates/Form";
+import Modal from "core/ui/primitives/Modal";
 import OAuth from "./OAuth";
+import { z } from "zod";
 
 const SignInSchema = z.object({
   email: z.string().email("Enter a real email please.").describe("Email"), // renders TextField

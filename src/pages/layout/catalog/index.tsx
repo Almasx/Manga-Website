@@ -1,7 +1,7 @@
-import Button from "components/ui/primitives/Button";
+import Button from "core/ui/primitives/Button";
 import { FilterSearch } from "iconsax-react";
 import FilterSideBar from "./sidebar";
-import Navigation from "components/ui/templates/Navigation";
+import Navigation from "core/ui/templates/Navigation";
 import type { ReactNode } from "react";
 import useScreen from "../../../lib/hooks/useScreen";
 import { useState } from "react";

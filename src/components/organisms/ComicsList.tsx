@@ -1,6 +1,6 @@
 import ComicsCard from "../../components/molecules/ComicsCard";
 import InfiniteScroll from "react-infinite-scroll-component";
-import Spinner from "components/ui/primitives/Spinner";
+import Spinner from "core/ui/primitives/Spinner";
 import { trpc } from "../../utils/trpc";
 import { useFilterStore } from "../../lib/hooks/useFilterStore";
 import { useMemo } from "react";

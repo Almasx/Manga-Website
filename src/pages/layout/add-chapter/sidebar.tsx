@@ -1,6 +1,6 @@
-import NumberField from "components/ui/fields/NumberField";
-import TextField from "components/ui/fields/TextField";
-import SideBar from "components/ui/templates/SideBar";
+import NumberField from "core/ui/fields/NumberField";
+import SideBar from "core/ui/templates/SideBar";
+import TextField from "core/ui/fields/TextField";
 import { useRouter } from "next/router";
 
 const FormSideBar = () => {

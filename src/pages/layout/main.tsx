@@ -1,5 +1,5 @@
-import GridLayout from "components/ui/templates/GridLayout";
-import Navigation from "components/ui/templates/Navigation";
+import GridLayout from "core/ui/templates/GridLayout";
+import Navigation from "core/ui/templates/Navigation";
 
 export default function MainLayout({
   children,

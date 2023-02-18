@@ -1,6 +1,6 @@
 import { ArrowLeft2, ArrowRight2 } from "iconsax-react";
 
-import Navigation from "components/ui/templates/Navigation";
+import Navigation from "core/ui/templates/Navigation";
 import React from "react";
 import { showContentAtom } from ".";
 import { useSetAtom } from "jotai";

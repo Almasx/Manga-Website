@@ -1,6 +1,6 @@
-import Badge from "components/ui/primitives/Badge";
+import Badge from "core/ui/primitives/Badge";
 import { SearchNormal } from "iconsax-react";
-import TextField from "components/ui/fields/TextField";
+import TextField from "core/ui/fields/TextField";
 import clsx from "clsx";
 import { trpc } from "utils/trpc";
 import useDebounce from "lib/hooks/useDebounce";

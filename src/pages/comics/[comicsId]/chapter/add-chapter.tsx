@@ -1,10 +1,10 @@
 import AddChapterLayout from "../../../layout/add-chapter";
-import FileField from "components/ui/fields/FileField";
-import NumberField from "components/ui/fields/NumberField";
+import FileField from "core/ui/fields/FileField";
+import NumberField from "core/ui/fields/NumberField";
 import type { PresignedPost } from "aws-sdk/clients/s3";
 import type { ReactNode } from "react";
 import type { SubmitHandler } from "react-hook-form";
-import TextField from "components/ui/fields/TextField";
+import TextField from "core/ui/fields/TextField";
 import { getAddChapterSchema } from "lib/schemas/getAddChapterSchema";
 import { getDefaultVolumeAndChapterIndex } from "utils/get-default-index";
 import { trpc } from "utils/trpc";

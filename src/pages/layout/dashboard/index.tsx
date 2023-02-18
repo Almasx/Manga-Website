@@ -1,4 +1,4 @@
-import Navigation from "components/ui/templates/Navigation";
+import Navigation from "core/ui/templates/Navigation";
 import type { ReactNode } from "react";
 import SideBar from "./sidebar";
 

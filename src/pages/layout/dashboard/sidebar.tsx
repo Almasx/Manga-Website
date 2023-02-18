@@ -1,9 +1,9 @@
 import { Book1, Logout, Notification, Setting2 } from "iconsax-react";
 import { signOut, useSession } from "next-auth/react";
 
-import CheckBoxField from "components/ui/fields/CheckBoxField";
+import CheckBoxField from "core/ui/fields/CheckBoxField";
 import Link from "next/link";
-import SideBar from "components/ui/templates/SideBar";
+import SideBar from "core/ui/templates/SideBar";
 import { trpc } from "../../../utils/trpc";
 import { useRouter } from "next/router";
 

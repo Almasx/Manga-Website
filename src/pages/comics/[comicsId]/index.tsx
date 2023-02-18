@@ -4,8 +4,8 @@ import type {
   InferGetStaticPropsType,
 } from "next/types";
 
-import Badge from "../../../components/ui/primitives/Badge";
-import Button from "components/ui/primitives/Button";
+import Badge from "../../../core/ui/primitives/Badge";
+import Button from "core/ui/primitives/Button";
 import ChapterCard from "../../../components/molecules/ChapterCard";
 import ComicsCard from "../../../components/molecules/ComicsCard";
 import CommentField from "../../../components/molecules/CommentField";

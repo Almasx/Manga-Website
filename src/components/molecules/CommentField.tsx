@@ -1,4 +1,4 @@
-import Button from "components/ui/primitives/Button";
+import Button from "core/ui/primitives/Button";
 import React from "react";
 
 const CommentField = () => {

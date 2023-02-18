@@ -1,6 +1,6 @@
 import CommentField from "components/molecules/CommentField";
 import Comments from "components/molecules/Comments";
-import SideBar from "components/ui/templates/SideBar";
+import SideBar from "core/ui/templates/SideBar";
 
 const CommentsSection = () => {
   return (

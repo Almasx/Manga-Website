@@ -1,6 +1,6 @@
+import { checkBookmark, defaultCheckBookmark } from "lib/queries/checkBookmark";
 import { protectedProcedure, router } from "../trpc";
 
-import { checkBookmark } from "lib/queries/checkBookmark";
 import { checkComics } from "lib/queries/checkComics";
 import { clearSubscriptions } from "lib/queries/clearSubscriptions";
 import { handleQuery } from "server/common/handle-query";
@@ -19,7 +19,6 @@ const bookmarkRouter = router({
     .mutation(async ({ input, ctx }) => {
       const { bookmarkId, comicsId } = input;
 
-      // Input validation
       const comics = await handleQuery(
         checkComics({ bookmarks: true }, { id: comicsId })
       );
@@ -48,20 +47,7 @@ const bookmarkRouter = router({
       );
 
       const bookmark = await handleQuery(
-        checkBookmark(bookmarkId, {
-          userId: false,
-          title: true,
-          comics: {
-            select: {
-              id: true,
-              title: true,
-              title_ru: true,
-              thumbnail: true,
-              updatedAt: true,
-              createdAt: true,
-            },
-          },
-        })
+        checkBookmark(bookmarkId, defaultCheckBookmark)
       );
 
       return bookmark;

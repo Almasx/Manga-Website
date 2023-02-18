@@ -2,8 +2,8 @@ import ComicsCard from "components/molecules/ComicsCard";
 import DashBoardLayout from "pages/layout/dashboard";
 import type { ReactNode } from "react";
 import { SearchNormal } from "iconsax-react";
-import Spinner from "components/ui/primitives/Spinner";
-import TextField from "components/ui/fields/TextField";
+import Spinner from "core/ui/primitives/Spinner";
+import TextField from "core/ui/fields/TextField";
 import { trpc } from "utils/trpc";
 import { useRouter } from "next/router";
 
