@@ -1,10 +1,39 @@
+import { Prisma } from "@prisma/client";
 import prisma from "server/db/client";
 
-export async function checkComics(comicsId: string) {
-  const comics = await prisma.comics.findUnique({
-    where: { id: comicsId },
-    include: { bookmarks: true },
-  });
+export const defaultCheckComicsSelect = Prisma.validator<Prisma.ComicsSelect>()(
+  {
+    id: true,
+    title: true,
+    title_ru: true,
+    description: true,
+    rating: true,
+    saved: true,
+    status: true,
+    year: true,
+    createdAt: true,
+    updatedAt: true,
+    chapters: {
+      select: {
+        chapterIndex: true,
+        volumeIndex: true,
+        createdAt: true,
+        id: true,
+      },
+    },
+    genres: true,
+    thumbnail: true,
+  }
+);
+
+export async function checkComics<S extends Prisma.ComicsSelect>(
+  select: Prisma.Subset<S, Prisma.ComicsSelect>,
+  where: Prisma.ComicsWhereUniqueInput
+) {
+  const comics = await prisma.comics.findUnique<{
+    select: S;
+    where: Prisma.ComicsWhereUniqueInput;
+  }>({ select, where: where });
 
   if (!comics) {
     return {

@@ -122,54 +122,6 @@ const comicsRouter = router({
 
       return s3CreatePresignedUrl(comics.thumbnail?.id as string);
     }),
-
-  getChapter: publicProcedure
-    .input(
-      z.object({
-        chapterId: z.string({ required_error: "Chapter id is required" }),
-        comicsId: z.string({ required_error: "Comics id is required" }),
-      })
-    )
-    .query(async ({ input, ctx }) => {
-      const { comicsId, chapterId } = input;
-
-      const chapter = await handleQuery(
-        checkChapter({ pages: true }, chapterId, comicsId)
-      );
-      return chapter;
-    }),
-
-  postChapter: protectedProcedure
-    .input(
-      z.object({
-        comicsId: z.string({ required_error: "Comics id is required" }),
-        volumeIndex: z.number({ required_error: "Volume is required" }),
-        chapterIndex: z.number({ required_error: "Volume is required" }),
-        pagesLenght: z.number(),
-      })
-    )
-    .mutation(async ({ input, ctx }) => {
-      const { volumeIndex, chapterIndex, comicsId, pagesLenght } = input;
-      await handleQuery(checkComics({ chapters: true }, { id: comicsId }));
-
-      const chapter = await ctx.prisma.chapter.create({
-        include: { pages: true },
-        data: {
-          volumeIndex,
-          chapterIndex,
-          comicsId,
-          pages: { createMany: { data: Array(pagesLenght).fill({}) } },
-        },
-      });
-
-      return Promise.all(
-        chapter.pages.map((page) =>
-          s3CreatePresignedUrl(
-            `${comicsId}/volume_${chapter.volumeIndex}_chapter_${chapter.chapterIndex}/${page.id}`
-          )
-        )
-      );
-    }),
 });
 
 export default comicsRouter;

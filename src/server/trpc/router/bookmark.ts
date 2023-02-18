@@ -20,8 +20,10 @@ const bookmarkRouter = router({
       const { bookmarkId, comicsId } = input;
 
       // Input validation
-      const comics = await handleQuery(checkComics(comicsId));
-      const bookmark = await handleQuery(checkBookmark(bookmarkId));
+      const comics = await handleQuery(
+        checkComics({ bookmarks: true }, { id: comicsId })
+      );
+      await handleQuery(checkBookmark(bookmarkId));
       const userBookmarks = await handleQuery(
         isUserBookmark(ctx.session?.user?.id as string, bookmarkId)
       );

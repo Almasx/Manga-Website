@@ -12,7 +12,7 @@ import { useSetAtom } from "jotai";
 const Chapter = () => {
   const { query } = useRouter();
   const setShowComments = useSetAtom(showCommentsAtom);
-  const { data: chapter, isLoading } = trpc.comics.getChapter.useQuery({
+  const { data: chapter, isLoading } = trpc.chapter.getChapter.useQuery({
     chapterId: query.chapterId as string,
     comicsId: query.comicsId as string,
   });

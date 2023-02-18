@@ -17,7 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 const AddChapter = () => {
   const [previewPages, setPreviewPages] = useState<string[]>([]);
-  const chapterMutation = trpc.comics.postChapter.useMutation();
+  const chapterMutation = trpc.chapter.postChapter.useMutation();
   const { query } = useRouter();
 
   const { defaultVolumeIndex, defaultChapterIndex, chapterObject } =
