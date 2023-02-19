@@ -17,7 +17,6 @@ const ChapterCard = ({
   packed?: boolean;
 }) => {
   const [liked, setLiked] = useState<boolean>(false);
-  const { push, asPath } = useRouter();
 
   return (
     <button

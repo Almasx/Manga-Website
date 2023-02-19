@@ -78,6 +78,13 @@ const Chapter = ({
   );
 };
 
-Chapter.getLayout = (page: ReactNode) => <ChapterLayout>{page}</ChapterLayout>;
+Chapter.getLayout = (
+  page: ReactNode,
+  {
+    chapter: { chapterIndex, volumeIndex },
+  }: InferGetServerSidePropsType<typeof getServerSideProps>
+) => (
+  <ChapterLayout index={{ chapterIndex, volumeIndex }}>{page}</ChapterLayout>
+);
 
 export default Chapter;

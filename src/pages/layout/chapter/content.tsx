@@ -37,7 +37,7 @@ const ContentSection = () => {
           </button>
         )}
       </div>
-      <div className="scrollbar-hide flex grow flex-col gap-3 overflow-y-auto">
+      <div className="scrollbar-hide flex  flex-col gap-3 overflow-y-auto ">
         {comics?.chapters.map(({ chapterIndex, volumeIndex }) => (
           <ChapterCard
             packed={true}

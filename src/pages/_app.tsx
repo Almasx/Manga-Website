@@ -13,7 +13,7 @@ import { Provider } from "jotai";
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
-  getLayout?: (page: ReactElement) => ReactNode;
+  getLayout?: (page: ReactElement, pageProps: any) => ReactNode;
 };
 
 type AppPropsWithLayout = AppProps & {
@@ -26,7 +26,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }: AppPropsWithLayout) => {
   const getLayout =
     Component.getLayout || ((page) => <MainLayout>{page}</MainLayout>);
-  const layout = getLayout(<Component {...pageProps} />);
+  const layout = getLayout(<Component {...pageProps} />, pageProps);
 
   return (
     <Provider>
