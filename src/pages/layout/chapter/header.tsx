@@ -25,7 +25,6 @@ const Header = ({
       chapter.chapterIndex === chapterIndex &&
       chapter.volumeIndex === volumeIndex
   );
-  console.log(contentIndex);
   const previosChapter = comics?.chapters[contentIndex - 1];
   const followingChapter = comics?.chapters[contentIndex + 1];
 

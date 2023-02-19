@@ -1,8 +1,8 @@
+import { ReactElement, cloneElement, useState } from "react";
+
+import { ButtonProps } from "core/ui/primitives/Button";
+import { TabProps } from "core/ui/templates/SideBar/Section/Tab";
 import clsx from "clsx";
-import type { ReactElement } from "react";
-import { cloneElement, useState } from "react";
-import type { ButtonProps } from "../atoms/Button";
-import type { TabProps } from "../organisms/SideBar/Section/Tab";
 
 interface DropDownProps {
   options: ReactElement<TabProps>[];
@@ -17,7 +17,7 @@ const DropDown = ({ header, options }: DropDownProps) => {
   });
   const clonedOptions = options.map((option, index) =>
     cloneElement(option, {
-      onClick: (event?: unknown) => {
+      onClick: (event?: any) => {
         option.props.onClick?.call(event);
         setDropDownOption(index);
         setDropdownShow(false);

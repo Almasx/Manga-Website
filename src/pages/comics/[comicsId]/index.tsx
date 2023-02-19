@@ -10,12 +10,15 @@ import ChapterCard from "../../../components/molecules/ChapterCard";
 import ComicsCard from "../../../components/molecules/ComicsCard";
 import CommentField from "../../../components/molecules/CommentField";
 import Comments from "../../../components/molecules/Comments";
+import DropDown from "core/ui/primitives/DropDown";
 import Link from "next/link";
+import Tab from "core/ui/templates/SideBar/Section/Tab";
 import TrendUpBulk from "../../../../public/icons/TrendUpBulk.svg";
 import { appRouter } from "../../../server/trpc/router/_app";
 import { createContextInner } from "../../../server/trpc/context";
 import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 import superjson from "superjson";
+import { trpc } from "utils/trpc";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
@@ -53,10 +56,14 @@ const Comics = ({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const session = useSession();
   const { asPath } = useRouter();
+  const { data: user } = trpc.auth.getBookmarks.useQuery(undefined, {
+    staleTime: Infinity,
+    cacheTime: Infinity,
+  });
 
   return (
     <>
-      <section className="grid grid-cols-8 gap-5 pt-8 lg:col-span-8">
+      <section className="grid grid-cols-8 gap-5 pt-8 lg:col-span-8 ">
         <div className="lg:col-span-2">
           <div className="relative flex flex-col gap-5">
             <img
@@ -113,35 +120,36 @@ const Comics = ({
                     <Button className="flex-grow">Начать читать</Button>
                   </Link>
 
-                  {session.data?.user?.role === "USER" && (
-                    <Button
-                      variant="text"
-                      content="icon"
-                      className="aspect-square w-10 "
-                    >
-                      <div className="scale-125">
-                        <Save2 />
-                      </div>
-                    </Button>
+                  {session.data?.user?.role === "USER" && user?.bookmarks && (
+                    <DropDown
+                      header={
+                        <Button
+                          variant="text"
+                          content="icon"
+                          className="aspect-square w-10 "
+                        >
+                          <div className="scale-125">
+                            <Save2 />
+                          </div>
+                        </Button>
+                      }
+                      options={user.bookmarks.map((bookmark) => (
+                        <Tab
+                          active={false}
+                          key={bookmark.id}
+                          // onClick={() => onBookmark(bookmark.id)}
+                        >
+                          {bookmark.title}
+                        </Tab>
+                      ))}
+                    />
                   )}
-                  {/* <DropDown
-              header={
-                
-              }
-              options={user.bookmarks.map(
-                (bookmark: { id: string; title: string }) => (
-                  <Tab active={false} onClick={() => onBookmark(bookmark.id)}>
-                    {bookmark.title}
-                  </Tab>
-                )
-              )}
-            ></DropDown> */}
                 </div>
               )}
           </div>
         </div>
 
-        <div className="relative flex flex-col gap-5 pr-10  lg:col-span-6">
+        <div className="relative flex flex-col gap-5  pr-10 lg:col-span-6">
           <div className="">
             <h1 className="pb-1 text-4xl font-bold text-white">
               {comics?.title_ru}
@@ -192,7 +200,7 @@ const Comics = ({
         </div>
       </section>
 
-      <aside className="col-span-4 row-span-2  bg-gradient bg-cover px-5 pt-8 lg:-mr-5">
+      <aside className="col-span-4 row-span-2 -mt-3 -mr-5 bg-gradient bg-cover px-5 pt-8">
         <div className="flex flex-row items-center gap-5 pb-8 text-4xl font-bold text-white">
           <h1>Cписок глав</h1>
           <p>{comics?.chapters?.length}</p>
