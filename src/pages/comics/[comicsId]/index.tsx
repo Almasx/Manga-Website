@@ -1,7 +1,7 @@
 import { Edit, Eye, Save2, Star1 } from "iconsax-react";
 import type {
   GetServerSidePropsContext,
-  InferGetStaticPropsType,
+  InferGetServerSidePropsType,
 } from "next/types";
 
 import Badge from "../../../core/ui/primitives/Badge";
@@ -16,45 +16,41 @@ import { appRouter } from "../../../server/trpc/router/_app";
 import { createContextInner } from "../../../server/trpc/context";
 import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 import superjson from "superjson";
-import { trpc } from "../../../utils/trpc";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import { withCSR } from "lib/helpers/withCSR";
 
-export const getServerSideProps = withCSR(
-  async (context: GetServerSidePropsContext<{ comicsId: string }>) => {
-    const ssgHelper = createProxySSGHelpers({
-      router: appRouter,
-      ctx: createContextInner({ session: null }),
-      transformer: superjson,
-    });
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext<{ comicsId: string }>
+) => {
+  const ssgHelper = createProxySSGHelpers({
+    router: appRouter,
+    ctx: createContextInner({ session: null }),
+    transformer: superjson,
+  });
 
-    const comicsId = context.params?.comicsId as string;
+  const comicsId = context.params?.comicsId as string;
 
-    try {
-      await ssgHelper.comics.getComics.fetch({ comicsId });
-    } catch (error) {
-      return {
-        redirect: {
-          destination: "/404",
-          permanent: false,
-        },
-      };
-    }
-
+  try {
+    const comics = await ssgHelper.comics.getComics.fetch({ comicsId });
     return {
       props: {
         trpcState: ssgHelper.dehydrate(),
-        comicsId,
+        comics,
+      },
+    };
+  } catch (error) {
+    return {
+      redirect: {
+        destination: "/404",
+        permanent: false,
       },
     };
   }
-);
+};
 
 const Comics = ({
-  comicsId,
-}: InferGetStaticPropsType<typeof getServerSideProps>) => {
-  const { data: comics } = trpc.comics.getComics.useQuery({ comicsId });
+  comics,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const session = useSession();
   const { asPath } = useRouter();
 
@@ -214,9 +210,6 @@ const Comics = ({
               className="flex"
               href={{
                 pathname: `${asPath}/chapter/${chapter.id}`,
-                query: {
-                  chapters: encodeURIComponent(JSON.stringify(chapter)),
-                },
               }}
               key={chapter.id}
             >

@@ -16,6 +16,32 @@ import { z } from "zod";
 const comicsRouter = router({
   getGenres: publicProcedure.query(({ ctx }) => ctx.prisma.genre.findMany()),
 
+  getChapters: publicProcedure
+    .input(
+      z.object({
+        comicsId: z.string({ required_error: "Comics id is required" }),
+      })
+    )
+    .query(async ({ input }) => {
+      const { comicsId } = input;
+      const chapters = await handleQuery(
+        checkComics(
+          {
+            chapters: {
+              select: {
+                chapterIndex: true,
+                volumeIndex: true,
+                createdAt: true,
+                id: true,
+              },
+            },
+          },
+          { id: comicsId }
+        )
+      );
+      return chapters;
+    }),
+
   getCatalog: publicProcedure
     .input(
       z.object({
@@ -93,6 +119,7 @@ const comicsRouter = router({
         genres: comics && comics.genres.map((genre) => genre.title),
       };
     }),
+
   postComics: protectedProcedure
     .input(
       z.object({
@@ -124,7 +151,7 @@ const comicsRouter = router({
       });
 
       return s3CreatePresignedUrl(
-        `thumbnail/${comics.thumbnail?.id as string}`
+        `thumbnails/${comics.thumbnail?.id as string}`
       );
     }),
 });

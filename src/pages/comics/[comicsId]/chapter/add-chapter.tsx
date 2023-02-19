@@ -1,4 +1,5 @@
 import AddChapterLayout from "../../../layout/add-chapter";
+import { DevTool } from "@hookform/devtools";
 import FileField from "core/ui/fields/FileField";
 import NumberField from "core/ui/fields/NumberField";
 import type { PresignedPost } from "aws-sdk/clients/s3";
@@ -28,6 +29,7 @@ const AddChapter = () => {
     register,
     handleSubmit,
     formState: { errors },
+    control,
   } = useForm<AddChapterSchema>({
     resolver: zodResolver(addChapterSchema),
     defaultValues: {
@@ -49,7 +51,7 @@ const AddChapter = () => {
   });
 
   const onSubmit: SubmitHandler<AddChapterSchema> = async (data) => {
-    console.log(data);
+    console.log(data.pages);
     const presignedPages = (await chapterMutation.mutateAsync({
       ...data,
       comicsId: query.comicsId as string,
@@ -125,6 +127,7 @@ const AddChapter = () => {
           />
         ))}
       </div>
+      <DevTool control={control} />
     </form>
   );
 };

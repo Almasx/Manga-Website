@@ -47,11 +47,13 @@ export const chapterRouter = router({
       });
 
       return Promise.all(
-        chapter.pages.map((page) =>
-          s3CreatePresignedUrl(
+        chapter.pages.map((page) => {
+          const url = s3CreatePresignedUrl(
             `${comicsId}/volume_${chapter.volumeIndex}_chapter_${chapter.chapterIndex}/${page.id}`
-          )
-        )
+          );
+          console.log(url);
+          return url;
+        })
       );
     }),
 });

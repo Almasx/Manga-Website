@@ -1,25 +1,56 @@
 import ChapterLayout, { showCommentsAtom } from "pages/layout/chapter";
+import type {
+  GetServerSidePropsContext,
+  InferGetServerSidePropsType,
+} from "next";
 
 import Button from "core/ui/primitives/Button";
 import { Messages1 } from "iconsax-react";
 import React from "react";
 import type { ReactNode } from "react";
-import Spinner from "core/ui/primitives/Spinner";
-import { trpc } from "utils/trpc";
-import { useRouter } from "next/router";
+import { appRouter } from "server/trpc/router/_app";
+import { createContextInner } from "server/trpc/context";
+import { createProxySSGHelpers } from "@trpc/react-query/ssg";
+import superjson from "superjson";
 import { useSetAtom } from "jotai";
 
-const Chapter = () => {
-  const { query } = useRouter();
-  const setShowComments = useSetAtom(showCommentsAtom);
-  const { data: chapter, isLoading } = trpc.chapter.getChapter.useQuery({
-    chapterId: query.chapterId as string,
-    comicsId: query.comicsId as string,
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext<{ comicsId: string; chapterId: string }>
+) => {
+  const ssgHelper = createProxySSGHelpers({
+    router: appRouter,
+    ctx: createContextInner({ session: null }),
+    transformer: superjson,
   });
 
-  if (isLoading) {
-    return <Spinner />;
+  const comicsId = context.params?.comicsId as string;
+  const chapterId = context.params?.chapterId as string;
+
+  try {
+    const chapter = await ssgHelper.chapter.getChapter.fetch({
+      chapterId,
+      comicsId,
+    });
+    return {
+      props: {
+        trpcState: ssgHelper.dehydrate(),
+        chapter,
+      },
+    };
+  } catch (error) {
+    return {
+      redirect: {
+        destination: "/404",
+        permanent: false,
+      },
+    };
   }
+};
+
+const Chapter = ({
+  chapter,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const setShowComments = useSetAtom(showCommentsAtom);
 
   return (
     <>

@@ -1,12 +1,16 @@
-export const withCSR = (next) => async (ctx) => {
-  // check is it a client side navigation
-  const isCSR = ctx.req.url?.startsWith("/_next");
+import type { GetServerSidePropsContext } from "next";
 
-  if (isCSR) {
-    return {
-      props: {},
-    };
-  }
+export const withCSR =
+  (next) =>
+  async <T extends GetServerSidePropsContext>(ctx: T) => {
+    // check is it a client side navigation
+    const isCSR = ctx.req.url?.startsWith("/_next");
 
-  return next?.(ctx);
-};
+    if (isCSR) {
+      return {
+        props: {},
+      };
+    }
+
+    return next?.(ctx);
+  };

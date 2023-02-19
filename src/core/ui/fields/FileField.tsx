@@ -1,8 +1,9 @@
-import clsx from "clsx";
-import { FolderCloud } from "iconsax-react";
-import type { ChangeEvent } from "react";
 import React, { forwardRef, useState } from "react";
+
+import type { ChangeEvent } from "react";
+import { FolderCloud } from "iconsax-react";
 import type { IField } from "../../../types/IField";
+import clsx from "clsx";
 
 export type IFileFieldProps = {
   className?: string;
@@ -54,8 +55,10 @@ const FileField = forwardRef<HTMLInputElement, IFileFieldProps>(
           className="hidden"
           name={name}
           ref={ref}
+          multiple
           onChange={(e) => {
             onChange && onChange(e);
+            console.log(onChange?.toString());
 
             onPreview
               ? onPreview(e)

@@ -2,8 +2,8 @@ import CancelCross from "../../../../public/icons/CancelCross.svg";
 import ChapterCard from "components/molecules/ChapterCard";
 import Modal from "core/ui/primitives/Modal";
 import React from "react";
-import type { queryChapter } from "utils/get-default-index";
 import { showContentAtom } from ".";
+import { trpc } from "utils/trpc";
 import { useAtom } from "jotai";
 import { useRouter } from "next/router";
 import useScreen from "lib/hooks/useScreen";
@@ -13,9 +13,9 @@ const ContentSection = () => {
   const { query } = useRouter();
 
   const [showContent, setShowSection] = useAtom(showContentAtom);
-  const content = JSON.parse(
-    decodeURIComponent(query.chapters as string)
-  ) as queryChapter;
+  const { data: comics } = trpc.comics.getChapters.useQuery({
+    comicsId: query.comicsId as string,
+  });
 
   return (
     <Modal
@@ -38,7 +38,7 @@ const ContentSection = () => {
         )}
       </div>
       <div className="scrollbar-hide flex grow flex-col gap-3 overflow-y-auto">
-        {content.map(({ chapterIndex, volumeIndex }) => (
+        {comics?.chapters.map(({ chapterIndex, volumeIndex }) => (
           <ChapterCard
             packed={true}
             key={`${volumeIndex}_${chapterIndex}`}
