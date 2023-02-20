@@ -60,6 +60,7 @@ const Comics = ({
     staleTime: Infinity,
     cacheTime: Infinity,
   });
+  const { mutate: addBookmark } = trpc.bookmark.addBookmark.useMutation();
 
   return (
     <>
@@ -137,7 +138,12 @@ const Comics = ({
                         <Tab
                           active={false}
                           key={bookmark.id}
-                          // onClick={() => onBookmark(bookmark.id)}
+                          onClick={() =>
+                            addBookmark({
+                              bookmarkId: bookmark.id,
+                              comicsId: comics.id,
+                            })
+                          }
                         >
                           {bookmark.title}
                         </Tab>

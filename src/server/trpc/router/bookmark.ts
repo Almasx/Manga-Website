@@ -20,7 +20,7 @@ const bookmarkRouter = router({
       const { bookmarkId, comicsId } = input;
 
       const comics = await handleQuery(
-        checkComics({ bookmarks: true }, { id: comicsId })
+        checkComics({ bookmarks: true, id: true }, { id: comicsId })
       );
       await handleQuery(checkBookmark(bookmarkId));
       const userBookmarks = await handleQuery(

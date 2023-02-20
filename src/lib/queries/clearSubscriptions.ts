@@ -13,6 +13,7 @@ export async function clearSubscriptions(
   const intersection = comics_bookmarks?.filter((value) =>
     userBookmarks.bookmarks.includes(value)
   );
+
   for await (const bookmarkId of intersection!) {
     await prisma.bookmark.update({
       select: { comics: true },
