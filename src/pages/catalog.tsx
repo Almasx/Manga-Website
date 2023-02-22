@@ -1,7 +1,8 @@
+import type { ChangeEvent, ReactNode } from "react";
+
 import Button from "core/ui/primitives/Button";
 import CatalogLayout from "./layout/catalog";
 import ComicsList from "../components/organisms/ComicsList";
-import type { ReactNode } from "react";
 import { SearchNormal } from "iconsax-react";
 import TabBar from "core/ui/primitives/TabBar";
 import TextField from "core/ui/fields/TextField";
@@ -14,7 +15,7 @@ const Catalog = () => {
   const { filter, setSort, setQuery, toggleOrder } = useFilterStore(
     (state) => state
   );
-  const debounce = useDebounce();
+  const debounce = useDebounce(filter.query);
 
   return (
     <main className="col-span-4 flex flex-col pl-4 pt-8 md:col-span-8 lg:col-span-9">
@@ -22,9 +23,9 @@ const Catalog = () => {
       <TextField
         className="pt-3"
         placeholder="пр: ванпачмен"
-        onChange={(event: { target: { value: string } }) =>
-          debounce(event.target.value, setQuery)
-        }
+        onChange={(event: ChangeEvent<HTMLInputElement>) => {
+          debounce(event.target.value, setQuery);
+        }}
         endIcon={<SearchNormal size="20" className="text-white/33 " />}
       />
       <div className="relative flex w-full flex-row justify-between">

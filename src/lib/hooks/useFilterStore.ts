@@ -2,7 +2,7 @@ import create from "zustand";
 
 interface IFilterState {
   filter: IFilter;
-  toggleGenre: (targetId: number) => void;
+  toggleGenre: (targetId: string) => void;
   toggleOrder: () => void;
   setQuery: (query: IFilter["query"]) => void;
   setGenreQuery: (query: IFilter["genres"]["query"]) => void;
@@ -57,12 +57,15 @@ export const useFilterStore = create<IFilterState>((set) => ({
     })),
 
   setQuery: (query) =>
-    set((state) => ({
-      filter: {
-        ...state.filter,
-        query: query,
-      },
-    })),
+    set((state) => {
+      console.log(query);
+      return {
+        filter: {
+          ...state.filter,
+          query: query,
+        },
+      };
+    }),
 
   setGenreQuery: (query) =>
     set((state) => ({
