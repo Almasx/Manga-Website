@@ -29,16 +29,16 @@ const ComicsList = () => {
     [data]
   );
 
+  if (isFetching) {
+    return <Spinner />;
+  }
+
   if (catalog === undefined || catalog.catalog.length === 0) {
     return (
       <div className="flex h-auto grow items-center justify-center text-4xl font-medium text-white/20">
         Манга не найдена...
       </div>
     );
-  }
-
-  if (isFetching) {
-    return <Spinner />;
   }
 
   return (

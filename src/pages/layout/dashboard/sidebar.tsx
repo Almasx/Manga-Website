@@ -58,9 +58,17 @@ const AccountBar = () => {
       {session.data?.user?.role === "USER" && (
         <SideBar.Section.Wrapper>
           <SideBar.Section.Header text="Сохранённые" />
-          {data?.bookmarks.map((bookmark, index: number) => (
-            <Link href={`${asPath}/bookmarks/${bookmark.id}`} key={index}>
-              <SideBar.Section.Tab active={false} classNames="rounded-xl">
+          {data?.bookmarks.map((bookmark) => (
+            <Link
+              href={`${asPath.replace(/\/bookmarks\/.*/, "")}/bookmarks/${
+                bookmark.id
+              }`}
+              key={bookmark.id}
+            >
+              <SideBar.Section.Tab
+                active={asPath.includes(bookmark.id)}
+                classNames="rounded-xl"
+              >
                 {bookmark.title}
               </SideBar.Section.Tab>
             </Link>
