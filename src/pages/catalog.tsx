@@ -1,4 +1,4 @@
-import type { ChangeEvent, ReactNode } from "react";
+import { ChangeEvent, ReactNode, useCallback } from "react";
 
 import Button from "core/ui/primitives/Button";
 import CatalogLayout from "./layout/catalog";
@@ -7,6 +7,7 @@ import { SearchNormal } from "iconsax-react";
 import TabBar from "core/ui/primitives/TabBar";
 import TextField from "core/ui/fields/TextField";
 import TrendUp from "../../public/icons/TrendUp.svg";
+import _ from "lodash";
 import clsx from "clsx";
 import useDebounce from "../lib/hooks/useDebounce";
 import { useFilterStore } from "../lib/hooks/useFilterStore";
@@ -15,7 +16,7 @@ const Catalog = () => {
   const { filter, setSort, setQuery, toggleOrder } = useFilterStore(
     (state) => state
   );
-  const debounce = useDebounce(filter.query);
+  const debounce = useDebounce();
 
   return (
     <main className="col-span-4 flex flex-col pl-4 pt-8 md:col-span-8 lg:col-span-9">
@@ -24,7 +25,7 @@ const Catalog = () => {
         className="pt-3"
         placeholder="пр: ванпачмен"
         onChange={(event: ChangeEvent<HTMLInputElement>) => {
-          debounce(event.target.value, setQuery);
+          debounce(() => setQuery(event.target.value));
         }}
         endIcon={<SearchNormal size="20" className="text-white/33 " />}
       />

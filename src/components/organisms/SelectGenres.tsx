@@ -1,4 +1,5 @@
 import Badge from "core/ui/primitives/Badge";
+import { ChangeEvent } from "react";
 import { SearchNormal } from "iconsax-react";
 import TextField from "core/ui/fields/TextField";
 import clsx from "clsx";
@@ -33,9 +34,9 @@ const SelectGenres = ({
       <TextField
         placeholder="пр: детектив, драма..."
         endIcon={<SearchNormal size="20" className="text-white/30 " />}
-        onChange={(event: { target: { value: string } }) =>
-          onQuery(event.target.value)
-        } // debounce(event.target.value, onQuery)
+        onChange={(event: ChangeEvent<HTMLInputElement>) =>
+          debounce(() => onQuery(event.target.value))
+        }
       />
       <div className="mt-4 mb-auto flex flex-row flex-wrap items-center justify-start overflow-y-auto">
         {sortedAndSearchedGenres.map((genre) => (
