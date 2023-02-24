@@ -36,10 +36,11 @@ const bookmarkRouter = router({
     .input(
       z.object({
         bookmarkId: z.string({ required_error: "Bookmark id is required" }),
+        query: z.string().default(""),
       })
     )
     .query(async ({ input, ctx }) => {
-      const { bookmarkId } = input;
+      const { bookmarkId, query } = input;
 
       // Bookmarks owned by user
       await handleQuery(
@@ -47,7 +48,20 @@ const bookmarkRouter = router({
       );
 
       const bookmark = await handleQuery(
-        checkBookmark(bookmarkId, defaultCheckBookmark)
+        checkBookmark(bookmarkId, {
+          ...defaultCheckBookmark,
+          comics: {
+            select: {
+              id: true,
+              title: true,
+              title_ru: true,
+              updatedAt: true,
+              createdAt: true,
+              thumbnail: true,
+            },
+            where: { title: { contains: query } },
+          },
+        })
       );
 
       return bookmark;

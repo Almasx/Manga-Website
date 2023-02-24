@@ -1,4 +1,5 @@
-import { ChangeEvent, ReactNode, useCallback } from "react";
+import type { ReactNode } from "react";
+import { ChangeEvent, useCallback } from "react";
 
 import Button from "core/ui/primitives/Button";
 import CatalogLayout from "./layout/catalog";
@@ -24,7 +25,7 @@ const Catalog = () => {
       <TextField
         className="pt-3"
         placeholder="пр: ванпачмен"
-        onChange={(event: ChangeEvent<HTMLInputElement>) => {
+        onChange={(event) => {
           debounce(() => setQuery(event.target.value));
         }}
         endIcon={<SearchNormal size="20" className="text-white/33 " />}

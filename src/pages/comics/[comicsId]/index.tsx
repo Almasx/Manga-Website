@@ -251,9 +251,10 @@ const RecomendedList = () => (
       {Array(5).fill(
         <ComicsCard
           rating={4.6}
-          thumbnail={null}
+          thumbnail={{ id: "1", comicsId: "w" }}
           title={{ title_ru: "Элисед", title_en: "Eliceed" }}
           variant="recomendation"
+          id={""}
         />
       )}
     </div>
