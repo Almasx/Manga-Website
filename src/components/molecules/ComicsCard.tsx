@@ -1,31 +1,30 @@
+import Link from "next/link";
+import Star from "../../../public/icons/Star.svg";
 import type { Thumbnail } from "@prisma/client";
 import clsx from "clsx";
-import Star from "../../../public/icons/Star.svg";
 
 export interface ComicsCardProps {
+  id: string;
   title: {
     title_en: string;
     title_ru: string;
   };
-  onClick?: (e: unknown) => void;
-  thumbnail: Thumbnail | null;
+  thumbnail: Thumbnail;
   rating?: number;
   variant?: "recomendation" | "catalog";
 }
 
 const ComicsCard = ({
+  id,
   title,
-  onClick,
   thumbnail,
   rating,
   variant = "catalog",
 }: ComicsCardProps) => {
   const { title_en, title_ru } = title;
   return (
-    <button
-      onClick={(e) => {
-        onClick && onClick(e);
-      }}
+    <Link
+      href={`/comics/${id}`}
       className={clsx(
         "flex cursor-pointer rounded-2xl text-left",
         "border border-stroke-100 p-3 ",
@@ -76,7 +75,7 @@ const ComicsCard = ({
         </h3>
         <h6 className=" text-xs text-white/60">{title_en}</h6>
       </div>
-    </button>
+    </Link>
   );
 };
 

@@ -4,10 +4,8 @@ import Spinner from "core/ui/primitives/Spinner";
 import { trpc } from "../../utils/trpc";
 import { useFilterStore } from "../../lib/hooks/useFilterStore";
 import { useMemo } from "react";
-import { useRouter } from "next/router";
 
 const ComicsList = () => {
-  const router = useRouter();
   const { filter } = useFilterStore((state) => state);
   const { data, fetchNextPage, hasNextPage, isFetching } =
     trpc.comics.getCatalog.useInfiniteQuery(
@@ -54,12 +52,11 @@ const ComicsList = () => {
       {data &&
         catalog.catalog.map((comics) => (
           <ComicsCard
-            onClick={() => {
-              router.push(`/comics/${comics.id}`);
-            }}
+            id={comics.id}
+            key={comics.id}
             title={{ title_en: comics.title, title_ru: comics.title_ru }}
-            key={comics.title}
-            thumbnail={comics.thumbnail}
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            thumbnail={comics.thumbnail!}
             rating={comics.rating}
           />
         ))}

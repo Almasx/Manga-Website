@@ -16,9 +16,10 @@ const Bookmark = () => {
   if (isLoading) {
     return <Spinner></Spinner>;
   }
+
   return (
-    <div className="-mx-4 -my-3 flex flex-col">
-      <div className="relative mb-12 flex h-52 flex-col justify-center bg-gradient bg-cover px-5 ">
+    <>
+      <div className="relative -mx-4 mb-12 -mt-3 flex h-52 flex-col justify-center bg-gradient bg-cover px-5 ">
         <h2 className="text-5xl font-bold text-white">{bookmark?.title}</h2>
         <TextField
           name="search"
@@ -29,17 +30,18 @@ const Bookmark = () => {
           endIcon={<SearchNormal size="20" className="text-white/30 " />}
         />
       </div>
-      {bookmark?.comics?.map((comics) => (
-        <ComicsCard
-          onClick={() => {
-            push(`/comics/${comics.id}`);
-          }}
-          title={{ title_en: comics.title, title_ru: comics.title_ru }}
-          key={comics.title}
-          thumbnail={comics.thumbnail}
-        />
-      ))}
-    </div>
+
+      <div className="grid grid-cols-6 gap-5 ">
+        {bookmark?.comics?.map((comics) => (
+          <ComicsCard
+            id={comics.id}
+            title={{ title_en: comics.title, title_ru: comics.title_ru }}
+            key={comics.title}
+            thumbnail={comics.thumbnail}
+          />
+        ))}
+      </div>
+    </>
   );
 };
 
