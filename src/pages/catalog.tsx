@@ -1,9 +1,9 @@
-import type { ReactNode } from "react";
 import { ChangeEvent, useCallback } from "react";
 
 import Button from "core/ui/primitives/Button";
 import CatalogLayout from "./layout/catalog";
 import ComicsList from "../components/organisms/ComicsList";
+import type { ReactNode } from "react";
 import { SearchNormal } from "iconsax-react";
 import TabBar from "core/ui/primitives/TabBar";
 import TextField from "core/ui/fields/TextField";
@@ -21,14 +21,13 @@ const Catalog = () => {
 
   return (
     <main className="col-span-4 flex flex-col pl-4 pt-8 md:col-span-8 lg:col-span-9">
-      <h3 className="text-xl font-bold text-white md:text-2xl">Каталог</h3>
+      <h3 className="mb-3 text-xl font-bold text-white md:text-2xl">Каталог</h3>
       <TextField
-        className="pt-3"
         placeholder="пр: ванпачмен"
         onChange={(event) => {
           debounce(() => setQuery(event.target.value));
         }}
-        endIcon={<SearchNormal size="20" className="text-white/33 " />}
+        endIcon={<SearchNormal size="20" className="text-white/30" />}
       />
       <div className="relative flex w-full flex-row justify-between">
         <TabBar
