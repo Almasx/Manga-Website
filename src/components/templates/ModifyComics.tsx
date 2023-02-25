@@ -1,56 +1,29 @@
+import type { ModifyComicsSchema } from "lib/schemas/modifyComicsSchema";
+import {
+  addComicsSchema,
+  editComicsSchema,
+} from "lib/schemas/modifyComicsSchema";
+
 import Button from "core/ui/primitives/Button";
 import FileField from "core/ui/fields/FileField";
 import NumberField from "core/ui/fields/NumberField";
-import type { PresignedPost } from "aws-sdk/clients/s3";
 import RadioGroupField from "core/ui/fields/RadioGroupField";
 import SelectGenres from "components/organisms/SelectGenres";
-import Spinner from "core/ui/primitives/Spinner";
 import type { SubmitHandler } from "react-hook-form";
 import TextAreaField from "core/ui/fields/TextAreaField";
 import TextField from "core/ui/fields/TextField";
 import _ from "lodash";
-import { trpc } from "utils/trpc";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/router";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const MAX_FILE_SIZE = 500000;
-const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
-
-const ModifyComicsSchema = z.object({
-  title: z.string().min(1).describe("Name // Введите название манги"),
-  title_ru: z
-    .string()
-    .min(1)
-    .describe("Название // Введите название манги на русском"),
-  description: z.string().min(1).describe("Описание // Введите описание манги"),
-  year: z
-    .number()
-    .min(1990)
-    .max(new Date().getFullYear())
-    .describe("Год // Введите год выпуска манги"),
-  thumbnail: z
-    .any()
-    .refine((files) => files?.length == 1, "Image is required.")
-    .refine(
-      (files) => files?.[0]?.size <= MAX_FILE_SIZE,
-      `Max file size is 5MB.`
-    )
-    .refine(
-      (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-      ".jpg, .jpeg, .png files are accepted."
-    ),
-  status: z.enum(["ongoing", "finished", "abandoned"]),
-  genres: z.array(z.string()),
-  genresQuery: z.string(),
-});
-
-type ModifyComicsSchema = z.infer<typeof ModifyComicsSchema>;
-
-const ModifyComics = () => {
+const ModifyComics = ({
+  defaultValues,
+  onSubmit,
+}: {
+  defaultValues?: Partial<ModifyComicsSchema>;
+  onSubmit: SubmitHandler<ModifyComicsSchema>;
+}) => {
   const {
     register,
     handleSubmit,
@@ -58,8 +31,13 @@ const ModifyComics = () => {
     setValue,
     formState: { errors },
   } = useForm<ModifyComicsSchema>({
-    resolver: zodResolver(ModifyComicsSchema),
-    defaultValues: { genres: [], genresQuery: "", status: "ongoing" },
+    resolver: zodResolver(defaultValues ? editComicsSchema : addComicsSchema),
+    defaultValues: {
+      genres: [],
+      genresQuery: "",
+      status: "ongoing",
+      ...defaultValues,
+    },
   });
 
   useEffect(() => {
@@ -69,44 +47,6 @@ const ModifyComics = () => {
 
   const genresValue = watch("genres");
 
-  const comicsMutation = trpc.comics.postComics.useMutation();
-  const { mutate: s3Mutate, isLoading: isUploading } = useMutation({
-    mutationFn: ({ url, formData }: { url: string; formData: FormData }) => {
-      return fetch(url, {
-        method: "POST",
-        body: formData,
-      });
-    },
-    onSuccess: () => {
-      router.push("/catalog");
-    },
-  });
-
-  const router = useRouter();
-
-  const onSubmit: SubmitHandler<ModifyComicsSchema> = async (data) => {
-    const { url, fields } = (await comicsMutation.mutateAsync(
-      data
-    )) as PresignedPost;
-
-    const formData = new FormData();
-    Object.keys(fields).forEach((name) => {
-      formData.append(name, fields[name] as string);
-    });
-
-    formData.append("Content-Type", data.thumbnail[0].type);
-    formData.append("file", data.thumbnail[0]);
-
-    s3Mutate({ url, formData });
-  };
-
-  if (isUploading) {
-    return (
-      <div className="my-auto">
-        <Spinner />
-      </div>
-    );
-  }
   return (
     <>
       <h3 className="mb-5 text-xl font-medium text-white/40 ">
@@ -122,6 +62,9 @@ const ModifyComics = () => {
           className="h-full"
           error={errors.thumbnail?.message as string}
           {...register("thumbnail", { required: true })}
+          {...{
+            initialValue: `https://darkfraction.s3.eu-north-1.amazonaws.com/thumbnails/${defaultValues?.thumbnail?.id}`,
+          }}
         />
 
         <div className="col-span-5 col-start-3 flex flex-col gap-5">
@@ -197,7 +140,7 @@ const ModifyComics = () => {
         />
 
         <Button className="col-span-2 mt-4" type="submit">
-          Добавить мангу
+          {defaultValues ? "Изменить" : "Добавить мангу"}
         </Button>
       </form>
     </>

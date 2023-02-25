@@ -6,16 +6,20 @@ import type { IField } from "../../../types/IField";
 import clsx from "clsx";
 
 export type IFileFieldProps = {
+  initialValue?: string;
   className?: string;
   onPreview?: (e: ChangeEvent<HTMLInputElement>) => void;
 } & IField<HTMLInputElement>;
 
 const FileField = forwardRef<HTMLInputElement, IFileFieldProps>(
-  ({ name, onChange, onBlur, error, className, onPreview }, ref) => {
+  (
+    { name, onChange, onBlur, error, className, onPreview, initialValue },
+    ref
+  ) => {
     const [preview, setPreview] = useState<any>(null);
 
     return (
-      <div className="col-span-2 flex flex-col">
+      <div className="relative col-span-2 flex flex-col">
         <label
           htmlFor="dropzone-file"
           className={clsx(
@@ -40,15 +44,14 @@ const FileField = forwardRef<HTMLInputElement, IFileFieldProps>(
             </p>
           </div>
 
-          {preview !== null && (
+          {(preview !== null || initialValue) && (
             <img
-              src={preview}
+              src={preview ?? initialValue}
               alt="thumbnail image"
               className="absolute inset-0 z-10 min-h-full object-fill"
             />
           )}
         </label>
-
         <input
           id="dropzone-file"
           type="file"

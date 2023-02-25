@@ -116,7 +116,6 @@ const comicsRouter = router({
         year: 2000,
         rating: 3,
         saved: 10000,
-        genres: comics && comics.genres.map((genre) => genre.title),
       };
     }),
 

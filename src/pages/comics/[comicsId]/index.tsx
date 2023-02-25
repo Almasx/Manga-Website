@@ -166,7 +166,7 @@ const Comics = ({
           </div>
           <div className="flex flex-row flex-wrap gap-2">
             {comics?.genres?.map((genre) => (
-              <Badge key={genre}>{genre}</Badge>
+              <Badge key={genre.id}>{genre.title}</Badge>
             ))}
           </div>
           <p className="text-sm text-white">{comics?.description}</p>
