@@ -96,6 +96,7 @@ const EditComics = ({
       </div>
     );
   }
+
   return (
     <div className="col-span-full mt-3">
       <ModifyComics

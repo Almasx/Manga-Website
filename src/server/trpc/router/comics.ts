@@ -60,14 +60,8 @@ const comicsRouter = router({
       })
     )
     .query(async ({ input, ctx }) => {
-      // Get all genres
-      const genre_db = (await ctx.prisma.genre.findMany({})).map(
-        (genre) => genre.id
-      );
-
       // Decontruct query
       const { cursor, query, status, sort, order } = input;
-      const genres = input.genres.length === 0 ? genre_db : input.genres;
       const limit = input.limit ?? 10;
 
       const catalog = await ctx.prisma.comics.findMany({
@@ -81,7 +75,9 @@ const comicsRouter = router({
           rating: true,
         },
         where: {
-          genres: { some: { id: { in: genres } } },
+          ...(input.genres.length !== 0 && {
+            genres: { some: { id: { in: input.genres } } },
+          }),
           status: status,
           title: { contains: query },
         },
