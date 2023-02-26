@@ -12,3 +12,14 @@ export default function MainLayout({ children }: { children: ReactNode }) {
     </div>
   );
 }
+
+export function DenseLayout({ children }: { children: ReactNode }) {
+  return (
+    <div className="relative min-h-screen overflow-hidden bg-black text-white">
+      <Navigation.Wrapper auth={true} className="px-[10vw]">
+        <Navigation.Links />
+      </Navigation.Wrapper>
+      <GridLayout className="!w-[80vw] !px-0">{children}</GridLayout>
+    </div>
+  );
+}

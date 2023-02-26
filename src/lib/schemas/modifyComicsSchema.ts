@@ -46,11 +46,11 @@ export const editComicsSchema = z.object({
   thumbnail: z
     .any()
     .refine(
-      (files) => files?.[0]?.size <= MAX_FILE_SIZE,
+      (files) => !files?.[0] || files?.[0]?.size <= MAX_FILE_SIZE,
       `Max file size is 5MB.`
     )
     .refine(
-      (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+      (files) => !files?.[0] || ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
       ".jpg, .jpeg, .png files are accepted."
     ),
   status: z.enum(["ongoing", "finished", "abandoned"]),

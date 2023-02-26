@@ -1,4 +1,3 @@
-import type { ModifyComicsSchema } from "lib/schemas/modifyComicsSchema";
 import {
   addComicsSchema,
   editComicsSchema,
@@ -6,6 +5,7 @@ import {
 
 import Button from "core/ui/primitives/Button";
 import FileField from "core/ui/fields/FileField";
+import type { ModifyComicsSchema } from "lib/schemas/modifyComicsSchema";
 import NumberField from "core/ui/fields/NumberField";
 import RadioGroupField from "core/ui/fields/RadioGroupField";
 import SelectGenres from "components/organisms/SelectGenres";
@@ -54,7 +54,7 @@ const ModifyComics = ({
       </h3>
       <form
         onSubmit={handleSubmit(onSubmit, (error) => {
-          throw error;
+          console.log(error);
         })}
         className="grid grid-cols-4 gap-5 md:grid-cols-6 lg:grid-cols-10"
       >
@@ -62,9 +62,9 @@ const ModifyComics = ({
           className="h-full"
           error={errors.thumbnail?.message as string}
           {...register("thumbnail", { required: true })}
-          {...{
+          {...(defaultValues?.thumbnail?.id && {
             initialValue: `https://darkfraction.s3.eu-north-1.amazonaws.com/thumbnails/${defaultValues?.thumbnail?.id}`,
-          }}
+          })}
         />
 
         <div className="col-span-5 col-start-3 flex flex-col gap-5">

@@ -7,7 +7,6 @@ import { protectedProcedure, publicProcedure, router } from "../trpc";
 
 import type { Comics } from "@prisma/client";
 import { Status } from "@prisma/client";
-import { checkChapter } from "lib/queries/checkChapter";
 import { handleQuery } from "server/common/handle-query";
 import { propertyOf } from "utils/property-of";
 import { s3CreatePresignedUrl } from "lib/aws/s3-presigned-url";
@@ -146,6 +145,44 @@ const comicsRouter = router({
           },
           description,
           thumbnail: { create: {} },
+        },
+      });
+
+      return s3CreatePresignedUrl(
+        `thumbnails/${comics.thumbnail?.id as string}`
+      );
+    }),
+
+  putComics: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        title: z.string().optional(),
+        title_ru: z.string().optional(),
+        description: z.string().optional(),
+        status: z.enum(["ongoing", "abandoned", "finished"]).optional(),
+        genres: z.array(z.string()).optional(),
+        year: z.number().optional(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const { title, title_ru, status, year, genres, description, id } = input;
+
+      const comics = await handleQuery(
+        checkComics(defaultCheckComicsSelect, { id })
+      );
+      await ctx.prisma.comics.update({
+        where: { id },
+        include: { thumbnail: true },
+        data: {
+          title,
+          title_ru,
+          status,
+          year,
+          description,
+          ...(genres && {
+            genres: { set: genres.map((genre) => ({ id: genre })) },
+          }),
         },
       });
 
