@@ -58,10 +58,8 @@ const FileField = forwardRef<HTMLInputElement, IFileFieldProps>(
           className="hidden"
           name={name}
           ref={ref}
-          multiple
           onChange={(e) => {
             onChange && onChange(e);
-            console.log(onChange?.toString());
 
             onPreview
               ? onPreview(e)
@@ -69,6 +67,7 @@ const FileField = forwardRef<HTMLInputElement, IFileFieldProps>(
                 e.target.files[0] &&
                 setPreview(window.URL.createObjectURL(e.target.files[0]));
           }}
+          multiple
           onBlur={(e) => {
             onBlur && onBlur(e);
           }}

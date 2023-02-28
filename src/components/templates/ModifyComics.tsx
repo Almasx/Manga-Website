@@ -4,6 +4,7 @@ import {
 } from "lib/schemas/modifyComicsSchema";
 
 import Button from "core/ui/primitives/Button";
+import { DevTool } from "@hookform/devtools";
 import FileField from "core/ui/fields/FileField";
 import type { ModifyComicsSchema } from "lib/schemas/modifyComicsSchema";
 import NumberField from "core/ui/fields/NumberField";
@@ -13,7 +14,9 @@ import type { SubmitHandler } from "react-hook-form";
 import TextAreaField from "core/ui/fields/TextAreaField";
 import TextField from "core/ui/fields/TextField";
 import _ from "lodash";
+import { useController } from "react-hook-form";
 import { useEffect } from "react";
+import { useFieldArray } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -28,7 +31,8 @@ const ModifyComics = ({
     register,
     handleSubmit,
     watch,
-    setValue,
+    control,
+    getValues,
     formState: { errors },
   } = useForm<ModifyComicsSchema>({
     resolver: zodResolver(defaultValues ? editComicsSchema : addComicsSchema),
@@ -39,13 +43,17 @@ const ModifyComics = ({
       ...defaultValues,
     },
   });
+  const { append, remove, fields } = useFieldArray({ control, name: "genres" });
+  const {
+    field: { value, onChange: onQueryChange },
+  } = useController({
+    control,
+    name: "genresQuery",
+  });
 
   useEffect(() => {
     register("genres");
-    register("genresQuery");
   }, [register]);
-
-  const genresValue = watch("genres");
 
   return (
     <>
@@ -124,17 +132,15 @@ const ModifyComics = ({
 
         <SelectGenres
           className="col-span-3 col-start-8"
-          selected={genresValue}
-          query={watch("genresQuery")}
-          onQuery={(query) => setValue("genresQuery", query)}
+          selected={watch("genres")}
+          query={value}
+          onQuery={(query: string) => onQueryChange(query)}
           onToggleGenre={(targetId) => {
+            const genresValue = getValues("genres");
             if (!genresValue.includes(targetId)) {
-              setValue("genres", [...genresValue, targetId]);
+              append(targetId);
             } else {
-              setValue(
-                "genres",
-                genresValue.filter((id) => id !== targetId)
-              );
+              remove(genresValue.indexOf(targetId));
             }
           }}
         />
@@ -143,6 +149,7 @@ const ModifyComics = ({
           {defaultValues ? "Изменить" : "Добавить мангу"}
         </Button>
       </form>
+      <DevTool control={control} />
     </>
   );
 };

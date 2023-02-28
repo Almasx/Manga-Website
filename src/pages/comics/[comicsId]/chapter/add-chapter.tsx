@@ -4,11 +4,13 @@ import FileField from "core/ui/fields/FileField";
 import NumberField from "core/ui/fields/NumberField";
 import type { PresignedPost } from "aws-sdk/clients/s3";
 import type { ReactNode } from "react";
+import Spinner from "core/ui/primitives/Spinner";
 import type { SubmitHandler } from "react-hook-form";
 import TextField from "core/ui/fields/TextField";
 import { getAddChapterSchema } from "lib/schemas/getAddChapterSchema";
 import { getDefaultVolumeAndChapterIndex } from "utils/get-default-index";
 import { trpc } from "utils/trpc";
+import { useFieldArray } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
@@ -37,8 +39,9 @@ const AddChapter = () => {
       volumeIndex: defaultVolumeIndex,
     },
   });
+  const { append } = useFieldArray({ control, name: "pages" });
 
-  const { mutate: s3Mutate, isLoading: isUploading } = useMutation({
+  const { mutateAsync: s3Mutate, isLoading: isUploading } = useMutation({
     mutationFn: ({ url, formData }: { url: string; formData: FormData }) => {
       return fetch(url, {
         method: "POST",
@@ -52,14 +55,13 @@ const AddChapter = () => {
 
   const onSubmit: SubmitHandler<AddChapterSchema> = async (data) => {
     console.log(data.pages);
-    const presignedPages = (await chapterMutation.mutateAsync({
+    const presignedPages = await chapterMutation.mutateAsync({
       ...data,
       comicsId: query.comicsId as string,
       pagesLenght: previewPages.length,
-    })) as PresignedPost[];
-    console.log(presignedPages);
+    });
     for (const pageIndex in presignedPages) {
-      const { url, fields } = presignedPages[pageIndex]!;
+      const { url, fields } = presignedPages[pageIndex] as PresignedPost;
       const formData = new FormData();
 
       Object.keys(fields).forEach((name) => {
@@ -71,7 +73,7 @@ const AddChapter = () => {
         console.log(pair);
       }
 
-      s3Mutate({ url, formData });
+      await s3Mutate({ url, formData });
     }
   };
 
@@ -80,16 +82,17 @@ const AddChapter = () => {
       id="chapter-form"
       onSubmit={handleSubmit(onSubmit)}
       className="mx-auto flex w-[80vw] flex-col py-7 px-4 pt-8"
+      encType="multipart/form-data"
     >
       <div className="mb-3 flex flex-row gap-3">
         <NumberField
-          className="w-24 px-4"
+          className="!w-24 px-4"
           label="Том"
           error={errors.volumeIndex?.message as string}
           {...register("volumeIndex", { required: true })}
         />
         <NumberField
-          className="w-24 px-4"
+          className="!w-24 px-4"
           label="Глава"
           error={errors.chapterIndex?.message as string}
           {...register("chapterIndex", { required: true })}
@@ -115,6 +118,11 @@ const AddChapter = () => {
         }}
         error={errors.pages?.message as string}
         {...register("pages", { required: true })}
+        onChange={(e) => {
+          for (const file of e.target.files!) {
+            append(file);
+          }
+        }}
       />
       <div className="relative grid w-full grid-cols-5 gap-5">
         {previewPages.map((image) => (
@@ -127,7 +135,6 @@ const AddChapter = () => {
           />
         ))}
       </div>
-      <DevTool control={control} />
     </form>
   );
 };

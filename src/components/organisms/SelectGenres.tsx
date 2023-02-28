@@ -1,5 +1,5 @@
 import Badge from "core/ui/primitives/Badge";
-import { ChangeEvent } from "react";
+import type { ChangeEvent } from "react";
 import { SearchNormal } from "iconsax-react";
 import TextField from "core/ui/fields/TextField";
 import clsx from "clsx";

@@ -14,7 +14,7 @@ export const chapterRouter = router({
         comicsId: z.string({ required_error: "Comics id is required" }),
       })
     )
-    .query(async ({ input, ctx }) => {
+    .query(async ({ input }) => {
       const { comicsId, chapterId } = input;
 
       const chapter = await handleQuery(

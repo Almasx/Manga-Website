@@ -12,9 +12,7 @@ export const getAddChapterSchema = (
       title: z.string().min(1).describe("Name // Введите название манги"),
       chapterIndex: z.number().min(1),
       volumeIndex: z.number().min(1),
-      pages: z
-        .any()
-        .refine((files) => files?.length > 0, "Chapter image is required."),
+      pages: z.array(z.any()),
       // .refine(
       //   (files) => files.every((file: File) => console.log(file)),
       //   `Max file size is 5MB.`

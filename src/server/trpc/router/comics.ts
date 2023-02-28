@@ -60,7 +60,6 @@ const comicsRouter = router({
       })
     )
     .query(async ({ input, ctx }) => {
-      // Decontruct query
       const { cursor, query, status, sort, order } = input;
       const limit = input.limit ?? 10;
 
