@@ -54,7 +54,6 @@ const AddChapter = () => {
   });
 
   const onSubmit: SubmitHandler<AddChapterSchema> = async (data) => {
-    console.log(data.pages);
     const presignedPages = await chapterMutation.mutateAsync({
       ...data,
       comicsId: query.comicsId as string,
@@ -69,9 +68,6 @@ const AddChapter = () => {
       });
       formData.append("Content-Type", data.pages[pageIndex].type);
       formData.append("file", data.pages[pageIndex]);
-      for (const pair of formData.keys()) {
-        console.log(pair);
-      }
 
       await s3Mutate({ url, formData });
     }

@@ -42,17 +42,18 @@ model Session {
 }
 
 model User {
-  id            String     @id @default(cuid())
+  id            String          @id @default(cuid())
   name          String?
-  email         String?    @unique
+  email         String?         @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
-  role          Role       @default(USER)
+  role          Role            @default(USER)
   bookmarks     Bookmark[]
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  comments      ComicsComment[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
 }
 
 enum Role {
@@ -98,6 +99,7 @@ model Comics {
   genres    Genre[]
   bookmarks Bookmark[]
   chapters  Chapter[]
+  comments  ComicsComment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -145,4 +147,18 @@ model Page {
   chapterId String
 
   @@index([chapterId])
+}
+
+model ComicsComment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
+  comics    Comics   @relation(fields: [comicsId], references: [id])
+  comicsId  String
+
+  @@index([authorId])
+  @@index([comicsId])
 }
