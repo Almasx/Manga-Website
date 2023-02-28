@@ -2,6 +2,7 @@ import { authRouter } from "./auth";
 import bookmarkRouter from "./bookmark";
 import { chapterRouter } from "./chapter";
 import comicsRouter from "./comics";
+import { commentsRouter } from "./comments";
 import { router } from "../trpc";
 
 export const appRouter = router({
@@ -9,6 +10,7 @@ export const appRouter = router({
   comics: comicsRouter,
   bookmark: bookmarkRouter,
   chapter: chapterRouter,
+  comments: commentsRouter,
 });
 
 // export type definition of API

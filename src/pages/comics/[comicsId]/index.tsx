@@ -9,16 +9,18 @@ import { BookmarkButton } from "components/organisms/BookmarkButton";
 import Button from "core/ui/primitives/Button";
 import ChapterCard from "../../../components/molecules/ChapterCard";
 import ComicsCard from "../../../components/molecules/ComicsCard";
+import Comment from "../../../components/molecules/Comments";
 import CommentField from "../../../components/molecules/CommentField";
-import Comments from "../../../components/molecules/Comments";
 import Link from "next/link";
 import TrendUpBulk from "../../../../public/icons/TrendUpBulk.svg";
 import { appRouter } from "../../../server/trpc/router/_app";
 import { createContextInner } from "../../../server/trpc/context";
 import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 import superjson from "superjson";
+import { trpc } from "utils/trpc";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import { useState } from "react";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext<{ comicsId: string }>
@@ -239,11 +241,28 @@ const ChaptersSection = ({ chapters }: IChapterSectionProps) => {
 };
 
 const CommentsSection = ({ comicsId }: { comicsId: string }) => {
+  const [comment, setComment] = useState<string | undefined>(undefined);
+  const { mutate: commentMutate } =
+    trpc.comments.postCommentOnComics.useMutation();
+
   return (
     <section className="col-span-6 flex flex-col gap-5 pr-10 text-white">
       <h3 className="text-2xl font-bold text-white">Комментарий</h3>
-      <CommentField onClick={() => console.log("lol")} />
-      <Comments />
+      <CommentField
+        onChange={(e) => setComment(e.target.value)}
+        value={comment}
+        onClick={() => comment && commentMutate({ comicsId, content: comment })}
+      />
+      <Comment
+        author="John Doe"
+        createdAt={new Date()}
+        rating={10}
+        content="Ac nisl mauris hendrerit consequat bibendum pellentesque ut congue. In
+        consequat commodo libero urna in netus metus. Ac nisl mauris hendrerit
+        consequat bibendum pellentesque ut congue. In consequat commodo libero
+        urna in netus metus.Ac nisl mauris hendrerit consequat bibendum
+        pellentesque ut congue. In consequat commodo libero"
+      />
     </section>
   );
 };
