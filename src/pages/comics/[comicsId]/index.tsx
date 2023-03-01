@@ -9,10 +9,12 @@ import { BookmarkButton } from "components/organisms/BookmarkButton";
 import Button from "core/ui/primitives/Button";
 import ChapterCard from "../../../components/molecules/ChapterCard";
 import ComicsCard from "../../../components/molecules/ComicsCard";
+import type { ComicsComment } from "@prisma/client";
 import Comment from "../../../components/molecules/Comments";
 import CommentField from "../../../components/molecules/CommentField";
 import Link from "next/link";
 import TrendUpBulk from "../../../../public/icons/TrendUpBulk.svg";
+import type { User } from "next-auth";
 import { appRouter } from "../../../server/trpc/router/_app";
 import { createContextInner } from "../../../server/trpc/context";
 import { createProxySSGHelpers } from "@trpc/react-query/ssg";
@@ -90,7 +92,7 @@ const Comics = ({
 
       <ChaptersSection chapters={comics.chapters} />
       <RecomendedList />
-      <CommentsSection comicsId={comics.id} />
+      <CommentsSection comicsId={comics.id} initialData={comics.comments} />
     </>
   );
 };
@@ -225,25 +227,31 @@ const ChaptersSection = ({ chapters }: IChapterSectionProps) => {
       </div>
       <div className="flex flex-col gap-4">
         {chapters?.map((chapter) => (
-          <Link
-            className="flex"
-            href={{
-              pathname: `${asPath}/chapter/${chapter.id}`,
-            }}
-            key={chapter.id}
-          >
-            <ChapterCard {...chapter} />
-          </Link>
+          <ChapterCard {...chapter} key={chapter.id} />
         ))}
       </div>
     </aside>
   );
 };
 
-const CommentsSection = ({ comicsId }: { comicsId: string }) => {
+interface ICommentsSectionProps {
+  comicsId: string;
+  initialData: (ComicsComment & {
+    author: User;
+  })[];
+}
+
+const CommentsSection = ({ comicsId, initialData }: ICommentsSectionProps) => {
   const [comment, setComment] = useState<string | undefined>(undefined);
+  const { data: comics, refetch } = trpc.comics.getComments.useQuery(
+    { comicsId },
+    { initialData }
+  );
+
   const { mutate: commentMutate } =
-    trpc.comments.postCommentOnComics.useMutation();
+    trpc.comments.postCommentOnComics.useMutation({
+      onSuccess: () => refetch(),
+    });
 
   return (
     <section className="col-span-6 flex flex-col gap-5 pr-10 text-white">
@@ -253,16 +261,9 @@ const CommentsSection = ({ comicsId }: { comicsId: string }) => {
         value={comment}
         onClick={() => comment && commentMutate({ comicsId, content: comment })}
       />
-      <Comment
-        author="John Doe"
-        createdAt={new Date()}
-        rating={10}
-        content="Ac nisl mauris hendrerit consequat bibendum pellentesque ut congue. In
-        consequat commodo libero urna in netus metus. Ac nisl mauris hendrerit
-        consequat bibendum pellentesque ut congue. In consequat commodo libero
-        urna in netus metus.Ac nisl mauris hendrerit consequat bibendum
-        pellentesque ut congue. In consequat commodo libero"
-      />
+      {comics?.comments?.map((comment) => (
+        <Comment key={comment.id} {...comment} rating={10} />
+      ))}
     </section>
   );
 };

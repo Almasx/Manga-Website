@@ -1,8 +1,10 @@
 import { ArrowDown2, ArrowForward, ArrowUp2 } from "iconsax-react";
 
+import type { User } from "@prisma/client";
+
 interface ICommentProps {
   content: string;
-  author: string;
+  author: User;
   createdAt: Date;
   rating: number;
 }
@@ -13,7 +15,7 @@ const Comment = ({ content, author, createdAt, rating }: ICommentProps) => {
       <div className="flex flex-row items-center gap-3">
         <img className="h-9 w-9 rounded-full" src="/images/pfp.png" alt="" />
         <div className="flex flex-col">
-          <h1 className="text-sm font-medium text-white">{author}</h1>
+          <h1 className="text-sm font-medium text-white">{author.name}</h1>
           <h3 className="text-xs text-white/30">
             {`${createdAt.getDate()} ${createdAt.toLocaleString("default", {
               month: "long",

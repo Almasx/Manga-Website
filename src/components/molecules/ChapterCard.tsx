@@ -1,25 +1,30 @@
 import { Heart, Lock1 } from "iconsax-react";
 
 import type { Chapter } from "@prisma/client";
+import Link from "next/link";
 import clsx from "clsx";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 const ChapterCard = ({
+  id,
   chapterIndex,
   volumeIndex,
   createdAt,
   packed = false,
 }: {
+  id: string;
   chapterIndex: number;
   volumeIndex: number;
   createdAt: Date;
   packed?: boolean;
 }) => {
   const [liked, setLiked] = useState<boolean>(false);
+  const { asPath } = useRouter();
 
   return (
-    <button
+    <Link
+      href={`${asPath}/chapter/${id}`}
       className={clsx(
         " flex grow flex-row items-center rounded-2xl border  border-stroke-100 px-5",
         "py-3 text-white duration-100  hover:border-stroke-200",
@@ -54,7 +59,7 @@ const ChapterCard = ({
           />
         </button>
       )}
-    </button>
+    </Link>
   );
 };
 

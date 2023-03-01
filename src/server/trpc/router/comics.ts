@@ -15,14 +15,34 @@ import { z } from "zod";
 const comicsRouter = router({
   getGenres: publicProcedure.query(({ ctx }) => ctx.prisma.genre.findMany()),
 
+  getComments: publicProcedure
+    .input(
+      z.object({
+        comicsId: z.string({ required_error: "Comics id is required" }),
+      })
+    )
+    .query(
+      async ({ input: { comicsId } }) =>
+        await handleQuery(
+          checkComics(
+            {
+              comments: {
+                include: { author: true },
+                orderBy: { createdAt: "desc" },
+              },
+            },
+            { id: comicsId }
+          )
+        )
+    ),
+
   getChapters: publicProcedure
     .input(
       z.object({
         comicsId: z.string({ required_error: "Comics id is required" }),
       })
     )
-    .query(async ({ input }) => {
-      const { comicsId } = input;
+    .query(async ({ input: { comicsId } }) => {
       const chapters = await handleQuery(
         checkComics(
           {
