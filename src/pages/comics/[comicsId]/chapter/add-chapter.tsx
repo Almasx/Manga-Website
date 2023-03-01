@@ -1,15 +1,22 @@
+import type {
+  GetServerSidePropsContext,
+  InferGetServerSidePropsType,
+} from "next";
+
 import AddChapterLayout from "../../../layout/add-chapter";
-import { DevTool } from "@hookform/devtools";
 import FileField from "core/ui/fields/FileField";
 import NumberField from "core/ui/fields/NumberField";
 import type { PresignedPost } from "aws-sdk/clients/s3";
 import type { ReactNode } from "react";
-import Spinner from "core/ui/primitives/Spinner";
 import type { SubmitHandler } from "react-hook-form";
 import TextField from "core/ui/fields/TextField";
+import { appRouter } from "server/trpc/router/_app";
+import { createContextInner } from "server/trpc/context";
+import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 import { getAddChapterSchema } from "lib/schemas/getAddChapterSchema";
 import { getDefaultVolumeAndChapterIndex } from "utils/get-default-index";
 import { prepareFormData } from "lib/aws/prepare-form-data";
+import superjson from "superjson";
 import { trpc } from "utils/trpc";
 import { useFieldArray } from "react-hook-form";
 import { useForm } from "react-hook-form";
@@ -19,13 +26,48 @@ import { useState } from "react";
 import type { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const AddChapter = () => {
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext<{ comicsId: string }>
+) => {
+  const ssgHelper = createProxySSGHelpers({
+    router: appRouter,
+    ctx: createContextInner({ session: null }),
+    transformer: superjson,
+  });
+
+  const comicsId = context.params?.comicsId as string;
+
+  try {
+    const comics = await ssgHelper.comics.getComics.fetch({ comicsId });
+    const { defaultVolumeIndex, defaultChapterIndex, chapterObject } =
+      getDefaultVolumeAndChapterIndex(comics.chapters);
+    return {
+      props: {
+        trpcState: ssgHelper.dehydrate(),
+        comics,
+        defaultVolumeIndex,
+        defaultChapterIndex,
+        chapterObject,
+      },
+    };
+  } catch (error) {
+    return {
+      redirect: {
+        destination: "/404",
+        permanent: false,
+      },
+    };
+  }
+};
+
+const AddChapter = ({
+  defaultVolumeIndex,
+  defaultChapterIndex,
+  chapterObject,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [previewPages, setPreviewPages] = useState<string[]>([]);
   const chapterMutation = trpc.chapter.postChapter.useMutation();
   const { query } = useRouter();
-
-  const { defaultVolumeIndex, defaultChapterIndex, chapterObject } =
-    getDefaultVolumeAndChapterIndex((query.chapters ?? "[]") as string);
   const addChapterSchema = getAddChapterSchema(chapterObject);
   type AddChapterSchema = z.infer<typeof addChapterSchema>;
   const {
@@ -130,8 +172,13 @@ const AddChapter = () => {
   );
 };
 
-AddChapter.getLayout = (page: ReactNode) => (
-  <AddChapterLayout>{page}</AddChapterLayout>
+AddChapter.getLayout = (
+  page: ReactNode,
+  { comics }: InferGetServerSidePropsType<typeof getServerSideProps>
+) => (
+  <AddChapterLayout {...comics} thumbnail={comics.thumbnail?.id as string}>
+    {page}
+  </AddChapterLayout>
 );
 
 export default AddChapter;

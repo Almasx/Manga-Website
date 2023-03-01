@@ -1,13 +1,14 @@
 import { getKeys } from "./get-keys";
 
 export type queryChapter = {
+  id: string;
+  createdAt: Date;
   chapterIndex: number;
   volumeIndex: number;
 }[];
 
-export const preprocessQueryObject = (chapters: string) => {
-  const queryObject = JSON.parse(decodeURIComponent(chapters)) as queryChapter;
-  return queryObject.reduce((acc, obj) => {
+export const preprocessQueryObject = (chapters: queryChapter) => {
+  return chapters.reduce((acc, obj) => {
     const { volumeIndex, chapterIndex } = obj;
     if (volumeIndex in acc) {
       acc[volumeIndex]?.push(chapterIndex);
@@ -18,7 +19,7 @@ export const preprocessQueryObject = (chapters: string) => {
   }, {} as { [key: number]: number[] });
 };
 
-export const getDefaultVolumeAndChapterIndex = (chapters: string) => {
+export const getDefaultVolumeAndChapterIndex = (chapters: queryChapter) => {
   let defaultVolumeIndex = 1;
   let defaultChapterIndex = 1;
   const chapterObject = preprocessQueryObject(chapters);
