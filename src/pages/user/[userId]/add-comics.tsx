@@ -5,6 +5,7 @@ import type { PresignedPost } from "aws-sdk/clients/s3";
 import type { ReactNode } from "react";
 import Spinner from "core/ui/primitives/Spinner";
 import type { SubmitHandler } from "react-hook-form";
+import { prepareFormData } from "lib/aws/prepare-form-data";
 import { trpc } from "utils/trpc";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
@@ -29,14 +30,7 @@ const AddComics = () => {
     const { url, fields } = (await comicsMutation.mutateAsync(
       data
     )) as PresignedPost;
-
-    const formData = new FormData();
-    Object.keys(fields).forEach((name) => {
-      formData.append(name, fields[name] as string);
-    });
-
-    formData.append("Content-Type", data.thumbnail[0].type);
-    formData.append("file", data.thumbnail[0]);
+    const formData = prepareFormData({ page: data.thumbnail[0], fields });
 
     s3Mutate({ url, formData });
   };

@@ -9,6 +9,7 @@ import type { SubmitHandler } from "react-hook-form";
 import TextField from "core/ui/fields/TextField";
 import { getAddChapterSchema } from "lib/schemas/getAddChapterSchema";
 import { getDefaultVolumeAndChapterIndex } from "utils/get-default-index";
+import { prepareFormData } from "lib/aws/prepare-form-data";
 import { trpc } from "utils/trpc";
 import { useFieldArray } from "react-hook-form";
 import { useForm } from "react-hook-form";
@@ -61,13 +62,7 @@ const AddChapter = () => {
     });
     for (const pageIndex in presignedPages) {
       const { url, fields } = presignedPages[pageIndex] as PresignedPost;
-      const formData = new FormData();
-
-      Object.keys(fields).forEach((name) => {
-        formData.append(name, fields[name] as string);
-      });
-      formData.append("Content-Type", data.pages[pageIndex].type);
-      formData.append("file", data.pages[pageIndex]);
+      const formData = prepareFormData({ page: data.pages[pageIndex], fields });
 
       await s3Mutate({ url, formData });
     }
