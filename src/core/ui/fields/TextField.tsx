@@ -58,7 +58,7 @@ const TextField = forwardRef<
           }}
           placeholder={placeholder}
           className={clsx(
-            "ease peer w-full rounded-2xl border border-gray-dark bg-dark",
+            "ease peer w-full rounded-2xl border border-gray-dark bg-dark-secondary",
             "px-5 py-3 text-sm text-light duration-300 placeholder:text-light/30",
             "focus:border-primary focus:!bg-dark focus:outline-none",
             !error && "focus:ring-2",

@@ -1,10 +1,14 @@
 import { ArrowLeft2 } from "iconsax-react";
+import Button from "core/ui/primitives/Button";
 import Navigation from "core/ui/templates/Navigation";
 import React from "react";
+import { showAddChapterAtom } from ".";
 import { useRouter } from "next/router";
+import { useSetAtom } from "jotai";
 
 const Header = ({ title }: { title: string }) => {
   const { back } = useRouter();
+  const setShowAddChapter = useSetAtom(showAddChapterAtom);
 
   return (
     <Navigation.Wrapper>
@@ -19,6 +23,13 @@ const Header = ({ title }: { title: string }) => {
           { label: "Множественное", value: "/add-chapters" },
         ]}
       /> */}
+
+      <Button
+        className="w-24 rounded-lg py-1"
+        onClick={() => setShowAddChapter(true)}
+      >
+        Загрузить
+      </Button>
     </Navigation.Wrapper>
   );
 };

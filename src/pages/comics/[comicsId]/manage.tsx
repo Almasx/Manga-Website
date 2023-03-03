@@ -9,6 +9,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
+import AddChapterModal from "components/templates/AddChapterModal";
 import type { ArrayElement } from "types/array-element";
 import ManageChaptersLayout from "pages/layout/manage";
 import NumberField from "core/ui/fields/NumberField";
@@ -78,41 +79,46 @@ const AddChapters = ({
       ),
     }),
   ];
+
   const table = useReactTable({
     data: comics.chapters,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
   return (
-    <table className="divide mx-4 mt-8 h-fit  divide-gray-dark-secondary overflow-x-auto rounded-3xl border border-gray-dark-secondary ">
-      <thead>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <th key={header.id} colSpan={header.colSpan}>
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody>
-        {table.getRowModel().rows.map((row) => (
-          <tr key={row.id}>
-            {row.getVisibleCells().map((cell) => (
-              <td key={cell.id} className=" p-0">
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </td>
-            ))}
-          </tr>
-        ))}
-      </tbody>{" "}
-    </table>
+    <>
+      <AddChapterModal chapters={comics.chapters} />
+      <table className="divide mx-4 mt-8 h-fit divide-gray-dark-secondary overflow-x-auto rounded-3xl border border-gray-dark-secondary ">
+        <thead>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th key={header.id} colSpan={header.colSpan}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map((row) => (
+            <tr key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <td key={cell.id} className=" p-0">
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
   );
 };
 

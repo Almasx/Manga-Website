@@ -115,6 +115,7 @@ model Chapter {
   id           String @id @default(cuid())
   chapterIndex Int
   volumeIndex  Int
+  title        String
 
   comics   Comics @relation(fields: [comicsId], references: [id])
   comicsId String
