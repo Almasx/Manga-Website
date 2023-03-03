@@ -1,6 +1,6 @@
-import clsx from "clsx";
-import type { ReactNode } from "react";
 import Cross from "../../../../public/icons/Cross.svg";
+import type { ReactNode } from "react";
+import clsx from "clsx";
 
 interface BadgeProps {
   children: ReactNode;
@@ -17,7 +17,7 @@ const Badge = ({ children, active, onClick, className = "" }: BadgeProps) => {
         "rounded-full border py-[6px] px-3 outline-none duration-300 ease-in-out",
         active
           ? "flex flex-row items-center border-transparent bg-primary/20 text-primary "
-          : " border-stroke-200 text-white"
+          : " border-gray-dark text-light"
       )}
       onClick={(event) => {
         onClick && onClick(event);

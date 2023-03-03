@@ -23,8 +23,8 @@ const Modal = ({
     <div
       className={clsx(
         "fixed top-0 left-0 bottom-0 right-0 z-50 h-screen",
-        backgroundBlur && " bg-black/10 backdrop-blur-md",
-        backgroundBlack && "bg-black/60",
+        backgroundBlur && " bg-dark/10 backdrop-blur-md",
+        backgroundBlack && "bg-dark/60",
         !visible && "hidden",
         visible && "flex items-center justify-center"
       )}
@@ -32,13 +32,13 @@ const Modal = ({
     >
       <div
         className={clsx(
-          "rounded-2xl border border-stroke-200 bg-black",
+          "rounded-2xl border border-gray-dark bg-dark",
           className
         )}
       >
         <div
           className={clsx(
-            "h-full w-full rounded-2xl bg-surface/5",
+            "h-full w-full rounded-2xl bg-dark-secondary",
             classNameInner
           )}
           onClick={(e) => e.stopPropagation()}

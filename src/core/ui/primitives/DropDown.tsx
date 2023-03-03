@@ -1,7 +1,8 @@
-import { ReactElement, cloneElement, useState } from "react";
+import { cloneElement, useState } from "react";
 
-import { ButtonProps } from "core/ui/primitives/Button";
-import { TabProps } from "core/ui/templates/SideBar/Section/Tab";
+import type { ButtonProps } from "core/ui/primitives/Button";
+import type { ReactElement } from "react";
+import type { TabProps } from "core/ui/templates/SideBar/Section/Tab";
 import clsx from "clsx";
 
 interface DropDownProps {
@@ -26,12 +27,12 @@ const DropDown = ({ header, options }: DropDownProps) => {
     })
   );
   return (
-    <div className="text-white">
+    <div className="text-light">
       {clonedHeader}
       {dropDownShow && (
         <ul
           className={clsx(
-            "absolute top-full right-0 left-0 z-10 translate-y-3 rounded-xl border border-stroke-100 bg-black"
+            "absolute top-full right-0 left-0 z-10 translate-y-3 rounded-xl border border-gray-dark-secondary bg-dark"
           )}
         >
           {clonedOptions}

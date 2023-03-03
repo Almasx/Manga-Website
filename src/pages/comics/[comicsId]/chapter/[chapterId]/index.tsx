@@ -70,7 +70,7 @@ const Chapter = ({
         onClick={() => {
           setShowComments((previos) => !previos);
         }}
-        className="!fixed right-[15px] bottom-4 h-12 w-12 rounded-2xl !bg-black text-white md:bottom-5 md:right-5"
+        className="!fixed right-[15px] bottom-4 h-12 w-12 rounded-2xl !bg-dark text-light md:bottom-5 md:right-5"
       >
         <Messages1 size="24" />
       </Button>

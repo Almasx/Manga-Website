@@ -30,7 +30,7 @@ const FileField = forwardRef<HTMLInputElement, IFileFieldProps>(
             className
           )}
         >
-          <div className="text-bold absolute top-2 right-2 z-20 rounded-full bg-black/80  py-1 px-2 text-xs">
+          <div className="text-bold absolute top-2 right-2 z-20 rounded-full bg-dark/80  py-1 px-2 text-xs">
             227 x 338
           </div>
           <FolderCloud size="24" variant="Bold" className="mb-4 text-primary" />
@@ -39,7 +39,7 @@ const FileField = forwardRef<HTMLInputElement, IFileFieldProps>(
               Перетащите или <span className="text-primary">Выберите файл</span>{" "}
               для загрузки
             </h6>
-            <p className="-mt-2 text-center text-xs text-white/30">
+            <p className="-mt-2 text-center text-xs text-light/30">
               Поддерживает форматы .jpeg, .png, .jpg
             </p>
           </div>

@@ -12,14 +12,14 @@ const FormSideBar = ({ thumbnail, title_ru, title }: IFormSideBarProps) => {
       <img
         src={`https://darkfraction.s3.eu-north-1.amazonaws.com/thumbnails/${thumbnail}`}
         alt="lol"
-        className="mb-5 rounded-2xl text-white"
+        className="mb-5 rounded-2xl text-light"
       />
 
       <div className="flex flex-col">
-        <h1 className="w-full break-words text-2xl font-bold text-white">
+        <h1 className="w-full break-words text-2xl font-bold text-light">
           {title_ru}
         </h1>
-        <h3 className="text-base font-bold text-white/30">{title}</h3>
+        <h3 className="text-base font-bold text-light/30">{title}</h3>
       </div>
     </SideBar.Wrapper>
   );

@@ -33,7 +33,7 @@ const ComicsList = () => {
 
   if (catalog === undefined || catalog.catalog.length === 0) {
     return (
-      <div className="flex h-auto grow items-center justify-center text-4xl font-medium text-white/20">
+      <div className="flex h-auto grow items-center justify-center text-4xl font-medium text-light/20">
         Манга не найдена...
       </div>
     );

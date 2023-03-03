@@ -16,7 +16,7 @@ const ManageChaptersLayout = ({
   title_ru,
 }: IManageChaptersLayoutProps) => {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-black text-white">
+    <div className="relative min-h-screen overflow-hidden bg-dark text-light">
       <Header title={""} />
       <div className="flex flex-row">
         <FormSideBar thumbnail={thumbnail} title_ru={title_ru} title={title} />

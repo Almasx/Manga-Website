@@ -63,7 +63,7 @@ const Bookmark = ({
   return (
     <>
       <div className="relative -mx-4 mb-12 -mt-3 flex h-52 flex-col justify-center bg-gradient bg-cover px-5 ">
-        <h2 className="text-5xl font-bold text-white">{title}</h2>
+        <h2 className="text-5xl font-bold text-light">{title}</h2>
         <TextField
           name="search"
           className="bg-b !absolute bottom-0 left-5 right-5 translate-y-1/2"
@@ -74,7 +74,7 @@ const Bookmark = ({
               setSearchQuery(e.target.value);
             })
           }
-          endIcon={<SearchNormal size="20" className="text-white/30 " />}
+          endIcon={<SearchNormal size="20" className="text-light/30 " />}
         />
       </div>
 

@@ -27,7 +27,7 @@ const ComicsCard = ({
       href={`/comics/${id}`}
       className={clsx(
         "flex cursor-pointer rounded-2xl text-left",
-        "border border-stroke-100 p-3 ",
+        "border border-gray-dark-secondary p-3 ",
         [
           variant === "catalog" && "flex-col gap-y-2",
           variant === "recomendation" && "flex-row gap-x-3",
@@ -43,17 +43,17 @@ const ComicsCard = ({
         <img
           src={`https://darkfraction.s3.eu-north-1.amazonaws.com/thumbnails/${thumbnail?.id}`}
           alt="lol"
-          className="h-full w-full rounded-2xl text-white"
+          className="h-full w-full rounded-2xl text-light"
         />
         {rating !== undefined && (
           <div
             className={clsx(
-              "flex flex-row items-center gap-x-1 bg-black/80 px-[6px] py-1 backdrop-blur-2xl",
+              "flex flex-row items-center gap-x-1 bg-dark/80 px-[6px] py-1 backdrop-blur-2xl",
               "absolute bottom-0 right-0 rounded-tl-xl rounded-br-md"
             )}
           >
             <Star />
-            <p className="text-xs text-white/60 ">{rating.toFixed(1)}</p>
+            <p className="text-xs text-light/60 ">{rating.toFixed(1)}</p>
           </div>
         )}
       </div>
@@ -66,14 +66,14 @@ const ComicsCard = ({
       >
         <h3
           className={clsx(
-            " font-bold text-white",
+            " font-bold text-light",
             variant === "catalog" && "text-sm",
             variant === "recomendation" && "text-base"
           )}
         >
           {title_ru}
         </h3>
-        <h6 className=" text-xs text-white/60">{title_en}</h6>
+        <h6 className=" text-xs text-light/60">{title_en}</h6>
       </div>
     </Link>
   );

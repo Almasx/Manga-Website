@@ -26,20 +26,20 @@ const ChapterCard = ({
     <Link
       href={`${asPath}/chapter/${id}`}
       className={clsx(
-        " flex grow flex-row items-center rounded-2xl border  border-stroke-100 px-5",
-        "py-3 text-white duration-100  hover:border-stroke-200",
-        !packed && "-ml-10 bg-black hover:scale-105",
-        packed && "border-stroke-200 bg-black/40 hover:border-white/30"
+        " flex grow flex-row items-center rounded-2xl border  border-gray-dark-secondary px-5",
+        "py-3 text-light duration-100  hover:border-gray-dark",
+        !packed && "-ml-10 bg-dark hover:scale-105",
+        packed && "border-gray-dark bg-dark/40 hover:border-white/30"
       )}
     >
-      {!packed && <Lock1 size="24" className="mr-4 text-white/30" />}
-      <p className="mr-2 text-sm font-medium uppercase text-white/60">
+      {!packed && <Lock1 size="24" className="mr-4 text-light/30" />}
+      <p className="mr-2 text-sm font-medium uppercase text-light/60">
         Том {volumeIndex}
       </p>
-      <p className="mr-2 text-base font-bold text-white">
+      <p className="mr-2 text-base font-bold text-light">
         Глава {chapterIndex}
       </p>
-      <p className="mr-4 text-sm text-white/60">{createdAt.getMonth()}</p>
+      <p className="mr-4 text-sm text-light/60">{createdAt.getMonth()}</p>
 
       {/* VIP */}
       {/* {!access && (

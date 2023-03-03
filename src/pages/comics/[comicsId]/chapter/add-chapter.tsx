@@ -138,7 +138,7 @@ const AddChapter = ({
           {...register("title", { required: true })}
         />
       </div>
-      <h3 className="mb-2 px-3 text-sm text-white/30">Страницы</h3>
+      <h3 className="mb-2 px-3 text-sm text-light/30">Страницы</h3>
       <FileField
         className="mb-6 h-48 justify-center"
         onPreview={(e) => {
@@ -161,7 +161,7 @@ const AddChapter = ({
         {previewPages.map((image) => (
           <img
             className="h-80 w-full cursor-pointer 
-          rounded-2xl border border-stroke-100"
+          rounded-2xl border border-gray-dark-secondary"
             src={image}
             alt=""
             key={image}

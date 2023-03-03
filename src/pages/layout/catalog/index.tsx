@@ -10,7 +10,7 @@ export default function CatalogLayout({ children }: { children: ReactNode }) {
   const [showSideBar, setShowSideBar] = useState<boolean>(false);
   const { isDesktop } = useScreen();
   return (
-    <div className="relative min-h-screen overflow-hidden bg-black text-white">
+    <div className="relative min-h-screen overflow-hidden bg-dark text-light">
       <Navigation.Wrapper auth={true}>
         <Navigation.Links />
       </Navigation.Wrapper>
@@ -25,7 +25,7 @@ export default function CatalogLayout({ children }: { children: ReactNode }) {
         {isDesktop && (
           <div className="fixed bottom-[15px] right-[15px] z-10">
             <Button
-              className="h-9 w-9 rounded-2xl text-white md:hidden"
+              className="h-9 w-9 rounded-2xl text-light md:hidden"
               content="icon"
               onClick={() => setShowSideBar(true)}
             >

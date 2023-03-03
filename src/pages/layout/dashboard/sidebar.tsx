@@ -28,7 +28,7 @@ const AccountBar = () => {
 
         <div className="flex flex-col ">
           <h4 className="text-xl font-bold">{session.data?.user?.name}</h4>
-          <p className="text-white/33 -mt-1">Привет 👋</p>
+          <p className="text-light/33 -mt-1">Привет 👋</p>
         </div>
       </section>
       <SideBar.Section.Wrapper>
@@ -87,8 +87,8 @@ const AccountBar = () => {
       )}
 
       <section
-        className="mt-8 flex flex-row items-center gap-3 border-t border-stroke-100
-                   py-4 px-5 text-lg font-medium text-white/30"
+        className="mt-8 flex flex-row items-center gap-3 border-t border-gray-dark-secondary
+                   py-4 px-5 text-lg font-medium text-light/30"
         onClick={() => signOut()}
       >
         <Logout size="24" />

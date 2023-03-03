@@ -9,7 +9,7 @@ const OAuth = () => {
     <>
       <Divider>или</Divider>
       <Button
-        className="w-80 bg-white text-black"
+        className="w-80 !bg-light !text-black"
         type="button"
         onClick={() => signIn("discord")}
       >

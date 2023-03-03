@@ -20,14 +20,14 @@ const FilterSideBar = ({ show, setShow }: IFilterSideBarProps) => {
   return (
     <aside
       className={clsx(
-        "fixed top-0 z-10 -ml-[15px] flex h-[calc(100vh-64px)] flex-col gap-y-10 bg-black/80 px-[15px] pt-8 pb-5 md:mx-0 ",
-        "backdrop-blur-2xl md:sticky md:col-span-4 md:col-start-9 md:border-l md:border-stroke-100 md:px-5 lg:col-start-10",
+        "fixed top-0 z-10 -ml-[15px] flex h-[calc(100vh-64px)] flex-col gap-y-10 bg-dark/80 px-[15px] pt-8 pb-5 md:mx-0 ",
+        "backdrop-blur-2xl md:sticky md:col-span-4 md:col-start-9 md:border-l md:border-gray-dark-secondary md:px-5 lg:col-start-10",
         show && "hidden"
       )}
     >
       {/* Genres */}
       <section className="flex flex-col overflow-hidden rounded-2xl md:grow">
-        <h3 className="mb-3 flex flex-row text-xl font-bold text-white md:text-2xl">
+        <h3 className="mb-3 flex flex-row text-xl font-bold text-light md:text-2xl">
           Жанры
           {!isDesktop && show && (
             <button className="ml-auto " onClick={() => setShow(false)}>
@@ -45,7 +45,7 @@ const FilterSideBar = ({ show, setShow }: IFilterSideBarProps) => {
 
       {/* Status */}
       <section className="">
-        <h3 className="mb-3 text-xl font-bold text-white md:text-2xl">
+        <h3 className="mb-3 text-xl font-bold text-light md:text-2xl">
           Статус
         </h3>
         <CheckBoxField

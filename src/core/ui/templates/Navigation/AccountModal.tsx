@@ -21,7 +21,7 @@ const AccountModal = ({ visible, setVisible }: IAccountModalProps) => {
       backgroundBlur={false}
       className="absolute right-5 top-16 w-64"
     >
-      <div className="relative flex flex-col overflow-hidden rounded-2xl text-white">
+      <div className="relative flex flex-col overflow-hidden rounded-2xl text-light">
         {data?.user?.image && (
           <img
             src={data?.user?.image}
@@ -29,7 +29,7 @@ const AccountModal = ({ visible, setVisible }: IAccountModalProps) => {
             className="absolute top-[10px] left-4 h-16 w-16 rounded-full"
           />
         )}
-        <div className="h-[42px] border-b border-b-stroke-100" />
+        <div className="h-[42px] border-b border-b-gray-dark-secondary" />
         <div className="flex flex-col px-4 pt-[42px] pb-3">
           <h4 className="mb-1 text-2xl font-bold">{data?.user?.name}</h4>
           <Button
@@ -38,7 +38,7 @@ const AccountModal = ({ visible, setVisible }: IAccountModalProps) => {
               router.push(`/user/${data?.user?.id}`);
             }}
           >
-            <div className="flex flex-row items-center gap-3 text-lg font-medium text-white/60">
+            <div className="flex flex-row items-center gap-3 text-lg font-medium text-light/60">
               <Setting2 size="24" />
               Настройки
             </div>
@@ -50,7 +50,7 @@ const AccountModal = ({ visible, setVisible }: IAccountModalProps) => {
               router.push(`/user/${data?.user?.id}`);
             }}
           >
-            <div className="flex flex-row items-center gap-3 text-lg font-medium text-white/60">
+            <div className="flex flex-row items-center gap-3 text-lg font-medium text-light/60">
               <Save2 size="24" />
               Сохранённые
             </div>
@@ -60,7 +60,7 @@ const AccountModal = ({ visible, setVisible }: IAccountModalProps) => {
             className=" !justify-start bg-transparent"
             onClick={() => signOut()}
           >
-            <div className="flex flex-row items-center gap-3 text-lg font-medium text-white/60">
+            <div className="flex flex-row items-center gap-3 text-lg font-medium text-light/60">
               <Logout size="24" />
               Выход
             </div>

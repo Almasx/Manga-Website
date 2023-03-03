@@ -84,7 +84,7 @@ const AddChapters = ({
     getCoreRowModel: getCoreRowModel(),
   });
   return (
-    <table className="divide mx-4 mt-8 h-fit  divide-stroke-100 overflow-x-auto rounded-3xl border border-stroke-100 ">
+    <table className="divide mx-4 mt-8 h-fit  divide-gray-dark-secondary overflow-x-auto rounded-3xl border border-gray-dark-secondary ">
       <thead>
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>

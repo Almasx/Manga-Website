@@ -15,7 +15,7 @@ const CommentField = ({ value, onChange, onClick }: ICommentFieldProps) => {
           onChange && onChange(e);
         }}
         value={value}
-        className=" h-full w-full rounded-2xl border border-stroke-200 bg-black p-4 placeholder:text-white/30 focus:outline-none"
+        className=" h-full w-full rounded-2xl border border-gray-dark bg-dark p-4 placeholder:text-light/30 focus:outline-none"
         placeholder="Оставьте здесь комментарий.."
       />
       <div className="absolute bottom-0 right-0">

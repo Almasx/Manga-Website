@@ -10,21 +10,24 @@ module.exports = {
         black: "#020202",
         transparent: "transparent",
         primary: "#4A54EB",
-        stroke: {
-          100: "#1C1B20",
-          200: "#302F37",
+        dark: {
+          DEFAULT: "#020202",
+          secondary: "#090909",
+          tertiary: "#0f0f0f",
         },
-        surface: "#DCDCFF",
-        // gray: {
-        //   dark: {
-        //     DEFAULT: "#333333",
-        //     secondary: "#1A1A1A",
-        //   },
-        //   light: {
-        //     DEFAULT: "#D4D4D4",
-        //     secondary: "#e5e5e5",
-        //   },
-        // },
+        light: {
+          DEFAULT: "#ffffff",
+        },
+        gray: {
+          dark: {
+            DEFAULT: "#1a1b1b",
+            secondary: "#1C1B20",
+          },
+          light: {
+            DEFAULT: "#D4D4D4",
+            secondary: "#e5e5e5",
+          },
+        },
       },
       fontFamily: { sans: ["TT Norms Pro", "sans-serif"] },
       backgroundImage: {

@@ -31,7 +31,7 @@ const Header = ({
   return (
     <Navigation.Wrapper auth={true} dynamicHide={true} className="fixed z-10">
       <Navigation.Links />
-      <div className="flex flex-row items-center gap-5 font-medium text-white">
+      <div className="flex flex-row items-center gap-5 font-medium text-light">
         <button
           onClick={() =>
             previosChapter &&
@@ -40,7 +40,7 @@ const Header = ({
         >
           <ArrowLeft2
             size="18"
-            className={clsx(!previosChapter && "text-white/30")}
+            className={clsx(!previosChapter && "text-light/30")}
           />
         </button>
 
@@ -60,7 +60,7 @@ const Header = ({
         >
           <ArrowRight2
             size="18"
-            className={clsx(!followingChapter && "text-white/30")}
+            className={clsx(!followingChapter && "text-light/30")}
           />
         </button>
       </div>

@@ -1,5 +1,5 @@
-import clsx from "clsx";
 import type { ReactNode } from "react";
+import clsx from "clsx";
 
 export interface TabProps {
   children: ReactNode;
@@ -12,8 +12,8 @@ const Tab = ({ children, classNames = "", active, onClick }: TabProps) => {
   return (
     <li
       className={clsx(
-        "hover:bg-surface/5 flex flex-row gap-3 py-3 px-5 font-medium hover:text-white",
-        active && "bg-surface/5 text-white",
+        "flex flex-row gap-3 py-3 px-5 font-medium hover:bg-dark-secondary hover:text-light",
+        active && "bg-dark-secondary text-light",
         classNames
       )}
       onClick={onClick}

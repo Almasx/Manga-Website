@@ -57,7 +57,7 @@ const ModifyComics = ({
 
   return (
     <>
-      <h3 className="mb-5 text-xl font-medium text-white/40 ">
+      <h3 className="mb-5 text-xl font-medium text-light/40 ">
         Сведения о манге
       </h3>
       <form

@@ -15,7 +15,7 @@ const RadioGroupField = forwardRef<HTMLInputElement, IRadioGroupFieldProps>(
       <div
         className={clsx(
           "relative flex h-[46px] items-center gap-x-3 rounded-2xl border ",
-          " border-stroke-200 bg-surface/5 bg-black px-5",
+          " border-gray-dark bg-dark-secondary bg-dark px-5",
           active && "border-primary bg-primary/10"
         )}
       >
@@ -25,7 +25,7 @@ const RadioGroupField = forwardRef<HTMLInputElement, IRadioGroupFieldProps>(
             type="radio"
             className={clsx(
               "h-[21px] w-[21px] rotate-45 appearance-none rounded-lg border",
-              "border-stroke-200 bg-surface/5 accent-primary duration-200",
+              "border-gray-dark bg-dark-secondary accent-primary duration-200",
               active && "!border-0 !bg-primary"
             )}
             name={name}
@@ -49,8 +49,8 @@ const RadioGroupField = forwardRef<HTMLInputElement, IRadioGroupFieldProps>(
         </div>
         <p
           className={clsx(
-            "relative text-sm text-white/30",
-            active && "!text-white"
+            "relative text-sm text-light/30",
+            active && "!text-light"
           )}
         >
           {label}

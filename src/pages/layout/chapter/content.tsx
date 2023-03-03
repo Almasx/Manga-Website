@@ -21,16 +21,16 @@ const ContentSection = () => {
     <Modal
       visible={showContent}
       setVisible={setShowSection}
-      className="absolute right-0 h-screen w-1/3 !rounded-none !border-stroke-100 bg-black/90 px-5 pt-8 backdrop-blur-md"
+      className="absolute right-0 h-screen w-1/3 !rounded-none !border-gray-dark-secondary bg-dark/90 px-5 pt-8 backdrop-blur-md"
       classNameInner="!bg-transparent !rounded-none flex flex-col gap-5"
       backgroundBlur={false}
       backgroundBlack={true}
     >
       <div className="flex flex-row">
-        <h3 className="text-2xl font-bold text-white">Главы</h3>
+        <h3 className="text-2xl font-bold text-light">Главы</h3>
         {isPhone && (
           <button
-            className="text-white/66 ml-auto"
+            className="text-light/66 ml-auto"
             onClick={() => setShowSection(false)}
           >
             <CancelCross />

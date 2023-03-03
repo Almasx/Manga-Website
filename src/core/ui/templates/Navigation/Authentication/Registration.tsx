@@ -28,12 +28,12 @@ const Registration = ({
   return (
     <Modal visible={visible} setVisible={setVisible}>
       <div className="relative flex flex-col items-center p-4 pt-6">
-        <div className="absolute -top-0 left-1/2 z-[51] -translate-y-1/2 -translate-x-1/2 transform rounded-full bg-primary px-3 py-2 text-xs font-bold text-white">
+        <div className="absolute -top-0 left-1/2 z-[51] -translate-y-1/2 -translate-x-1/2 transform rounded-full bg-primary px-3 py-2 text-xs font-bold text-light">
           Регистрация
         </div>
 
-        <h1 className="text-3xl font-bold text-white">Dark Fraction</h1>
-        <h2 className="font-meduim mb-8 text-lg text-white/30">
+        <h1 className="text-3xl font-bold text-light">Dark Fraction</h1>
+        <h2 className="font-meduim mb-8 text-lg text-light/30">
           Добро пожаловать
         </h2>
 
@@ -51,7 +51,7 @@ const Registration = ({
         />
 
         <OAuth />
-        <p className="m-5 text-center text-xs text-white/30">
+        <p className="m-5 text-center text-xs text-light/30">
           Уже есть аккаунт?{" "}
           <button
             className=" text-primary"

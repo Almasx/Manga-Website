@@ -19,13 +19,13 @@ const Catalog = () => {
 
   return (
     <main className="col-span-4 flex flex-col pl-4 pt-8 md:col-span-8 lg:col-span-9">
-      <h3 className="mb-3 text-xl font-bold text-white md:text-2xl">Каталог</h3>
+      <h3 className="mb-3 text-xl font-bold text-light md:text-2xl">Каталог</h3>
       <TextField
         placeholder="пр: ванпачмен"
         onChange={(event) => {
           debounce(() => setQuery(event.target.value));
         }}
-        endIcon={<SearchNormal size="20" className="text-white/30" />}
+        endIcon={<SearchNormal size="20" className="text-light/30" />}
       />
       <div className="relative flex w-full flex-row justify-between">
         <TabBar

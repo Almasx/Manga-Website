@@ -31,8 +31,8 @@ export const TabBar = ({ tabs, onChange }: TabBarProps) => {
             className={clsx(
               "text-sm font-bold duration-300 lg:text-base",
               activeIndex === index
-                ? "text-white"
-                : "text-white/30 hover:text-primary"
+                ? "text-light"
+                : "text-light/30 hover:text-primary"
             )}
           >
             {tab.label}
@@ -56,7 +56,7 @@ export const BoxyTabBar = ({ tabs }: TabBarProps) => {
 
   return (
     <div className="relative">
-      <div className="flex flex-row gap-1 rounded-xl border border-stroke-100 p-1">
+      <div className="flex flex-row gap-1 rounded-xl border border-gray-dark-secondary p-1">
         {tabs.map((tab, index) => {
           const link = tabs[index]?.value as string;
 
@@ -71,8 +71,8 @@ export const BoxyTabBar = ({ tabs }: TabBarProps) => {
               className={clsx(
                 "flex h-8 items-center gap-2 rounded-xl px-4 duration-300",
                 asPath.endsWith(link)
-                  ? " text-white"
-                  : "text-white/30 hover:text-white"
+                  ? " text-light"
+                  : "text-light/30 hover:text-light"
               )}
             >
               {tab.label}
@@ -82,7 +82,7 @@ export const BoxyTabBar = ({ tabs }: TabBarProps) => {
       </div>
       <div
         ref={indicatorRef}
-        className="absolute top-1/2 h-8 w-16 -translate-y-1/2 rounded-xl bg-white/5 duration-200"
+        className="absolute top-1/2 h-8 w-16 -translate-y-1/2 rounded-xl bg-light/5 duration-200"
       />
     </div>
   );

@@ -34,7 +34,7 @@ const Wrapper = ({
         className={clsx(
           className,
           "flex w-full flex-row items-center justify-between gap-10 border-b duration-150",
-          "h-16 border-b-stroke-100 bg-black/80 px-5 backdrop-blur-2xl"
+          "h-16 border-b-gray-dark-secondary bg-dark/80 px-5 backdrop-blur-2xl"
         )}
       >
         {children}

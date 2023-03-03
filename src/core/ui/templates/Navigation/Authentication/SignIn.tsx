@@ -23,11 +23,11 @@ const SignIn = ({ visible, setVisible, setHasAccount }: ISignInProps) => {
   return (
     <Modal visible={visible} setVisible={setVisible}>
       <div className="relative flex flex-col items-center p-4 pt-6">
-        <div className="absolute -top-0 left-1/2 z-[51] -translate-y-1/2 -translate-x-1/2 transform rounded-full bg-primary px-3 py-2 text-xs font-bold text-white">
+        <div className="absolute -top-0 left-1/2 z-[51] -translate-y-1/2 -translate-x-1/2 transform rounded-full bg-primary px-3 py-2 text-xs font-bold text-light">
           Войти в аккаунт
         </div>
-        <h1 className="text-3xl font-bold text-white">Dark Fraction</h1>
-        <h2 className="font-meduim text-white/33 mb-8 text-lg">
+        <h1 className="text-3xl font-bold text-light">Dark Fraction</h1>
+        <h2 className="font-meduim text-light/33 mb-8 text-lg">
           Добро пожаловать
         </h2>
         <Form
@@ -45,7 +45,7 @@ const SignIn = ({ visible, setVisible, setHasAccount }: ISignInProps) => {
 
         <OAuth />
 
-        <p className="my-5 text-center text-xs text-white/30">
+        <p className="my-5 text-center text-xs text-light/30">
           Впервые здесь?{" "}
           <button
             className=" text-primary"

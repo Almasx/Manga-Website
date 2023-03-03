@@ -5,7 +5,7 @@ const Spinner = () => {
       className="flex h-full w-full flex-col items-center justify-center gap-3"
     >
       <svg
-        className="mr-2 inline h-10 w-10 animate-spin fill-primary text-stroke-200"
+        className="mr-2 inline h-10 w-10 animate-spin fill-primary text-gray-dark"
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -19,7 +19,7 @@ const Spinner = () => {
           fill="currentFill"
         />
       </svg>
-      <span className=" text-xl text-white/20">Loading...</span>
+      <span className=" text-xl text-light/20">Loading...</span>
     </div>
   );
 };

@@ -33,7 +33,7 @@ const SelectGenres = ({
     <div className={clsx("flex flex-col ", className)}>
       <TextField
         placeholder="пр: детектив, драма..."
-        endIcon={<SearchNormal size="20" className="text-white/30 " />}
+        endIcon={<SearchNormal size="20" className="text-light/30 " />}
         onChange={(event: ChangeEvent<HTMLInputElement>) =>
           debounce(() => onQuery(event.target.value))
         }

@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 export default function MainLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-black text-white">
+    <div className="relative min-h-screen overflow-hidden bg-dark text-light">
       <Navigation.Wrapper auth={true}>
         <Navigation.Links />
       </Navigation.Wrapper>
@@ -15,7 +15,7 @@ export default function MainLayout({ children }: { children: ReactNode }) {
 
 export function DenseLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-black text-white">
+    <div className="relative min-h-screen overflow-hidden bg-dark text-light">
       <Navigation.Wrapper auth={true} className="px-[10vw]">
         <Navigation.Links />
       </Navigation.Wrapper>
