@@ -10,8 +10,22 @@ export const getAddChapterSchema = (
   z
     .object({
       title: z.string().min(1).describe("Name // Введите название манги"),
-      chapterIndex: z.number().min(1),
-      volumeIndex: z.number().min(1),
+      chapterIndex: z.preprocess((year) => {
+        const processed = z
+          .string()
+          .regex(/^\d+$/)
+          .transform(Number)
+          .safeParse(year);
+        return processed.success ? processed.data : year;
+      }, z.number().min(1)),
+      volumeIndex: z.preprocess((year) => {
+        const processed = z
+          .string()
+          .regex(/^\d+$/)
+          .transform(Number)
+          .safeParse(year);
+        return processed.success ? processed.data : year;
+      }, z.number().min(1)),
       pages: z.array(z.any()),
       // .refine(
       //   (files) => files.every((file: File) => console.log(file)),

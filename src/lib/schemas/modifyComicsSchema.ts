@@ -10,11 +10,14 @@ export const addComicsSchema = z.object({
     .min(1)
     .describe("Название // Введите название манги на русском"),
   description: z.string().min(1).describe("Описание // Введите описание манги"),
-  year: z
-    .number()
-    .min(1990)
-    .max(new Date().getFullYear())
-    .describe("Год // Введите год выпуска манги"),
+  year: z.preprocess((year) => {
+    const processed = z
+      .string()
+      .regex(/^\d+$/)
+      .transform(Number)
+      .safeParse(year);
+    return processed.success ? processed.data : year;
+  }, z.number().min(0).min(1990).max(new Date().getFullYear()).describe("Год // Введите год выпуска манги")),
   thumbnail: z
     .any()
     .refine((files) => files?.length == 1, "Image is required.")
