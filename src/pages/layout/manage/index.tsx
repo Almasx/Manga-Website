@@ -2,19 +2,19 @@ import FormSideBar from "./sidebar";
 import Header from "./header";
 import type { ReactNode } from "react";
 
-interface IAddChapterLayoutProps {
+interface IManageChaptersLayoutProps {
   children: ReactNode;
   thumbnail: string;
   title: string;
   title_ru: string;
 }
 
-const AddChapterLayout = ({
+const ManageChaptersLayout = ({
   children,
   thumbnail,
   title,
   title_ru,
-}: IAddChapterLayoutProps) => {
+}: IManageChaptersLayoutProps) => {
   return (
     <div className="relative min-h-screen overflow-hidden bg-black text-white">
       <Header title={""} />
@@ -26,4 +26,4 @@ const AddChapterLayout = ({
   );
 };
 
-export default AddChapterLayout;
+export default ManageChaptersLayout;

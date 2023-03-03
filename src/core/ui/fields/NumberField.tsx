@@ -1,6 +1,6 @@
+import type { IField } from "types/field";
 import clsx from "clsx";
 import { forwardRef } from "react";
-import type { IField } from "types/IField";
 
 export type INumberFieldProps<T> = {
   className?: string;
@@ -35,6 +35,7 @@ const NumberField = forwardRef<
         <input
           name={name}
           type="number"
+          pattern="[0-9]*"
           {...{ value: value }}
           ref={ref}
           onChange={(e) => {

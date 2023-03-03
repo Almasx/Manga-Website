@@ -131,8 +131,8 @@ const ComicsCover = ({
         )}
 
         {session.data?.user?.role === "ADMIN" && (
-          <Link href={`${asPath}/chapter/add-chapter`} className="flex">
-            <Button className="flex-grow">Добавить Главу</Button>
+          <Link href={`${asPath}/manage`} className="flex">
+            <Button className="flex-grow">Загрузка Глав</Button>
           </Link>
         )}
         {session.data?.user?.role !== "ADMIN" && lastChapterId && (

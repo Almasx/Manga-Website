@@ -1,4 +1,4 @@
-import type { IField } from "types/IField";
+import type { IField } from "types/field";
 import clsx from "clsx";
 import { forwardRef } from "react";
 

@@ -1,7 +1,7 @@
+import type { IField } from "types/field";
+import Tick from "../../../../public/icons/Tick.svg";
 import clsx from "clsx";
 import { forwardRef } from "react";
-import type { IField } from "types/IField";
-import Tick from "../../../../public/icons/Tick.svg";
 
 type IRadioGroupFieldProps = {
   label: string;

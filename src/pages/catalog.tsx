@@ -1,11 +1,9 @@
-import { ChangeEvent, useCallback } from "react";
-
 import Button from "core/ui/primitives/Button";
 import CatalogLayout from "./layout/catalog";
 import ComicsList from "../components/organisms/ComicsList";
 import type { ReactNode } from "react";
 import { SearchNormal } from "iconsax-react";
-import TabBar from "core/ui/primitives/TabBar";
+import { TabBar } from "core/ui/primitives/TabBar";
 import TextField from "core/ui/fields/TextField";
 import TrendUp from "../../public/icons/TrendUp.svg";
 import _ from "lodash";
@@ -31,7 +29,7 @@ const Catalog = () => {
       />
       <div className="relative flex w-full flex-row justify-between">
         <TabBar
-          onChange={(value) => {
+          onChange={(value: "rating" | "saved" | "year") => {
             setSort(value);
           }}
           tabs={[

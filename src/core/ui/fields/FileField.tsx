@@ -2,7 +2,7 @@ import React, { forwardRef, useState } from "react";
 
 import type { ChangeEvent } from "react";
 import { FolderCloud } from "iconsax-react";
-import type { IField } from "../../../types/IField";
+import type { IField } from "../../../types/field";
 import clsx from "clsx";
 
 export type IFileFieldProps = {

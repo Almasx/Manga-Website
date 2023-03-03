@@ -8,6 +8,7 @@ specifiers:
   '@svgr/webpack': ^6.5.1
   '@swc-jotai/react-refresh': ^0.0.4
   '@tanstack/react-query': ^4.20.2
+  '@tanstack/react-table': ^8.7.9
   '@trpc/client': ^10.9.0
   '@trpc/next': ^10.9.0
   '@trpc/react-query': ^10.9.0
@@ -56,6 +57,7 @@ dependencies:
   '@svgr/webpack': 6.5.1
   '@swc-jotai/react-refresh': 0.0.4
   '@tanstack/react-query': 4.24.10_biqbaboplfbrettd7655fr4n2y
+  '@tanstack/react-table': 8.7.9_biqbaboplfbrettd7655fr4n2y
   '@trpc/client': 10.12.0_@trpc+server@10.12.0
   '@trpc/next': 10.12.0_twxsmod72jqp5mq5sjgf4pkz2u
   '@trpc/react-query': 10.12.0_tij422wpfxfl3iixjhzsgwgs2e
@@ -1973,6 +1975,23 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       use-sync-external-store: 1.2.0_react@18.2.0
+    dev: false
+
+  /@tanstack/react-table/8.7.9_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-6MbbQn5AupSOkek1+6IYu+1yZNthAKTRZw9tW92Vi6++iRrD1GbI3lKTjJalf8lEEKOqapPzQPE20nywu0PjCA==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+    dependencies:
+      '@tanstack/table-core': 8.7.9
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /@tanstack/table-core/8.7.9:
+    resolution: {integrity: sha512-4RkayPMV1oS2SKDXfQbFoct1w5k+pvGpmX18tCXMofK/VDRdA2hhxfsQlMvsJ4oTX8b0CI4Y3GDKn5T425jBCw==}
+    engines: {node: '>=12'}
     dev: false
 
   /@trpc/client/10.12.0_@trpc+server@10.12.0:

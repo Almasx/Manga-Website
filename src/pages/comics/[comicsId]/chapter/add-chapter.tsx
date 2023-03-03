@@ -3,7 +3,7 @@ import type {
   InferGetServerSidePropsType,
 } from "next";
 
-import AddChapterLayout from "../../../layout/add-chapter";
+import AddChapterLayout from "../../../layout/manage";
 import FileField from "core/ui/fields/FileField";
 import NumberField from "core/ui/fields/NumberField";
 import type { PresignedPost } from "aws-sdk/clients/s3";
