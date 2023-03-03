@@ -19,6 +19,7 @@ import { createContextInner } from "server/trpc/context";
 import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 import { getDefaultVolumeAndChapterIndex } from "utils/get-default-index";
 import superjson from "superjson";
+import { trpc } from "utils/trpc";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext<{ comicsId: string }>
@@ -57,9 +58,15 @@ const AddChapters = ({
   comics,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   console.log(comics.chapters);
+  const {
+    data: { chapters },
+    refetch,
+  } = trpc.comics.getChapters.useQuery(
+    { comicsId: comics.id },
+    { initialData: comics }
+  );
 
-  const columnHelper =
-    createColumnHelper<ArrayElement<typeof comics.chapters>>();
+  const columnHelper = createColumnHelper<ArrayElement<typeof chapters>>();
   const columns = [
     // Display Column
     columnHelper.accessor("chapterIndex", {
@@ -81,14 +88,14 @@ const AddChapters = ({
   ];
 
   const table = useReactTable({
-    data: comics.chapters,
+    data: chapters,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
   return (
     <>
-      <AddChapterModal chapters={comics.chapters} />
+      <AddChapterModal chapters={chapters} onSuccess={() => refetch()} />
       <table className="divide mx-4 mt-8 h-fit divide-gray-dark-secondary overflow-x-auto rounded-3xl border border-gray-dark-secondary ">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (

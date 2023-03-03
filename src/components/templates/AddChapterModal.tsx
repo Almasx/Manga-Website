@@ -26,9 +26,10 @@ interface IAddChapterModalProps {
     createdAt: Date;
     chapterIndex: number;
   }[];
+  onSuccess: () => void;
 }
 
-const AddChapterModal = ({ chapters }: IAddChapterModalProps) => {
+const AddChapterModal = ({ chapters, onSuccess }: IAddChapterModalProps) => {
   const { query } = useRouter();
   const [showAddChapter, setShowAddChapter] = useAtom(showAddChapterAtom);
   const [previewPages, setPreviewPages] = useState<string[]>([]);
@@ -45,6 +46,7 @@ const AddChapterModal = ({ chapters }: IAddChapterModalProps) => {
     handleSubmit,
     formState: { errors },
     control,
+    reset,
   } = useForm<AddChapterSchema>({
     resolver: zodResolver(addChapterSchema),
     defaultValues: {
@@ -78,6 +80,9 @@ const AddChapterModal = ({ chapters }: IAddChapterModalProps) => {
 
       await s3Mutate({ url, formData });
     }
+    onSuccess();
+    reset();
+    setShowAddChapter(false);
   };
 
   return (
