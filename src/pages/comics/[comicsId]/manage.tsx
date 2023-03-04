@@ -16,12 +16,15 @@ import type { ArrayElement } from "types/array-element";
 import ManageChaptersLayout from "pages/layout/manage";
 import NumberField from "core/ui/fields/NumberField";
 import TextField from "core/ui/fields/TextField";
+import Tick from "../../../../public/icons/Tick.svg";
 import { appRouter } from "server/trpc/router/_app";
+import clsx from "clsx";
 import { createContextInner } from "server/trpc/context";
 import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 import { getDefaultVolumeAndChapterIndex } from "utils/get-default-index";
 import superjson from "superjson";
 import { trpc } from "utils/trpc";
+import { useState } from "react";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext<{ comicsId: string }>
@@ -67,9 +70,10 @@ const AddChapters = ({
     { initialData: comics }
   );
 
+  const [rowSelection, setRowSelection] = useState({});
   const columnHelper = createColumnHelper<ArrayElement<typeof chapters>>();
   const columns = [
-    {
+    columnHelper.display({
       id: "select",
       header: ({ table }) => (
         <IndeterminateCheckbox
@@ -92,7 +96,7 @@ const AddChapters = ({
           />
         </div>
       ),
-    },
+    }),
     columnHelper.accessor("chapterIndex", {
       cell: (info) => (
         <NumberField
@@ -119,6 +123,11 @@ const AddChapters = ({
   const table = useReactTable({
     data: chapters,
     columns,
+    state: {
+      rowSelection,
+    },
+    enableRowSelection: true,
+    onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
   });
 
@@ -181,15 +190,30 @@ function IndeterminateCheckbox({
     if (typeof indeterminate === "boolean") {
       ref.current.indeterminate = !rest.checked && indeterminate;
     }
-  }, [ref, indeterminate]);
+  }, [ref, indeterminate, rest.checked]);
 
   return (
-    <input
-      type="checkbox"
-      ref={ref}
-      className={className + " cursor-pointer"}
-      {...rest}
-    />
+    <label className="relative cursor-pointer">
+      <input
+        type="checkbox"
+        className={clsx(
+          "h-[21px] w-[21px] rotate-45 appearance-none rounded-lg border",
+          "border-gray-dark bg-dark-secondary accent-primary duration-200",
+          rest.checked && " !border-0 !bg-primary",
+          className
+        )}
+        ref={ref}
+        {...rest}
+      />
+      <div
+        className={clsx(
+          "invisible absolute top-3 left-1/2 box-content -translate-x-1/2 -translate-y-1/2 transform",
+          rest.checked && "!visible"
+        )}
+      >
+        <Tick />
+      </div>
+    </label>
   );
 }
 
