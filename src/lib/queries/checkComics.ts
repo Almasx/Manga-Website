@@ -19,6 +19,7 @@ export const defaultCheckComicsSelect = Prisma.validator<Prisma.ComicsSelect>()(
         volumeIndex: true,
         createdAt: true,
         id: true,
+        title: true,
       },
     },
     comments: { include: { author: true }, orderBy: { createdAt: "desc" } },

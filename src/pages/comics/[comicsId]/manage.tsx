@@ -2,18 +2,20 @@ import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from "next";
+import type { HTMLProps, ReactNode } from "react";
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { useEffect, useRef } from "react";
 
 import AddChapterModal from "components/templates/AddChapterModal";
 import type { ArrayElement } from "types/array-element";
 import ManageChaptersLayout from "pages/layout/manage";
 import NumberField from "core/ui/fields/NumberField";
-import type { ReactNode } from "react";
+import TextField from "core/ui/fields/TextField";
 import { appRouter } from "server/trpc/router/_app";
 import { createContextInner } from "server/trpc/context";
 import { createProxySSGHelpers } from "@trpc/react-query/ssg";
@@ -57,7 +59,6 @@ export const getServerSideProps = async (
 const AddChapters = ({
   comics,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  console.log(comics.chapters);
   const {
     data: { chapters },
     refetch,
@@ -68,12 +69,35 @@ const AddChapters = ({
 
   const columnHelper = createColumnHelper<ArrayElement<typeof chapters>>();
   const columns = [
-    // Display Column
+    {
+      id: "select",
+      header: ({ table }) => (
+        <IndeterminateCheckbox
+          {...{
+            checked: table.getIsAllRowsSelected(),
+            indeterminate: table.getIsSomeRowsSelected(),
+            onChange: table.getToggleAllRowsSelectedHandler(),
+          }}
+        />
+      ),
+      cell: ({ row }) => (
+        <div className="px-1">
+          <IndeterminateCheckbox
+            {...{
+              checked: row.getIsSelected(),
+              disabled: !row.getCanSelect(),
+              indeterminate: row.getIsSomeSelected(),
+              onChange: row.getToggleSelectedHandler(),
+            }}
+          />
+        </div>
+      ),
+    },
     columnHelper.accessor("chapterIndex", {
       cell: (info) => (
         <NumberField
           value={info.getValue().toString()}
-          className="rounded-none border-none"
+          className="rounded-none border-0"
         />
       ),
     }),
@@ -81,8 +105,13 @@ const AddChapters = ({
       cell: (info) => (
         <NumberField
           value={info.getValue().toString()}
-          className="rounded-none border-none"
+          className="rounded-none border-0"
         />
+      ),
+    }),
+    columnHelper.accessor("title", {
+      cell: (info) => (
+        <TextField value={info.getValue()} className="rounded-none border-0" />
       ),
     }),
   ];
@@ -96,7 +125,10 @@ const AddChapters = ({
   return (
     <>
       <AddChapterModal chapters={chapters} onSuccess={() => refetch()} />
-      <table className="divide mx-4 mt-8 h-fit divide-gray-dark-secondary overflow-x-auto rounded-3xl border border-gray-dark-secondary ">
+      <table
+        className="divide mx-4 mt-8 h-fit w-full border-separate
+                   divide-gray-dark-secondary overflow-x-auto  rounded-xl bg-gray-dark "
+      >
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
@@ -137,5 +169,28 @@ AddChapters.getLayout = (
     {page}
   </ManageChaptersLayout>
 );
+
+function IndeterminateCheckbox({
+  indeterminate,
+  className = "",
+  ...rest
+}: { indeterminate?: boolean } & HTMLProps<HTMLInputElement>) {
+  const ref = useRef<HTMLInputElement>(null!);
+
+  useEffect(() => {
+    if (typeof indeterminate === "boolean") {
+      ref.current.indeterminate = !rest.checked && indeterminate;
+    }
+  }, [ref, indeterminate]);
+
+  return (
+    <input
+      type="checkbox"
+      ref={ref}
+      className={className + " cursor-pointer"}
+      {...rest}
+    />
+  );
+}
 
 export default AddChapters;

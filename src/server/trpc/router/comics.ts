@@ -52,6 +52,7 @@ const comicsRouter = router({
                 volumeIndex: true,
                 createdAt: true,
                 id: true,
+                title: true,
               },
             },
           },

@@ -63,7 +63,8 @@ const TextField = forwardRef<
             "focus:border-primary focus:!bg-dark focus:outline-none",
             !error && "focus:ring-2",
             error && "border-red-500 bg-red-500/10",
-            startIcon !== null && "pl-12"
+            startIcon !== null && "pl-12",
+            className
           )}
         />
         {endIcon !== null && (
