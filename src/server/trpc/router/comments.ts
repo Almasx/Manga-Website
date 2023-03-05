@@ -9,11 +9,24 @@ export const commentsRouter = router({
     .input(z.object({ comicsId: z.string(), content: z.string() }))
     .mutation(async ({ input: { comicsId, content }, ctx }) => {
       await handleQuery(checkComics({ id: true }, { id: comicsId }));
-      const comment = await ctx.prisma.comicsComment.create({
+      await ctx.prisma.comicsComment.create({
         data: {
           content,
           author: { connect: { id: ctx.session.user.id } },
           comics: { connect: { id: comicsId } },
+        },
+      });
+    }),
+
+  postCommentOnChapter: protectedProcedure
+    .input(z.object({ chapterId: z.string(), content: z.string() }))
+    .mutation(async ({ input: { chapterId, content }, ctx }) => {
+      await handleQuery(checkComics({ id: true }, { id: chapterId }));
+      await ctx.prisma.chapterComment.create({
+        data: {
+          content,
+          author: { connect: { id: ctx.session.user.id } },
+          chapter: { connect: { id: chapterId } },
         },
       });
     }),

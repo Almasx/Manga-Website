@@ -7,6 +7,28 @@ import { s3CreatePresignedUrl } from "lib/aws/s3-presigned-url";
 import { z } from "zod";
 
 export const chapterRouter = router({
+  getComments: publicProcedure
+    .input(
+      z.object({
+        chapterId: z.string({ required_error: "Chapter id is required" }),
+        comicsId: z.string({ required_error: "Comics id is required" }),
+      })
+    )
+    .query(
+      async ({ input: { chapterId, comicsId } }) =>
+        await handleQuery(
+          checkChapter(
+            {
+              comments: {
+                include: { author: true },
+                orderBy: { createdAt: "desc" },
+              },
+            },
+            chapterId,
+            comicsId
+          )
+        )
+    ),
   getChapter: publicProcedure
     .input(
       z.object({

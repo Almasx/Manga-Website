@@ -11,10 +11,10 @@ const OAuth = () => {
       <Button
         className="w-80 !bg-light !text-black"
         type="button"
-        onClick={() => signIn("discord")}
+        onClick={() => signIn("vk")}
       >
         <div className="flex flex-row gap-3">
-          <Google size="24" variant="Bold" /> Войти с помощью Discord
+          <Google size="24" variant="Bold" /> Войти с помощью VK
         </div>
       </Button>
     </>

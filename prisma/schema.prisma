@@ -15,15 +15,17 @@ datasource db {
 model Account {
   id                String  @id @default(cuid())
   userId            String
+  email             String?
+  user_id           Int?
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? // @db.Text
-  access_token      String? // @db.Text
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? // @db.Text
+  id_token          String? @db.Text
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -42,18 +44,21 @@ model Session {
 }
 
 model User {
-  id            String          @id @default(cuid())
+  id            String    @id @default(cuid())
   name          String?
-  email         String?         @unique
+  email         String?   @unique
   emailVerified DateTime?
-  image         String?
+  image         String?   @db.Text
   accounts      Account[]
   sessions      Session[]
-  role          Role            @default(USER)
-  bookmarks     Bookmark[]
-  comments      ComicsComment[]
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
+
+  role            Role             @default(USER)
+  bookmarks       Bookmark[]
+  comicsComments  ComicsComment[]
+  chapterComments ChapterComment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum Role {
@@ -121,8 +126,9 @@ model Chapter {
   comicsId String
 
   pages     Page[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  comments  ChapterComment[]
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
 
   @@unique([chapterIndex, volumeIndex])
   @@index([comicsId])
@@ -162,4 +168,18 @@ model ComicsComment {
 
   @@index([authorId])
   @@index([comicsId])
+}
+
+model ChapterComment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
+  chapter   Chapter  @relation(fields: [chapterId], references: [id])
+  chapterId String
+
+  @@index([authorId])
+  @@index([chapterId])
 }
