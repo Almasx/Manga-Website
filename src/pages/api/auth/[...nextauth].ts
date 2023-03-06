@@ -1,7 +1,5 @@
 import NextAuth, { type NextAuthOptions } from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
 import VkProvider from "next-auth/providers/vk";
-import GoogleProvider from "next-auth/providers/google";
 
 // Prisma adapter for NextAuth, optional and can be removed
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
@@ -9,6 +7,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
 import { env } from "../../../env/server.mjs";
 import prisma from "../../../server/db/client";
+import { isGroupDon } from "../../../lib/vk/isDon";
 
 export const authOptions: NextAuthOptions = {
   secret: env.NEXTAUTH_SECRET,
@@ -16,6 +15,10 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
+    async signIn({ account }) {
+      console.log(isGroupDon(account?.access_token as string));
+      return true;
+    },
     jwt({ token, user }) {
       if (user) {
         token.id = user.id;
@@ -38,6 +41,7 @@ export const authOptions: NextAuthOptions = {
     VkProvider({
       clientId: env.VK_CLIENT_ID,
       clientSecret: env.VK_CLIENT_SECRET,
+      authorization: { params: { scope: "groups" } },
     }),
   ],
 

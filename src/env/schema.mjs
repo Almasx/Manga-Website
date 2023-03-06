@@ -21,7 +21,7 @@ export const serverSchema = z.object({
   ),
   VK_CLIENT_ID: z.string(),
   VK_CLIENT_SECRET: z.string(),
-
+  VK_GROUP_ID: z.string().regex(/^[-+]?[0-9]\d*(\.\d+)?$/),
   AWS_ACCESS_KEY_ID: z.string(),
   AWS_SECRET_ACCESS_KEY: z.string(),
   AWS_BUCKET_NAME: z.string(),
@@ -40,6 +40,7 @@ export const serverEnv = {
   NEXTAUTH_URL: process.env.NEXTAUTH_URL,
   VK_CLIENT_ID: process.env.VK_CLIENT_ID,
   VK_CLIENT_SECRET: process.env.VK_CLIENT_SECRET,
+  VK_GROUP_ID: process.env.VK_GROUP_ID,
   AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
   AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
   AWS_BUCKET_NAME: process.env.AWS_BUCKET_NAME,
