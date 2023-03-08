@@ -15,14 +15,11 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    async signIn({ account }) {
-      console.log(isGroupDon(account?.access_token as string));
-      return true;
-    },
-    jwt({ token, user }) {
+    jwt: async ({ token, user, account }) => {
       if (user) {
         token.id = user.id;
         token.role = user.role;
+        token.premium = await isGroupDon(account?.access_token as string);
       }
       return token;
     },
@@ -46,6 +43,12 @@ export const authOptions: NextAuthOptions = {
   ],
 
   events: {
+    signIn: ({ account }) => {
+      isGroupDon(account?.access_token as string).then((res) =>
+        console.log(res)
+      );
+    },
+
     createUser: async (message) => {
       const bookmarksTitles = [
         "Читаю",
