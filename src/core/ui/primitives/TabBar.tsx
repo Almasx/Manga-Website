@@ -9,7 +9,7 @@ interface TabBarProps<T> {
     value: string;
     label: T;
   }[];
-  onChange?: (event?: any) => void;
+  onChange?: (value?: any) => void;
 }
 
 export const TabBar = ({ tabs, onChange }: TabBarProps<string>) => {

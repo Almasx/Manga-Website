@@ -26,6 +26,31 @@ export const getAddChapterSchema = (
           .safeParse(year);
         return processed.success ? processed.data : year;
       }, z.number().min(1)),
+      date: z.date().optional(),
+      time: z.preprocess((time) => {
+        const processed = z
+          .string()
+          .regex(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/)
+          .transform((timeString) => {
+            const today = new Date();
+            const [hour, minute] = timeString
+              .split(":")
+              .map((iNum) => parseInt(iNum));
+
+            return new Date(
+              today.getFullYear(),
+              today.getMonth(),
+              today.getDate(),
+              hour,
+              minute,
+              0
+            );
+          })
+          .safeParse(time);
+        return processed.success ? processed.data : time;
+      }, z.date()),
+
+      access: z.enum(["private", "public"]).optional(),
       pages: z.array(z.any()),
       // .refine(
       //   (files) => files.every((file: File) => console.log(file)),

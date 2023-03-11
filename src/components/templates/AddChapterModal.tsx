@@ -51,6 +51,7 @@ const AddChapterModal = ({ chapters, onSuccess }: IAddChapterModalProps) => {
     formState: { errors },
     control,
     reset,
+    setValue,
   } = useForm<AddChapterSchema>({
     resolver: zodResolver(addChapterSchema),
     defaultValues: {
@@ -73,20 +74,20 @@ const AddChapterModal = ({ chapters, onSuccess }: IAddChapterModalProps) => {
   });
 
   const onSubmit: SubmitHandler<AddChapterSchema> = async (data) => {
-    const presignedPages = await chapterMutation.mutateAsync({
-      ...data,
-      comicsId: query.comicsId as string,
-      pagesLenght: previewPages.length,
-    });
-    for (const pageIndex in presignedPages) {
-      const { url, fields } = presignedPages[pageIndex] as PresignedPost;
-      const formData = prepareFormData({ page: data.pages[pageIndex], fields });
-
-      await s3Mutate({ url, formData });
-    }
-    onSuccess();
-    reset();
-    setShowAddChapter(false);
+    // const presignedPages = await chapterMutation.mutateAsync({
+    //   ...data,
+    //   comicsId: query.comicsId as string,
+    //   pagesLenght: previewPages.length,
+    //   premium: data.access === "private",
+    // });
+    // for (const pageIndex in presignedPages) {
+    //   const { url, fields } = presignedPages[pageIndex] as PresignedPost;
+    //   const formData = prepareFormData({ page: data.pages[pageIndex], fields });
+    //   await s3Mutate({ url, formData });
+    // }
+    // onSuccess();
+    // reset();
+    // setShowAddChapter(false);
   };
 
   return (
@@ -107,7 +108,7 @@ const AddChapterModal = ({ chapters, onSuccess }: IAddChapterModalProps) => {
         >
           Добавить главу
         </div>
-        <div className="mb-3 flex flex-row gap-3">
+        <div className="mb-4 flex flex-row gap-3">
           <NumberField
             className="!w-24 px-4"
             label="Том"
@@ -135,9 +136,20 @@ const AddChapterModal = ({ chapters, onSuccess }: IAddChapterModalProps) => {
               { label: <Lock1 size="24" />, value: "private" },
             ]}
             label="Доступ"
+            onChange={(value) => setValue("access", value)}
           />
-          <DateField className="grow" label="Дата" />
-          <TimeField className="grow" label="Время" />
+          <DateField
+            className="grow"
+            label="Дата"
+            error={errors.date?.message as string}
+            {...register("date", { valueAsDate: true })}
+          />
+          <TimeField
+            className="grow"
+            label="Время"
+            error={errors.time?.message as string}
+            {...register("time")}
+          />
         </div>
         <div className="scrollbar-hide relative flex grow flex-col overflow-y-auto">
           <h3 className="mb-2 px-3 text-sm text-light/30">Страницы</h3>
