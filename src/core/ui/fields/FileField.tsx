@@ -17,6 +17,7 @@ const FileField = forwardRef<HTMLInputElement, IFileFieldProps>(
     ref
   ) => {
     const [preview, setPreview] = useState<any>(null);
+    const dropping = false;
 
     return (
       <div className="relative col-span-2 flex flex-col">
@@ -24,22 +25,30 @@ const FileField = forwardRef<HTMLInputElement, IFileFieldProps>(
           htmlFor="dropzone-file"
           className={clsx(
             "relative flex flex-col items-center overflow-clip",
-            "border border-dashed border-primary",
-            "rounded-2xl bg-primary/10 px-3 py-6 duration-300",
+            "justify-center border-2 border-dashed bg-dark-secondary",
+            "rounded-2xl  border-gray-dark px-3 py-6 duration-300",
             error && "!border-red-500 !bg-red-500/10",
+            dropping && "border-primary bg-primary/10 ",
             className
           )}
         >
           <div className="text-bold absolute top-2 right-2 z-20 rounded-full bg-dark/80  py-1 px-2 text-xs">
             227 x 338
           </div>
-          <FolderCloud size="24" variant="Bold" className="mb-4 text-primary" />
-          <div className="flex flex-col items-center gap-3">
-            <h6 className="font-base font-medium">
-              Перетащите или <span className="text-primary">Выберите файл</span>{" "}
-              для загрузки
+          <FolderCloud
+            size="48"
+            variant="Bold"
+            className={clsx(
+              "mb-4 text-gray-dark-secondary",
+              dropping && "text-primary"
+            )}
+          />
+          <div className="flex flex-col items-center  gap-3">
+            <h6 className="font-base mx-1 text-center font-medium">
+              Перетащите или <span className="text-primary">Выберите </span>
+              обложку манги
             </h6>
-            <p className="-mt-2 text-center text-xs text-light/30">
+            <p className="mx-2 -mt-2 text-center text-xs text-light/30">
               Поддерживает форматы .jpeg, .png, .jpg
             </p>
           </div>

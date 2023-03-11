@@ -4,7 +4,6 @@ import {
 } from "lib/schemas/modifyComicsSchema";
 
 import Button from "core/ui/primitives/Button";
-import { DevTool } from "@hookform/devtools";
 import FileField from "core/ui/fields/FileField";
 import type { ModifyComicsSchema } from "lib/schemas/modifyComicsSchema";
 import NumberField from "core/ui/fields/NumberField";
@@ -149,7 +148,6 @@ const ModifyComics = ({
           {defaultValues ? "Изменить" : "Добавить мангу"}
         </Button>
       </form>
-      <DevTool control={control} />
     </>
   );
 };

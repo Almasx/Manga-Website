@@ -125,6 +125,8 @@ model Chapter {
   comics   Comics @relation(fields: [comicsId], references: [id])
   comicsId String
 
+  premium Boolean @default(false)
+
   pages     Page[]
   comments  ChapterComment[]
   createdAt DateTime         @default(now())
