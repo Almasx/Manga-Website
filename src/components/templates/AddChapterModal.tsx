@@ -1,12 +1,16 @@
+import { Lock1, Unlock } from "iconsax-react";
 import { useFieldArray, useForm } from "react-hook-form";
 
 import Button from "core/ui/primitives/Button";
+import DateField from "core/ui/fields/DateField";
 import FileField from "core/ui/fields/FileField";
 import Modal from "core/ui/primitives/Modal";
 import NumberField from "core/ui/fields/NumberField";
 import type { PresignedPost } from "aws-sdk/clients/s3";
+import { RadioFieldTabs } from "core/ui/primitives/TabBar";
 import type { SubmitHandler } from "react-hook-form";
 import TextField from "core/ui/fields/TextField";
+import TimeField from "core/ui/fields/TimeField";
 import { getAddChapterSchema } from "lib/schemas/getAddChapterSchema";
 import { getDefaultVolumeAndChapterIndex } from "utils/get-default-index";
 import { prepareFormData } from "lib/aws/prepare-form-data";
@@ -123,6 +127,17 @@ const AddChapterModal = ({ chapters, onSuccess }: IAddChapterModalProps) => {
             error={errors.title?.message as string}
             {...register("title", { required: true })}
           />
+        </div>
+        <div className="mb-3 flex flex-row gap-3">
+          <RadioFieldTabs
+            tabs={[
+              { label: <Unlock size="24" />, value: "public" },
+              { label: <Lock1 size="24" />, value: "private" },
+            ]}
+            label="Доступ"
+          />
+          <DateField className="grow" label="Дата" />
+          <TimeField className="grow" label="Время" />
         </div>
         <div className="scrollbar-hide relative flex grow flex-col overflow-y-auto">
           <h3 className="mb-2 px-3 text-sm text-light/30">Страницы</h3>

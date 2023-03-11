@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(100%);
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(100%);
+}
+
 /* custom scrollbar */
 ::-webkit-scrollbar {
   width: 12px;
