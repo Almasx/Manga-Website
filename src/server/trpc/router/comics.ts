@@ -5,12 +5,16 @@ import {
 } from "lib/queries/checkComics";
 import { protectedProcedure, publicProcedure, router } from "../trpc";
 
-import type { Comics } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import { Status } from "@prisma/client";
 import { handleQuery } from "server/common/handle-query";
 import { propertyOf } from "utils/property-of";
 import { s3CreatePresignedUrl } from "lib/aws/s3-presigned-url";
 import { z } from "zod";
+
+type ComicsWithRatings = Prisma.ComicsGetPayload<{
+  include: { ratings: true };
+}>;
 
 const comicsRouter = router({
   getGenres: publicProcedure.query(({ ctx }) => ctx.prisma.genre.findMany()),
@@ -71,9 +75,9 @@ const comicsRouter = router({
         status: z.nativeEnum(Status).default("ongoing"),
         sort: z
           .enum([
-            propertyOf<Comics>("saved"),
-            propertyOf<Comics>("year"),
-            propertyOf<Comics>("rating"),
+            propertyOf<ComicsWithRatings>("saved"),
+            propertyOf<ComicsWithRatings>("year"),
+            propertyOf<ComicsWithRatings>("ratings"),
           ])
           .default("year"),
         genres: z.array(z.string()).default([]),
@@ -86,13 +90,11 @@ const comicsRouter = router({
 
       const catalog = await ctx.prisma.comics.findMany({
         select: {
-          chapters: false,
-          description: false,
           thumbnail: true,
           title: true,
           title_ru: true,
           id: true,
-          rating: true,
+          ratings: true,
         },
         where: {
           ...(input.genres.length !== 0 && {
@@ -102,7 +104,7 @@ const comicsRouter = router({
           title: { contains: query },
         },
         orderBy: {
-          [sort]: order,
+          [sort]: sort === "ratings" ? { _count: order } : order,
         },
         cursor: cursor ? { id: cursor } : undefined,
         take: limit,
@@ -125,6 +127,7 @@ const comicsRouter = router({
       const comics = await handleQuery(
         checkComics(defaultCheckComicsSelect, { id: comicsId })
       );
+      // comics.ratings.reduce((acc, rating) => acc + rating.rating, 0)
 
       return {
         ...comics,

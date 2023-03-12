@@ -1,4 +1,4 @@
-import { Edit, Eye, Save2 } from "iconsax-react";
+import { Edit, Eye, Save2, Star1 } from "iconsax-react";
 import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
@@ -12,8 +12,11 @@ import ComicsCard from "../../../components/molecules/ComicsCard";
 import type { ComicsComment } from "@prisma/client";
 import Comment from "../../../components/molecules/Comments";
 import CommentField from "../../../components/molecules/CommentField";
+import type { IModal } from "types/model";
 import Link from "next/link";
+import Modal from "core/ui/primitives/Modal";
 import Star from "../../../../public/icons/Star.svg";
+import Star3 from "../../../../public/icons/Star3.svg";
 import TrendUpBulk from "../../../../public/icons/TrendUpBulk.svg";
 import type { User } from "next-auth";
 import { appRouter } from "../../../server/trpc/router/_app";
@@ -57,6 +60,9 @@ export const getServerSideProps = async (
 const Comics = ({
   comics,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const session = useSession();
+  const [showRating, setShowRating] = useState<boolean>(false);
+
   return (
     <>
       <section className="grid grid-cols-8 gap-5 pt-8 lg:col-span-8 ">
@@ -85,10 +91,24 @@ const Comics = ({
           <div className="absolute top-0 right-10 flex items-center gap-2 text-3xl font-bold text-primary">
             {comics?.rating}
             <Star />
+            {session?.status === "authenticated" && (
+              <Button
+                variant="secondary"
+                className="!absolute right-1/2 bottom-[9px] h-3 translate-y-full translate-x-1/2 rounded-full
+                           bg-dark/60 px-1 text-xs font-normal backdrop-blur-md"
+                onClick={() => setShowRating(true)}
+              >
+                Оценить
+              </Button>
+            )}
           </div>
         </div>
       </section>
-
+      <RatingModal
+        title={comics.title}
+        visible={showRating}
+        setVisible={setShowRating as any}
+      />
       <ChaptersSection chapters={comics.chapters} />
       <RecomendedList />
       <CommentsSection comicsId={comics.id} initialData={comics.comments} />
@@ -183,6 +203,46 @@ const ComicsStats = ({ status, year, saved }: IComicsStatsProps) => (
   </div>
 );
 
+const RatingModal = ({
+  title,
+  setVisible,
+  visible,
+}: { title: string } & IModal) => {
+  const [rating, setRating] = useState(0);
+  const [hover, setHover] = useState(0);
+
+  return (
+    <Modal visible={visible} setVisible={setVisible}>
+      <div className="relative flex w-96 flex-col items-center gap-2 px-8 py-6">
+        <div className="absolute -top-0 left-1/2 z-[51] -translate-y-1/2 -translate-x-1/2 transform rounded-full bg-primary px-3 py-2 text-xs font-bold text-light">
+          Рейтинг
+        </div>
+
+        <div className="flex gap-5 py-4">
+          {[...Array(5)].map((star, index) => {
+            index += 1;
+            return (
+              <button
+                key={index}
+                className=" text-primary"
+                onClick={() => setRating(index)}
+                onMouseEnter={() => setHover(index)}
+                onMouseLeave={() => setHover(rating)}
+              >
+                {index <= (hover || rating) ? <Star3 /> : <Star1 size="40" />}
+              </button>
+            );
+          })}
+        </div>
+        <h2 className=" w-full text-center text-sm text-light/30">
+          Мы будем рады услышать ваше мнение об {title}. Ваш отзыв поможет нам
+          улучшить рейтинговую систему
+        </h2>
+      </div>
+    </Modal>
+  );
+};
+
 const RecomendedList = () => (
   <section className="col-span-2">
     <h3 className="pb-5 text-2xl font-bold text-light">Похожие</h3>
@@ -210,7 +270,6 @@ interface IChapterSectionProps {
 }
 
 const ChaptersSection = ({ chapters }: IChapterSectionProps) => {
-  const { asPath } = useRouter();
   return (
     <aside className="col-span-4 row-span-2 -mt-3 -mr-5 bg-gradient bg-cover px-5 pt-8">
       <div className="flex flex-row items-center gap-5 pb-8 text-4xl font-bold text-light">

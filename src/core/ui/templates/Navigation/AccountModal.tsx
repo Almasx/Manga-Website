@@ -2,15 +2,11 @@ import { Logout, Save2, Setting2 } from "iconsax-react";
 import { signOut, useSession } from "next-auth/react";
 
 import Button from "core/ui/primitives/Button";
+import type { IModal } from "types/model";
 import Modal from "core/ui/primitives/Modal";
 import { useRouter } from "next/router";
 
-interface IAccountModalProps {
-  visible: boolean;
-  setVisible: (event?: unknown) => void;
-}
-
-const AccountModal = ({ visible, setVisible }: IAccountModalProps) => {
+const AccountModal = ({ visible, setVisible }: IModal) => {
   const router = useRouter();
   const { data } = useSession();
 

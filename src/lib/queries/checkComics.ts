@@ -7,12 +7,12 @@ export const defaultCheckComicsSelect = Prisma.validator<Prisma.ComicsSelect>()(
     title: true,
     title_ru: true,
     description: true,
-    rating: true,
     saved: true,
     status: true,
     year: true,
     createdAt: true,
     updatedAt: true,
+    ratings: true,
     chapters: {
       select: {
         chapterIndex: true,

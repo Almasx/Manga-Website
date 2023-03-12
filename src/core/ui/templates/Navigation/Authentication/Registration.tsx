@@ -1,5 +1,6 @@
 import Button from "core/ui/primitives/Button";
 import Form from "core/ui/templates/Form";
+import type { IModal } from "types/model";
 import Modal from "core/ui/primitives/Modal";
 import OAuth from "./OAuth";
 import { z } from "zod";
@@ -11,8 +12,6 @@ const SignUpSchema = z.object({
 });
 
 interface IRegistrationProps {
-  visible: boolean;
-  setVisible: (event?: any) => void;
   setHasAccount: (event?: any) => void;
 }
 
@@ -20,7 +19,7 @@ const Registration = ({
   visible,
   setVisible,
   setHasAccount,
-}: IRegistrationProps) => {
+}: IRegistrationProps & IModal) => {
   function onSubmit(data: z.infer<typeof SignUpSchema>) {
     // gets typesafe data when form is submitted
   }

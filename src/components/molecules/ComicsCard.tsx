@@ -37,13 +37,17 @@ const ComicsCard = ({
       <div
         className={clsx(
           "relative grow",
+
           variant === "recomendation" && "aspect-square w-2/5"
         )}
       >
         <img
           src={`https://darkfraction.s3.eu-north-1.amazonaws.com/thumbnails/${thumbnail?.id}`}
           alt="lol"
-          className="h-full w-full rounded-2xl text-light"
+          className={clsx(
+            "h-full w-full rounded-2xl text-light",
+            variant === "catalog" && "aspect-[3/4]"
+          )}
         />
         {rating !== undefined && (
           <div
