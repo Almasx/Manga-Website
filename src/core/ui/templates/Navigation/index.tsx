@@ -1,8 +1,6 @@
 import AccountModal from "./AccountModal";
+import AuthenticationModal from "./AuthenticationModal";
 import Link from "next/link";
-import Links from "./Links";
-import Registration from "./Authentication/Registration";
-import SignIn from "./Authentication/SignIn";
 import clsx from "clsx";
 import { useHideOnScroll } from "lib/hooks/useHideOnScroll";
 import { useSession } from "next-auth/react";
@@ -23,9 +21,7 @@ const Wrapper = ({
 }: IWrapperProps) => {
   const { status, data } = useSession();
   const navigationBar = useHideOnScroll<HTMLDivElement>(dynamicHide);
-
   const [modal, setModal] = useState<boolean>(false);
-  const [hasAccount, setHasAccount] = useState<boolean>(true);
 
   return (
     <>
@@ -61,20 +57,23 @@ const Wrapper = ({
         <></>
       ) : status === "authenticated" ? (
         <AccountModal visible={modal} setVisible={() => setModal(false)} />
-      ) : hasAccount ? (
-        <SignIn
-          visible={modal}
-          setVisible={setModal}
-          setHasAccount={() => setHasAccount(false)}
-        />
       ) : (
-        <Registration
-          visible={modal}
-          setVisible={setModal}
-          setHasAccount={() => setHasAccount(false)}
-        />
+        <AuthenticationModal visible={modal} setVisible={setModal as any} />
       )}
     </>
+  );
+};
+
+const Links = () => {
+  return (
+    <div className="flex flex-row gap-5">
+      <Link href="/" className="text-xs text-light/60">
+        Главная
+      </Link>
+      <Link href="/catalog" className="text-xs text-light/60">
+        Каталог
+      </Link>
+    </div>
   );
 };
 
