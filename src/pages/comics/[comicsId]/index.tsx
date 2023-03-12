@@ -1,4 +1,4 @@
-import { Edit, Eye, Save2, Star1 } from "iconsax-react";
+import { Edit, Eye, Save2 } from "iconsax-react";
 import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
@@ -13,6 +13,7 @@ import type { ComicsComment } from "@prisma/client";
 import Comment from "../../../components/molecules/Comments";
 import CommentField from "../../../components/molecules/CommentField";
 import Link from "next/link";
+import Star from "../../../../public/icons/Star.svg";
 import TrendUpBulk from "../../../../public/icons/TrendUpBulk.svg";
 import type { User } from "next-auth";
 import { appRouter } from "../../../server/trpc/router/_app";
@@ -83,9 +84,7 @@ const Comics = ({
           <ComicsStats {...comics} />
           <div className="absolute top-0 right-10 flex items-center gap-2 text-3xl font-bold text-primary">
             {comics?.rating}
-            <div className="scale-[1.7]">
-              <Star1 />
-            </div>
+            <Star />
           </div>
         </div>
       </section>
@@ -117,7 +116,7 @@ const ComicsCover = ({
         <img
           src={`https://darkfraction.s3.eu-north-1.amazonaws.com/thumbnails/${thumbnailId}`}
           alt="lol"
-          className="w-full rounded-2xl text-light"
+          className="aspect-[3/4] w-full rounded-2xl text-light"
         />
         {session.data?.user?.role === "ADMIN" && (
           <Link

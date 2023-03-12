@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Star from "../../../public/icons/Star.svg";
+import Star from "../../../public/icons/Star2.svg";
 import type { Thumbnail } from "@prisma/client";
 import clsx from "clsx";
 

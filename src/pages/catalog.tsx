@@ -41,13 +41,13 @@ const Catalog = () => {
         <Button
           variant="secondary"
           content="icon"
-          className="top-4 h-8 w-8"
+          className="top-4 h-9 w-9"
           onClick={() => {
             toggleOrder();
           }}
         >
           <div className={clsx(filter.order === "desc" && "-scale-y-100")}>
-            <TrendUp className="block h-[11px] w-[17px] fill-primary" />
+            <TrendUp className="block text-primary" />
           </div>
         </Button>
       </div>
