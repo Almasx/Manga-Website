@@ -39,6 +39,7 @@ const ModifyComics = ({
       genres: [],
       genresQuery: "",
       status: "ongoing",
+      year: new Date().getFullYear(),
       ...defaultValues,
     },
   });
@@ -104,7 +105,6 @@ const ModifyComics = ({
             {...register("year", {
               required: true,
               valueAsNumber: true,
-              value: new Date().getFullYear(),
             })}
           />
           <div className="grid grid-cols-3 gap-5">

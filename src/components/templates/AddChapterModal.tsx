@@ -114,13 +114,19 @@ const AddChapterModal = ({ chapters, onSuccess }: IAddChapterModalProps) => {
             className="!w-24 px-4"
             label="Том"
             error={errors.volumeIndex?.message as string}
-            {...register("volumeIndex", { required: true })}
+            {...register("volumeIndex", {
+              required: true,
+              valueAsNumber: true,
+            })}
           />
           <NumberField
             className="!w-24 px-4"
             label="Глава"
             error={errors.chapterIndex?.message as string}
-            {...register("chapterIndex", { required: true })}
+            {...register("chapterIndex", {
+              required: true,
+              valueAsNumber: true,
+            })}
           />
           <TextField
             className="grow"
