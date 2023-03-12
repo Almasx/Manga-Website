@@ -43,7 +43,7 @@ const ModifyComics = ({
       ...defaultValues,
     },
   });
-  const { append, remove, fields } = useFieldArray({ control, name: "genres" });
+  const { append, remove } = useFieldArray({ control, name: "genres" });
   const {
     field: { value, onChange: onQueryChange },
   } = useController({

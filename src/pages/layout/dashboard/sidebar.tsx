@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 const AccountBar = () => {
   const { asPath } = useRouter();
   const session = useSession();
-  const { data } = trpc.auth.getBookmarks.useQuery(undefined, {
+  const { data } = trpc.user.getBookmarks.useQuery(undefined, {
     staleTime: Infinity,
     cacheTime: Infinity,
   });

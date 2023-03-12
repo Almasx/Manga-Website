@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 
 export const BookmarkButton = ({ comicsId }: { comicsId: string }) => {
   const session = useSession();
-  const { data: user } = trpc.auth.getBookmarks.useQuery(undefined, {
+  const { data: user } = trpc.user.getBookmarks.useQuery(undefined, {
     staleTime: Infinity,
     cacheTime: Infinity,
   });

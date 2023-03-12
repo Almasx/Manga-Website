@@ -1,16 +1,18 @@
-import { authRouter } from "./auth";
 import bookmarkRouter from "./bookmark";
 import { chapterRouter } from "./chapter";
 import comicsRouter from "./comics";
 import { commentsRouter } from "./comments";
+import { ratingRouter } from "./ratings";
 import { router } from "../trpc";
+import { userRouter } from "./user";
 
 export const appRouter = router({
-  auth: authRouter,
+  user: userRouter,
   comics: comicsRouter,
   bookmark: bookmarkRouter,
   chapter: chapterRouter,
   comments: commentsRouter,
+  rating: ratingRouter,
 });
 
 // export type definition of API

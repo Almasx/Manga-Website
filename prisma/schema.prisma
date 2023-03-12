@@ -97,7 +97,6 @@ model Comics {
   thumbnail   Thumbnail?
   description String
 
-  saved  Int    @default(0)
   status Status @default(ongoing)
   year   Int
 
@@ -188,11 +187,11 @@ model ChapterComment {
 }
 
 model Ratings {
-  id       Int     @id @default(autoincrement())
-  rating   Decimal
-  comics   Comics  @relation(fields: [comicsId], references: [id])
+  id       Int    @id @default(autoincrement())
+  rating   Int
+  comics   Comics @relation(fields: [comicsId], references: [id])
   comicsId String
-  user     User    @relation(fields: [userId], references: [id])
+  user     User   @relation(fields: [userId], references: [id])
   userId   String
 
   @@index([comicsId])

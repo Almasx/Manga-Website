@@ -1,9 +1,6 @@
-import { protectedProcedure, publicProcedure, router } from "../trpc";
+import { protectedProcedure, router } from "../trpc";
 
-export const authRouter = router({
-  getSession: publicProcedure.query(({ ctx }) => {
-    return ctx.session;
-  }),
+export const userRouter = router({
   getBookmarks: protectedProcedure.query(({ ctx }) => {
     const bookmarks = ctx.prisma.user.findUnique({
       where: { id: ctx.session.user.id },

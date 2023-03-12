@@ -22,6 +22,7 @@ import type { User } from "next-auth";
 import { appRouter } from "../../../server/trpc/router/_app";
 import { createContextInner } from "../../../server/trpc/context";
 import { createProxySSGHelpers } from "@trpc/react-query/ssg";
+import { formatter } from "utils/number-formater";
 import superjson from "superjson";
 import { trpc } from "utils/trpc";
 import { useRouter } from "next/router";
@@ -89,7 +90,7 @@ const Comics = ({
           <p className="text-sm text-light">{comics?.description}</p>
           <ComicsStats {...comics} />
           <div className="absolute top-0 right-10 flex items-center gap-2 text-3xl font-bold text-primary">
-            {comics?.rating}
+            {comics?.ratings.toFixed(1)}
             <Star />
             {session?.status === "authenticated" && (
               <Button
@@ -108,6 +109,7 @@ const Comics = ({
         title={comics.title}
         visible={showRating}
         setVisible={setShowRating as any}
+        comicsId={comics.id}
       />
       <ChaptersSection chapters={comics.chapters} />
       <RecomendedList />
@@ -196,7 +198,7 @@ const ComicsStats = ({ status, year, saved }: IComicsStatsProps) => (
     <div>
       <h4 className="text-base font-medium text-light/30">Сохранённые</h4>
       <h3 className="flex items-center gap-2 text-lg font-bold text-light">
-        {saved}
+        {formatter.format(saved)}
         <Save2 size="24" className="text-light/30" />
       </h3>
     </div>
@@ -205,11 +207,18 @@ const ComicsStats = ({ status, year, saved }: IComicsStatsProps) => (
 
 const RatingModal = ({
   title,
+  comicsId,
   setVisible,
   visible,
-}: { title: string } & IModal) => {
-  const [rating, setRating] = useState(0);
+}: { title: string; comicsId: string } & IModal) => {
   const [hover, setHover] = useState(0);
+  const { data } = trpc.rating.getRating.useQuery({ comicsId });
+
+  const { mutate: ratingMutate } = trpc.rating.postRating.useMutation({
+    onSuccess: () => setVisible(false),
+  });
+
+  console.log(data);
 
   return (
     <Modal visible={visible} setVisible={setVisible}>
@@ -225,11 +234,15 @@ const RatingModal = ({
               <button
                 key={index}
                 className=" text-primary"
-                onClick={() => setRating(index)}
+                onClick={() => ratingMutate({ rating: index, comicsId })}
                 onMouseEnter={() => setHover(index)}
-                onMouseLeave={() => setHover(rating)}
+                onMouseLeave={() => setHover(data?.rating || 0)}
               >
-                {index <= (hover || rating) ? <Star3 /> : <Star1 size="40" />}
+                {index <= (hover || data?.rating || 0) ? (
+                  <Star3 />
+                ) : (
+                  <Star1 size="40" />
+                )}
               </button>
             );
           })}

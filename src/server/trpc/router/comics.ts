@@ -127,13 +127,19 @@ const comicsRouter = router({
       const comics = await handleQuery(
         checkComics(defaultCheckComicsSelect, { id: comicsId })
       );
-      // comics.ratings.reduce((acc, rating) => acc + rating.rating, 0)
 
       return {
         ...comics,
-        year: 2000,
-        rating: 3,
-        saved: 10000,
+        status:
+          comics.status === "ongoing"
+            ? "Выпускается"
+            : comics.status === "abandoned"
+            ? "Заброшен"
+            : "Завершен",
+        ratings:
+          comics.ratings.reduce((acc, rating) => acc + rating.rating, 0) /
+          comics.ratings.length,
+        saved: comics.bookmarks.length,
       };
     }),
 

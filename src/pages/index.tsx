@@ -1,7 +1,3 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import NumberField from "core/ui/fields/NumberField";
-import TextField from "core/ui/fields/TextField";
-import Button from "core/ui/primitives/Button";
 import { type NextPage } from "next";
 import Head from "next/head";
 
