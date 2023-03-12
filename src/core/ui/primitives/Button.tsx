@@ -1,6 +1,7 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { useEffect, useState } from "react";
 
+import { Spinner } from "./Spinner";
 import clsx from "clsx";
 
 export interface ButtonProps extends ComponentPropsWithoutRef<"button"> {
@@ -11,6 +12,7 @@ export interface ButtonProps extends ComponentPropsWithoutRef<"button"> {
   onClick?: (event?: unknown) => void;
   disabled?: boolean;
   className?: string;
+  loading?: boolean;
 }
 
 const Button = ({
@@ -21,6 +23,7 @@ const Button = ({
   ripple = true,
   className = "",
   disabled = false,
+  loading = false,
   ...props
 }: ButtonProps) => {
   const [coords, setCoords] = useState({ x: -1, y: -1 });
@@ -44,7 +47,7 @@ const Button = ({
         setCoords({ x: event.clientX - left, y: event.clientY - top });
         onClick && onClick(event);
       }}
-      disabled={disabled}
+      disabled={disabled || loading}
       className={clsx(
         className,
         "flex flex-row items-center justify-center rounded-xl",
@@ -68,7 +71,7 @@ const Button = ({
             content === "text" && "text-primary ", // typography
           ],
         ],
-        disabled && "disabled: cursor-not-allowed"
+        "disabled:cursor-not-allowed disabled:bg-primary/80"
       )}
       {...props}
     >
@@ -81,7 +84,11 @@ const Button = ({
           style={{ left: coords.x, top: coords.y }}
         />
       )}
-      <span className="relative z-10 ">{children}</span>
+      {loading ? (
+        <Spinner className=" h-7 w-7 fill-white text-light/10" />
+      ) : (
+        <span className="relative z-10 ">{children}</span>
+      )}
     </button>
   );
 };

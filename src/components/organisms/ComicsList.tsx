@@ -1,6 +1,6 @@
 import ComicsCard from "../../components/molecules/ComicsCard";
 import InfiniteScroll from "react-infinite-scroll-component";
-import Spinner from "core/ui/primitives/Spinner";
+import { Loading } from "core/ui/primitives/Spinner";
 import { trpc } from "../../utils/trpc";
 import { useFilterStore } from "../../lib/hooks/useFilterStore";
 import { useMemo } from "react";
@@ -28,7 +28,7 @@ const ComicsList = () => {
   );
 
   if (isFetching) {
-    return <Spinner />;
+    return <Loading />;
   }
 
   if (catalog === undefined || catalog.catalog.length === 0) {

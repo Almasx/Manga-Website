@@ -12,7 +12,7 @@ const FormSideBar = ({ thumbnail, title_ru, title }: IFormSideBarProps) => {
       <img
         src={`https://darkfraction.s3.eu-north-1.amazonaws.com/thumbnails/${thumbnail}`}
         alt="lol"
-        className="mb-5 rounded-2xl text-light"
+        className="mb-5 aspect-[3/4] rounded-2xl text-light"
       />
 
       <div className="flex flex-col">

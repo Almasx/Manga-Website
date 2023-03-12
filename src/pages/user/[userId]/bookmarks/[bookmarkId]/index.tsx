@@ -5,9 +5,9 @@ import type {
 
 import ComicsCard from "components/molecules/ComicsCard";
 import DashBoardLayout from "pages/layout/dashboard";
+import { Loading } from "core/ui/primitives/Spinner";
 import type { ReactNode } from "react";
 import { SearchNormal } from "iconsax-react";
-import Spinner from "core/ui/primitives/Spinner";
 import TextField from "core/ui/fields/TextField";
 import { appRouter } from "server/trpc/router/_app";
 import { createContextInner } from "server/trpc/context";
@@ -80,7 +80,7 @@ const Bookmark = ({
 
       <div className="grid grid-cols-6 gap-5 ">
         {isLoading ? (
-          <Spinner />
+          <Loading />
         ) : (
           bookmark?.comics?.map((comics) => (
             <ComicsCard

@@ -37,6 +37,7 @@ const AddChapterModal = ({ chapters, onSuccess }: IAddChapterModalProps) => {
   const { query } = useRouter();
   const [showAddChapter, setShowAddChapter] = useAtom(showAddChapterAtom);
   const [previewPages, setPreviewPages] = useState<string[]>([]);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
 
   const { defaultVolumeIndex, defaultChapterIndex, chapterObject } =
     getDefaultVolumeAndChapterIndex(chapters);
@@ -75,20 +76,22 @@ const AddChapterModal = ({ chapters, onSuccess }: IAddChapterModalProps) => {
   });
 
   const onSubmit: SubmitHandler<AddChapterSchema> = async (data) => {
-    // const presignedPages = await chapterMutation.mutateAsync({
-    //   ...data,
-    //   comicsId: query.comicsId as string,
-    //   pagesLenght: previewPages.length,
-    //   premium: data.access === "private",
-    // });
-    // for (const pageIndex in presignedPages) {
-    //   const { url, fields } = presignedPages[pageIndex] as PresignedPost;
-    //   const formData = prepareFormData({ page: data.pages[pageIndex], fields });
-    //   await s3Mutate({ url, formData });
-    // }
-    // onSuccess();
-    // reset();
-    // setShowAddChapter(false);
+    setIsUploading(true);
+    const presignedPages = await chapterMutation.mutateAsync({
+      ...data,
+      comicsId: query.comicsId as string,
+      pagesLenght: previewPages.length,
+      premium: data.access === "private",
+    });
+    for (const pageIndex in presignedPages) {
+      const { url, fields } = presignedPages[pageIndex] as PresignedPost;
+      const formData = prepareFormData({ page: data.pages[pageIndex], fields });
+      await s3Mutate({ url, formData });
+    }
+    onSuccess();
+    setIsUploading(false);
+    reset();
+    setShowAddChapter(false);
   };
 
   return (
@@ -193,7 +196,10 @@ const AddChapterModal = ({ chapters, onSuccess }: IAddChapterModalProps) => {
             ))}
           </div>
         </div>
-        <Button className="absolute -bottom-0 left-1/2 z-20 translate-y-3 -translate-x-1/2 transform rounded-full bg-primary px-3 py-2 font-bold text-light">
+        <Button
+          loading={isUploading}
+          className="absolute -bottom-0 left-1/2 z-20 translate-y-3 -translate-x-1/2 transform rounded-full bg-primary px-3 py-2 font-bold text-light"
+        >
           Добавить главу
         </Button>
       </form>

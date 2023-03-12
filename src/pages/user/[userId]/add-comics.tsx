@@ -1,9 +1,9 @@
 import type { AddComicsSchema } from "lib/schemas/modifyComicsSchema";
 import DashBoardLayout from "pages/layout/dashboard";
+import { Loading } from "core/ui/primitives/Spinner";
 import ModifyComics from "components/templates/ModifyComics";
 import type { PresignedPost } from "aws-sdk/clients/s3";
 import type { ReactNode } from "react";
-import Spinner from "core/ui/primitives/Spinner";
 import type { SubmitHandler } from "react-hook-form";
 import { prepareFormData } from "lib/aws/prepare-form-data";
 import { trpc } from "utils/trpc";
@@ -38,7 +38,7 @@ const AddComics = () => {
   if (isUploading) {
     return (
       <div className="my-auto">
-        <Spinner />
+        <Loading />
       </div>
     );
   }

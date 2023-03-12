@@ -44,9 +44,10 @@ const comicsRouter = router({
     .input(
       z.object({
         comicsId: z.string({ required_error: "Comics id is required" }),
+        order: z.enum(["asc", "desc"]).default("asc"),
       })
     )
-    .query(async ({ input: { comicsId } }) => {
+    .query(async ({ input: { comicsId, order } }) => {
       const chapters = await handleQuery(
         checkComics(
           {
@@ -58,6 +59,7 @@ const comicsRouter = router({
                 id: true,
                 title: true,
               },
+              orderBy: { createdAt: order },
             },
           },
           { id: comicsId }
@@ -73,13 +75,7 @@ const comicsRouter = router({
         cursor: z.string().nullish(),
         query: z.string().default(""),
         status: z.nativeEnum(Status).default("ongoing"),
-        sort: z
-          .enum([
-            propertyOf<ComicsWithRatings>("saved"),
-            propertyOf<ComicsWithRatings>("year"),
-            propertyOf<ComicsWithRatings>("ratings"),
-          ])
-          .default("year"),
+        sort: z.enum(["saved", "year", "ratings"]).default("year"),
         genres: z.array(z.string()).default([]),
         order: z.enum(["asc", "desc"]).default("asc"),
       })
@@ -104,7 +100,8 @@ const comicsRouter = router({
           title: { contains: query },
         },
         orderBy: {
-          [sort]: sort === "ratings" ? { _count: order } : order,
+          [sort === "saved" ? "bookmarks" : sort]:
+            sort in ["ratings", "saved"] ? { _count: order } : order,
         },
         cursor: cursor ? { id: cursor } : undefined,
         take: limit,
@@ -140,6 +137,7 @@ const comicsRouter = router({
           comics.ratings.reduce((acc, rating) => acc + rating.rating, 0) /
           comics.ratings.length,
         saved: comics.bookmarks.length,
+        ratingLength: comics.ratings.length,
       };
     }),
 

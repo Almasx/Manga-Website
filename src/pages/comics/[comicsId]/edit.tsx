@@ -5,10 +5,10 @@ import type {
 
 import { DenseLayout } from "pages/layout/main";
 import type { EditComicsSchema } from "lib/schemas/modifyComicsSchema";
+import { Loading } from "core/ui/primitives/Spinner";
 import ModifyComics from "components/templates/ModifyComics";
 import type { PresignedPost } from "aws-sdk/clients/s3";
 import type { ReactNode } from "react";
-import Spinner from "core/ui/primitives/Spinner";
 import type { SubmitHandler } from "react-hook-form";
 import { appRouter } from "server/trpc/router/_app";
 import { createContextInner } from "server/trpc/context";
@@ -92,7 +92,7 @@ const EditComics = ({
   if (isUploading || comicsMutation.isLoading) {
     return (
       <div className="px-auto my-auto w-[80vw]">
-        <Spinner />
+        <Loading />
       </div>
     );
   }

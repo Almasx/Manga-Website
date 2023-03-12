@@ -20,9 +20,10 @@ import Star3 from "../../../../public/icons/Star3.svg";
 import TrendUpBulk from "../../../../public/icons/TrendUpBulk.svg";
 import type { User } from "next-auth";
 import { appRouter } from "../../../server/trpc/router/_app";
+import clsx from "clsx";
 import { createContextInner } from "../../../server/trpc/context";
 import { createProxySSGHelpers } from "@trpc/react-query/ssg";
-import { formatter } from "utils/number-formater";
+import { numberFormatter } from "utils/formaters";
 import superjson from "superjson";
 import { trpc } from "utils/trpc";
 import { useRouter } from "next/router";
@@ -111,7 +112,7 @@ const Comics = ({
         setVisible={setShowRating as any}
         comicsId={comics.id}
       />
-      <ChaptersSection chapters={comics.chapters} />
+      <ChaptersSection chapters={comics.chapters} comicsId={comics.id} />
       <RecomendedList />
       <CommentsSection comicsId={comics.id} initialData={comics.comments} />
     </>
@@ -177,9 +178,15 @@ interface IComicsStatsProps {
   status: string;
   year: number;
   saved: number;
+  ratingLength: number;
 }
 
-const ComicsStats = ({ status, year, saved }: IComicsStatsProps) => (
+const ComicsStats = ({
+  status,
+  year,
+  saved,
+  ratingLength,
+}: IComicsStatsProps) => (
   <div className="mt-auto grid grid-cols-4">
     <div>
       <h4 className="text-base font-medium text-light/30">Статус</h4>
@@ -190,15 +197,15 @@ const ComicsStats = ({ status, year, saved }: IComicsStatsProps) => (
       <h3 className="text-lg font-bold text-light">{year}</h3>
     </div>
     <div>
-      <h4 className="text-base font-medium text-light/30">Просмотренно</h4>
+      <h4 className="text-base font-medium text-light/30">Количество оценок</h4>
       <h3 className="flex items-center gap-2 text-lg font-bold text-light">
-        13.4k <Eye size="24" className="text-light/30" />
+        {numberFormatter.format(ratingLength)}
       </h3>
     </div>
     <div>
       <h4 className="text-base font-medium text-light/30">Сохранённые</h4>
       <h3 className="flex items-center gap-2 text-lg font-bold text-light">
-        {formatter.format(saved)}
+        {numberFormatter.format(saved)}
         <Save2 size="24" className="text-light/30" />
       </h3>
     </div>
@@ -274,6 +281,7 @@ const RecomendedList = () => (
 );
 
 interface IChapterSectionProps {
+  comicsId: string;
   chapters: {
     id: string;
     createdAt: Date;
@@ -282,28 +290,39 @@ interface IChapterSectionProps {
   }[];
 }
 
-const ChaptersSection = ({ chapters }: IChapterSectionProps) => {
+const ChaptersSection = ({ chapters, comicsId }: IChapterSectionProps) => {
+  const [order, setOrder] = useState<"asc" | "desc">("asc");
+  const { data } = trpc.comics.getChapters.useQuery(
+    { order, comicsId },
+    { initialData: chapters }
+  );
+
   return (
     <aside className="fixed right-5 -mt-3 -mr-5 flex h-screen w-[500px] flex-col bg-gradient bg-cover px-5 pt-8">
       <div className="flex flex-row items-center gap-5 pb-8 text-4xl font-bold text-light">
         <h1>Cписок глав</h1>
-        <p>{chapters?.length}</p>
+        <p>{data?.chapters?.length}</p>
         <Button
           variant="primary"
           content="icon"
           className="ml-auto -mt-0 h-11 w-11 rounded-2xl bg-light/20"
+          onClick={() =>
+            setOrder((previos) => (previos === "asc" ? "desc" : "asc"))
+          }
         >
-          <TrendUpBulk />
+          <div className={clsx(order === "desc" && "-scale-y-100")}>
+            <TrendUpBulk />
+          </div>
         </Button>
       </div>
       <div className="no-scroll scrollbar-hide -ml-14 flex grow flex-col gap-4 overflow-y-auto rounded-xl pl-4 ">
-        {chapters?.map((chapter) => (
+        {data?.chapters?.map((chapter) => (
           <ChapterCard {...chapter} key={chapter.id} />
         ))}
 
         <div className="h-8" />
       </div>
-      {!chapters?.length && (
+      {!data?.chapters?.length && (
         <div className="absolute inset-0 z-10 grid place-items-center backdrop-blur-md">
           <div className="mx-12 rounded-xl bg-dark/40 p-3">
             Упс! Похоже, еще нет загруженных глав. Зайдите позже, чтобы увидеть,
