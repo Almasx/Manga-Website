@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-interface ModalProps {
+interface IModalProps {
   children: React.ReactNode;
   className?: string;
   classNameInner?: string;
@@ -18,11 +18,11 @@ const Modal = ({
   backgroundBlack = false,
   visible,
   setVisible,
-}: ModalProps) => {
+}: IModalProps) => {
   return (
     <div
       className={clsx(
-        "fixed top-0 left-0 bottom-0 right-0 z-50 h-screen",
+        "fixed inset-0 z-50 h-screen",
         backgroundBlur && " bg-dark/10 backdrop-blur-md",
         backgroundBlack && "bg-dark/60",
         !visible && "hidden",

@@ -28,7 +28,7 @@ const ChapterCard = ({
       className={clsx(
         " flex grow flex-row items-center rounded-2xl border  border-gray-dark-secondary px-5",
         "py-3 text-light duration-100  hover:border-gray-dark",
-        !packed && "-ml-10 bg-dark hover:scale-105",
+        !packed && "bg-dark hover:scale-105",
         packed && "border-gray-dark bg-dark/40 hover:border-white/30"
       )}
     >

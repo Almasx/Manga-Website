@@ -244,7 +244,7 @@ const RatingModal = ({
 };
 
 const RecomendedList = () => (
-  <section className="col-span-2">
+  <section className="col-span-2 col-start-1">
     <h3 className="pb-5 text-2xl font-bold text-light">Похожие</h3>
     <div className="flex flex-col gap-4">
       {Array(5).fill(
@@ -271,7 +271,7 @@ interface IChapterSectionProps {
 
 const ChaptersSection = ({ chapters }: IChapterSectionProps) => {
   return (
-    <aside className="col-span-4 row-span-2 -mt-3 -mr-5 bg-gradient bg-cover px-5 pt-8">
+    <aside className="fixed right-5 -mt-3 -mr-5 flex h-screen w-[500px] flex-col bg-gradient bg-cover px-5 pt-8">
       <div className="flex flex-row items-center gap-5 pb-8 text-4xl font-bold text-light">
         <h1>Cписок глав</h1>
         <p>{chapters?.length}</p>
@@ -283,11 +283,22 @@ const ChaptersSection = ({ chapters }: IChapterSectionProps) => {
           <TrendUpBulk />
         </Button>
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="no-scroll scrollbar-hide -ml-14 flex grow flex-col gap-4 overflow-y-auto rounded-xl pl-4 ">
         {chapters?.map((chapter) => (
           <ChapterCard {...chapter} key={chapter.id} />
         ))}
+
+        <div className="h-8" />
       </div>
+      {!chapters?.length && (
+        <div className="absolute inset-0 z-10 grid place-items-center backdrop-blur-md">
+          <div className="mx-12 rounded-xl bg-dark/40 p-3">
+            Упс! Похоже, еще нет загруженных глав. Зайдите позже, чтобы увидеть,
+            есть ли какие-либо новые обновления. Мы уверены, что скоро здесь
+            будет интересные главы.
+          </div>
+        </div>
+      )}
     </aside>
   );
 };
