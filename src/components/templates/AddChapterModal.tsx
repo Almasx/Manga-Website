@@ -51,6 +51,7 @@ const AddChapterModal = ({ chapters, onSuccess }: IAddChapterModalProps) => {
     formState: { errors },
     control,
     reset,
+    watch,
     setValue,
   } = useForm<AddChapterSchema>({
     resolver: zodResolver(addChapterSchema),
@@ -142,12 +143,14 @@ const AddChapterModal = ({ chapters, onSuccess }: IAddChapterModalProps) => {
             className="grow"
             label="Дата"
             error={errors.date?.message as string}
+            disabled={watch("access") !== "private"}
             {...register("date", { valueAsDate: true })}
           />
           <TimeField
             className="grow"
             label="Время"
             error={errors.time?.message as string}
+            disabled={watch("access") !== "private"}
             {...register("time")}
           />
         </div>

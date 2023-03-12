@@ -30,12 +30,12 @@ export const getAddChapterSchema = (
       time: z.preprocess((time) => {
         const processed = z
           .string()
-          .regex(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/)
+          .optional()
           .transform((timeString) => {
             const today = new Date();
             const [hour, minute] = timeString
-              .split(":")
-              .map((iNum) => parseInt(iNum));
+              ? timeString.split(":").map((iNum) => parseInt(iNum))
+              : [0, 0];
 
             return new Date(
               today.getFullYear(),
