@@ -18,7 +18,7 @@ const Catalog = () => {
   const debounce = useDebounce();
 
   return (
-    <main className="col-span-4 flex flex-col pl-4 pt-8 md:col-span-8 lg:col-span-9">
+    <main className="mr-0 flex h-[calc(100vh-64px)] flex-col px-4 pt-8 lg:mr-[384px]">
       <h3 className="mb-3 text-xl font-bold text-light md:text-2xl">Каталог</h3>
       <TextField
         placeholder="пр: ванпачмен"

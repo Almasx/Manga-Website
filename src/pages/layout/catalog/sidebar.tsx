@@ -15,22 +15,22 @@ interface IFilterSideBarProps {
 const FilterSideBar = ({ show, setShow }: IFilterSideBarProps) => {
   const { filter, resetFilter, toggleGenre, setStatus, setGenreQuery } =
     useFilterStore((state) => state, shallow);
-  const { isDesktop } = useScreen();
+  const { isDesktop, isPhone } = useScreen();
 
   return (
     <aside
       className={clsx(
-        "fixed top-0 z-10 -ml-[15px] flex h-[calc(100vh-64px)] flex-col gap-y-10 bg-dark/80 px-[15px] pt-8 pb-5 md:mx-0 ",
-        "backdrop-blur-2xl md:sticky md:col-span-4 md:col-start-9 md:border-l md:border-gray-dark-secondary md:px-5 lg:col-start-10",
-        show && "hidden"
+        "fixed top-16 z-10 flex h-[calc(100vh-64px)] flex-col gap-y-10 bg-dark/20 px-[15px] pt-8 pb-5 lg:mx-0 ",
+        "right-0 w-screen backdrop-blur-lg lg:w-96 lg:border-l lg:border-gray-dark-secondary lg:px-5 ",
+        !show && !isDesktop && "hidden"
       )}
     >
       {/* Genres */}
-      <section className="flex flex-col overflow-hidden rounded-2xl md:grow">
-        <h3 className="mb-3 flex flex-row text-xl font-bold text-light md:text-2xl">
+      <section className="flex flex-col overflow-hidden rounded-2xl lg:grow">
+        <h3 className="mb-3 flex flex-row text-xl font-bold text-light lg:text-2xl">
           Жанры
-          {!isDesktop && show && (
-            <button className="ml-auto " onClick={() => setShow(false)}>
+          {!isDesktop && (
+            <button className="ml-auto" onClick={() => setShow(false)}>
               <CancelCross />
             </button>
           )}
@@ -45,7 +45,7 @@ const FilterSideBar = ({ show, setShow }: IFilterSideBarProps) => {
 
       {/* Status */}
       <section className="">
-        <h3 className="mb-3 text-xl font-bold text-light md:text-2xl">
+        <h3 className="mb-3 text-xl font-bold text-light lg:text-2xl">
           Статус
         </h3>
         <CheckBoxField
@@ -73,7 +73,7 @@ const FilterSideBar = ({ show, setShow }: IFilterSideBarProps) => {
 
       <Button
         variant="text"
-        className="absolute bottom-0 mt-auto py-3"
+        className="absolute bottom-0 mt-auto !bg-transparent py-3"
         ripple={false}
         onClick={() => resetFilter()}
       >
