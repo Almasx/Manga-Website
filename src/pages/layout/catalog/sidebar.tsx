@@ -20,8 +20,8 @@ const FilterSideBar = ({ show, setShow }: IFilterSideBarProps) => {
   return (
     <aside
       className={clsx(
-        "fixed top-16 z-10 flex h-[calc(100vh-64px)] flex-col gap-y-10 bg-dark/20 px-[15px] pt-8 pb-5 lg:mx-0 ",
-        "right-0 w-screen backdrop-blur-lg lg:w-96 lg:border-l lg:border-gray-dark-secondary lg:px-5 ",
+        "fixed top-16 z-10 flex h-[calc(100vh-64px)] flex-col gap-y-10 bg-dark/80 px-[15px] pt-8 pb-5 lg:mx-0 ",
+        "right-0 w-screen backdrop-blur-xl lg:w-96 lg:border-l lg:border-gray-dark-secondary lg:px-5 ",
         !show && !isDesktop && "hidden"
       )}
     >

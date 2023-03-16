@@ -3,6 +3,10 @@ import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from "next";
+import {
+  getServerAuthSession,
+  getServerAuthToken,
+} from "server/common/get-server-auth-session";
 
 import Button from "core/ui/primitives/Button";
 import { Messages1 } from "iconsax-react";
@@ -31,6 +35,18 @@ export const getServerSideProps = async (
       chapterId,
       comicsId,
     });
+    const token = await getServerAuthToken(context);
+    chapter.premium;
+    if (chapter.premium && !token?.premium) {
+      console.log("token");
+      return {
+        redirect: {
+          destination: "/404",
+          permanent: false,
+        },
+      };
+    }
+
     return {
       props: {
         trpcState: ssgHelper.dehydrate(),
