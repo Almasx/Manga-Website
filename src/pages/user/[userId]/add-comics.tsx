@@ -1,5 +1,5 @@
 import type { AddComicsSchema } from "lib/schemas/modifyComicsSchema";
-import DashBoardLayout from "pages/layout/dashboard";
+import DashBoardLayout from "layout/dashboard";
 import { Loading } from "core/ui/primitives/Spinner";
 import ModifyComics from "components/templates/ModifyComics";
 import type { PresignedPost } from "aws-sdk/clients/s3";

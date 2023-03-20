@@ -1,5 +1,5 @@
+import DashBoardLayout from "layout/dashboard";
 import type { ReactNode } from "react";
-import DashBoardLayout from "../../layout/dashboard";
 
 const Dashboard = () => {
   return <>loll</>;

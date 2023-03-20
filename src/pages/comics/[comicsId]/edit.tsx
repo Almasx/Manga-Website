@@ -3,7 +3,7 @@ import type {
   InferGetServerSidePropsType,
 } from "next";
 
-import { DenseLayout } from "pages/layout/main";
+import { DenseLayout } from "layout/main";
 import type { EditComicsSchema } from "lib/schemas/modifyComicsSchema";
 import { Loading } from "core/ui/primitives/Spinner";
 import ModifyComics from "components/templates/ModifyComics";

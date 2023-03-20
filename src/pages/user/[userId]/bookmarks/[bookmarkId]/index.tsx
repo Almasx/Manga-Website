@@ -4,7 +4,7 @@ import type {
 } from "next";
 
 import ComicsCard from "components/molecules/ComicsCard";
-import DashBoardLayout from "pages/layout/dashboard";
+import DashBoardLayout from "layout/dashboard";
 import { Loading } from "core/ui/primitives/Spinner";
 import type { ReactNode } from "react";
 import { SearchNormal } from "iconsax-react";

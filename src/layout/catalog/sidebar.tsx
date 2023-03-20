@@ -1,11 +1,11 @@
 import Button from "core/ui/primitives/Button";
-import CancelCross from "../../../../public/icons/CancelCross.svg";
+import CancelCross from "../../../public/icons/CancelCross.svg";
 import CheckBoxField from "core/ui/fields/CheckBoxField";
-import SelectGenres from "../../../components/organisms/SelectGenres";
+import SelectGenres from "components/organisms/SelectGenres";
 import clsx from "clsx";
 import shallow from "zustand/shallow";
-import { useFilterStore } from "../../../lib/hooks/useFilterStore";
-import useScreen from "../../../lib/hooks/useScreen";
+import { useFilterStore } from "lib/hooks/useFilterStore";
+import useScreen from "lib/hooks/useScreen";
 
 interface IFilterSideBarProps {
   show: boolean;

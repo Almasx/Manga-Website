@@ -25,8 +25,8 @@ const Header = ({
       chapter.chapterIndex === chapterIndex &&
       chapter.volumeIndex === volumeIndex
   );
-  const previosChapter = comics?.chapters[contentIndex - 1];
-  const followingChapter = comics?.chapters[contentIndex + 1];
+  const previosChapter = contentIndex && comics?.chapters[contentIndex - 1];
+  const followingChapter = contentIndex && comics?.chapters[contentIndex + 1];
 
   return (
     <Navigation.Wrapper auth={true} dynamicHide={true} className="fixed z-10">

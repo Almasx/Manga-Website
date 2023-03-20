@@ -14,7 +14,7 @@ import TimeField from "core/ui/fields/TimeField";
 import { getAddChapterSchema } from "lib/schemas/getAddChapterSchema";
 import { getDefaultVolumeAndChapterIndex } from "utils/get-default-index";
 import { prepareFormData } from "lib/aws/prepare-form-data";
-import { showAddChapterAtom } from "pages/layout/manage";
+import { showAddChapterAtom } from "layout/manage";
 import { trpc } from "utils/trpc";
 import { useAtom } from "jotai";
 import { useMutation } from "@tanstack/react-query";

@@ -1,5 +1,5 @@
 import Button from "core/ui/primitives/Button";
-import CatalogLayout from "./layout/catalog";
+import CatalogLayout from "layout/catalog";
 import ComicsList from "../components/organisms/ComicsList";
 import type { ReactNode } from "react";
 import { SearchNormal } from "iconsax-react";

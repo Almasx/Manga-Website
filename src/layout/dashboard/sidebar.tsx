@@ -4,7 +4,7 @@ import { signOut, useSession } from "next-auth/react";
 import CheckBoxField from "core/ui/fields/CheckBoxField";
 import Link from "next/link";
 import SideBar from "core/ui/templates/SideBar";
-import { trpc } from "../../../utils/trpc";
+import { trpc } from "utils/trpc";
 import { useRouter } from "next/router";
 
 const AccountBar = () => {

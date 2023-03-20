@@ -1,4 +1,4 @@
-import ChapterLayout, { showCommentsAtom } from "pages/layout/chapter";
+import ChapterLayout, { showCommentsAtom } from "layout/chapter";
 import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,

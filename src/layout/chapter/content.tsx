@@ -1,4 +1,4 @@
-import CancelCross from "../../../../public/icons/CancelCross.svg";
+import CancelCross from "../../../public/icons/CancelCross.svg";
 import ChapterCard from "components/molecules/ChapterCard";
 import Modal from "core/ui/primitives/Modal";
 import React from "react";
@@ -38,13 +38,11 @@ const ContentSection = () => {
         )}
       </div>
       <div className="scrollbar-hide flex  flex-col gap-3 overflow-y-auto ">
-        {comics?.chapters.map(({ chapterIndex, volumeIndex, id }) => (
+        {comics?.chapters.map((chapter) => (
           <ChapterCard
-            id={id}
             packed={true}
-            key={`${volumeIndex}_${chapterIndex}`}
-            {...{ chapterIndex, volumeIndex }}
-            createdAt={new Date()}
+            key={`${chapter.volumeIndex}_${chapter.chapterIndex}`}
+            {...chapter}
           />
         ))}
       </div>
