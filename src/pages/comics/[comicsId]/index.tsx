@@ -1,4 +1,4 @@
-import { Edit, Eye, Save2, Star1 } from "iconsax-react";
+import { Edit, Save2, Star1 } from "iconsax-react";
 import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
@@ -15,6 +15,7 @@ import CommentField from "../../../components/molecules/CommentField";
 import type { IModal } from "types/model";
 import Link from "next/link";
 import Modal from "core/ui/primitives/Modal";
+import type { RouterOutputs } from "utils/trpc";
 import Star from "../../../../public/icons/Star.svg";
 import Star3 from "../../../../public/icons/Star3.svg";
 import TrendUpBulk from "../../../../public/icons/TrendUpBulk.svg";
@@ -282,12 +283,7 @@ const RecomendedList = () => (
 
 interface IChapterSectionProps {
   comicsId: string;
-  chapters: {
-    id: string;
-    createdAt: Date;
-    chapterIndex: number;
-    volumeIndex: number;
-  }[];
+  chapters: RouterOutputs["comics"]["getComics"]["chapters"];
 }
 
 const ChaptersSection = ({ chapters, comicsId }: IChapterSectionProps) => {

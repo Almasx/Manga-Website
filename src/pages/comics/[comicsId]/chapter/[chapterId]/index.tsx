@@ -36,8 +36,12 @@ export const getServerSideProps = async (
       comicsId,
     });
     const token = await getServerAuthToken(context);
-    chapter.premium;
-    if (chapter.premium && !token?.premium) {
+    if (
+      chapter.publicAt
+        ? token?.premium ||
+          chapter.publicAt.valueOf() - new Date().valueOf() >= 0
+        : true
+    ) {
       console.log("token");
       return {
         redirect: {

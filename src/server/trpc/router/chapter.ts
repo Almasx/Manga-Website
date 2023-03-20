@@ -50,7 +50,7 @@ export const chapterRouter = router({
         volumeIndex: z.number({ required_error: "Volume index is required" }),
         chapterIndex: z.number({ required_error: "Chapter index is required" }),
         title: z.string({ required_error: "Title is required" }),
-        premium: z.boolean(),
+        publicAt: z.date().optional(),
         pagesLenght: z.number(),
       })
     )
@@ -62,7 +62,7 @@ export const chapterRouter = router({
           comicsId,
           pagesLenght,
           title,
-          premium,
+          publicAt,
         },
         ctx,
       }) => {
@@ -71,7 +71,7 @@ export const chapterRouter = router({
         const chapter = await ctx.prisma.chapter.create({
           include: { pages: true },
           data: {
-            premium,
+            publicAt,
             volumeIndex,
             chapterIndex,
             comicsId,

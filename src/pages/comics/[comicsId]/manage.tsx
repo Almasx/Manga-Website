@@ -12,7 +12,7 @@ import {
 import { useEffect, useRef } from "react";
 
 import AddChapterModal from "components/templates/AddChapterModal";
-import type { ArrayElement } from "types/array-element";
+import type { ArrayElement } from "utils/util-types";
 import ManageChaptersLayout from "pages/layout/manage";
 import NumberField from "core/ui/fields/NumberField";
 import TextField from "core/ui/fields/TextField";

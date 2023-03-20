@@ -31,6 +31,7 @@ const TimeField = forwardRef<
           defaultValue="00:00"
           ref={ref}
           onChange={(e) => {
+            console.log(e.target);
             onChange && onChange(e);
           }}
           onBlur={(e) => {

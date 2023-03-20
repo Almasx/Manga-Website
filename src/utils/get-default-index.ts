@@ -1,4 +1,4 @@
-import { getKeys } from "./get-keys";
+import { getKeys } from "./util-types";
 
 export type queryChapter = {
   id: string;

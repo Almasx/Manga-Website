@@ -125,7 +125,7 @@ model Chapter {
   comics   Comics @relation(fields: [comicsId], references: [id])
   comicsId String
 
-  premium Boolean @default(false)
+  publicAt DateTime?
 
   pages     Page[]
   comments  ChapterComment[]

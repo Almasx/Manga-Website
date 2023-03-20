@@ -5,16 +5,10 @@ import {
 } from "lib/queries/checkComics";
 import { protectedProcedure, publicProcedure, router } from "../trpc";
 
-import type { Prisma } from "@prisma/client";
 import { Status } from "@prisma/client";
 import { handleQuery } from "server/common/handle-query";
-import { propertyOf } from "utils/property-of";
 import { s3CreatePresignedUrl } from "lib/aws/s3-presigned-url";
 import { z } from "zod";
-
-type ComicsWithRatings = Prisma.ComicsGetPayload<{
-  include: { ratings: true };
-}>;
 
 const comicsRouter = router({
   getGenres: publicProcedure.query(({ ctx }) => ctx.prisma.genre.findMany()),
@@ -58,6 +52,7 @@ const comicsRouter = router({
                 createdAt: true,
                 id: true,
                 title: true,
+                publicAt: true,
               },
               orderBy: { createdAt: order },
             },

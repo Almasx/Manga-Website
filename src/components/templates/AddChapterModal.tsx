@@ -77,11 +77,21 @@ const AddChapterModal = ({ chapters, onSuccess }: IAddChapterModalProps) => {
 
   const onSubmit: SubmitHandler<AddChapterSchema> = async (data) => {
     setIsUploading(true);
+
     const presignedPages = await chapterMutation.mutateAsync({
       ...data,
       comicsId: query.comicsId as string,
       pagesLenght: previewPages.length,
-      premium: data.access === "private",
+      ...(data.access && {
+        publicAt: new Date(
+          data.date?.getFullYear() as number,
+          data.date?.getMonth() as number,
+          data.date?.getDate() as number,
+          data.time.getHours(),
+          data.time.getMinutes(),
+          0
+        ),
+      }),
     });
     for (const pageIndex in presignedPages) {
       const { url, fields } = presignedPages[pageIndex] as PresignedPost;
@@ -198,6 +208,7 @@ const AddChapterModal = ({ chapters, onSuccess }: IAddChapterModalProps) => {
         </div>
         <Button
           loading={isUploading}
+          type="submit"
           className="absolute -bottom-0 left-1/2 z-20 translate-y-3 -translate-x-1/2 transform rounded-full bg-primary px-3 py-2 font-bold text-light"
         >
           Добавить главу
