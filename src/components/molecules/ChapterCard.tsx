@@ -1,6 +1,5 @@
-import { Heart, Lock1 } from "iconsax-react";
-
 import type { Chapter } from "@prisma/client";
+import { Heart } from "iconsax-react";
 import Link from "next/link";
 import clsx from "clsx";
 import { dateOptions } from "utils/formaters";
