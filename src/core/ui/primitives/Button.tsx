@@ -43,6 +43,7 @@ const Button = ({
   return (
     <button
       onClick={(event: React.MouseEvent<HTMLElement>) => {
+        props.type !== "submit" && event.preventDefault();
         const { left, top } = event.currentTarget.getBoundingClientRect();
         setCoords({ x: event.clientX - left, y: event.clientY - top });
         onClick && onClick(event);
@@ -51,7 +52,7 @@ const Button = ({
       className={clsx(
         className,
         "flex flex-row items-center justify-center rounded-xl",
-        "relative overflow-hidden", // others
+        "relative overflow-hidden transition-colors", // others
         [
           content === "text" && ["box-content px-3 py-2", "font-bold"],
           content === "icon" && ["box-border "],

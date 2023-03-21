@@ -20,7 +20,7 @@ export default function CatalogLayout({ children }: { children: ReactNode }) {
         <FilterSideBar show={showSideBar} setShow={setShowSideBar} />
       </main>
       {isSmallDevice && (
-        <div className="fixed bottom-[15px] right-[15px]">
+        <div className="fixed bottom-4 right-4">
           <Button
             className="z-10 h-9 w-9 rounded-2xl text-light"
             content="icon"

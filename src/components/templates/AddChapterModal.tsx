@@ -2,6 +2,7 @@ import { Lock1, Unlock } from "iconsax-react";
 import { useFieldArray, useForm } from "react-hook-form";
 
 import Button from "core/ui/primitives/Button";
+import CancelCross from "../../../public/icons/CancelCross.svg";
 import DateField from "core/ui/fields/DateField";
 import FileField from "core/ui/fields/FileField";
 import Modal from "core/ui/primitives/Modal";
@@ -61,7 +62,7 @@ const AddChapterModal = ({ chapters, onSuccess }: IAddChapterModalProps) => {
       volumeIndex: defaultVolumeIndex,
     },
   });
-  const { append } = useFieldArray({ control, name: "pages" });
+  const { append, remove } = useFieldArray({ control, name: "pages" });
 
   const { mutateAsync: s3Mutate } = useMutation({
     mutationFn: ({ url, formData }: { url: string; formData: FormData }) => {
@@ -194,15 +195,33 @@ const AddChapterModal = ({ chapters, onSuccess }: IAddChapterModalProps) => {
               }
             }}
           />
+
           <div className="relative grid h-44 w-full grid-cols-3 gap-5">
-            {previewPages.map((image) => (
-              <img
-                className="h-80 w-full cursor-pointer 
-            rounded-2xl border border-gray-dark-secondary"
-                src={image}
-                alt=""
-                key={image}
-              />
+            {previewPages.map((image, index) => (
+              <div className="relative flex h-80 w-full" key={image}>
+                <img
+                  className="grow cursor-pointer rounded-2xl border border-gray-dark-secondary"
+                  src={image}
+                  alt={`page_${index}`}
+                />
+                <Button
+                  className="!absolute top-1 right-1 z-20  h-9 w-9 
+                  rounded-2xl border-2 !bg-dark text-light
+                  hover:border-red-600 hover:!bg-red-800/80 hover:backdrop-blur-xl"
+                  content="icon"
+                  variant="secondary"
+                  onClick={() => {
+                    remove(index);
+                    setPreviewPages(
+                      previewPages.filter(
+                        (page, pageIndex) => pageIndex !== index
+                      )
+                    );
+                  }}
+                >
+                  <CancelCross />
+                </Button>
+              </div>
             ))}
           </div>
         </div>

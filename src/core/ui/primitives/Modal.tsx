@@ -22,7 +22,7 @@ const Modal = ({
   return (
     <div
       className={clsx(
-        "fixed inset-0 z-50 h-screen",
+        "fixed inset-0 z-20 h-screen",
         backgroundBlur && " bg-dark/10 backdrop-blur-md",
         backgroundBlack && "bg-dark/60",
         !visible && "hidden",

@@ -19,10 +19,5 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: [
-    "/catalog",
-    "/user/:path*",
-    "/comics/:path/chapter/:path/add-chapter",
-    "/comics/:path/chapter/:path/edit",
-  ],
+  matcher: ["/user/:path*", "/comics/:path/manage", "/comics/:path/edit"],
 };
