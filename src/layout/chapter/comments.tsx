@@ -1,4 +1,4 @@
-import Comment from "components/molecules/Comments";
+import Comment from "components/molecules/Comment";
 import CommentField from "components/molecules/CommentField";
 import SideBar from "core/ui/templates/SideBar";
 import { trpc } from "utils/trpc";

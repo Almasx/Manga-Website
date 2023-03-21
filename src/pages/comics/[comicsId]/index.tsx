@@ -11,7 +11,7 @@ import ChapterCard from "../../../components/molecules/ChapterCard";
 import ComicsCard from "../../../components/molecules/ComicsCard";
 import type { ComicsComment } from "@prisma/client";
 import ComicsLayout from "layout/comics";
-import Comment from "../../../components/molecules/Comments";
+import Comment from "../../../components/molecules/Comment";
 import CommentField from "../../../components/molecules/CommentField";
 import GridLayout from "core/ui/templates/GridLayout";
 import type { IModal } from "types/model";

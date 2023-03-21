@@ -3,8 +3,8 @@ import { Heart } from "iconsax-react";
 import Link from "next/link";
 import clsx from "clsx";
 import { dateOptions } from "utils/formaters";
+import { trpc } from "utils/trpc";
 import { useRouter } from "next/router";
-import { useState } from "react";
 
 const ChapterCard = ({
   id,
@@ -20,10 +20,14 @@ const ChapterCard = ({
   const premium = publicAt
     ? publicAt.valueOf() - new Date().valueOf() >= 0
     : false;
-  console.log(
-    "v",
-    publicAt && new Date().valueOf() - (publicAt as Date).valueOf()
+
+  const { data, refetch } = trpc.chapter.getLikes.useQuery(
+    { chapterId: id },
+    { enabled: !packed }
   );
+  const { mutate: postLike } = trpc.chapter.postLike.useMutation({
+    onSuccess: () => refetch(),
+  });
 
   return (
     <Link
@@ -60,6 +64,23 @@ const ChapterCard = ({
           (publicAt ?? createdAt).toLocaleDateString("ru", dateOptions as any)
         }
       </p>
+      {!packed && (
+        <p className="font-meduim ml-auto mr-3">{data?.likes || ""}</p>
+      )}
+      {!packed && (
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            postLike({ chapterId: id });
+          }}
+        >
+          <Heart
+            size="24"
+            className="text-primary"
+            variant={data?.likedByUser ? "Bold" : "Linear"}
+          />
+        </button>
+      )}
     </Link>
   );
 };

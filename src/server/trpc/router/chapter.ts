@@ -2,11 +2,56 @@ import { protectedProcedure, publicProcedure, router } from "../trpc";
 
 import { checkChapter } from "lib/queries/checkChapter";
 import { checkComics } from "lib/queries/checkComics";
+import { getChapter } from "lib/queries/getChapter";
 import { handleQuery } from "server/common/handle-query";
 import { s3CreatePresignedUrl } from "lib/aws/s3-presigned-url";
 import { z } from "zod";
 
 export const chapterRouter = router({
+  getLikes: publicProcedure
+    .input(
+      z.object({
+        chapterId: z.string({ required_error: "Chapter id is required" }),
+      })
+    )
+    .query(async ({ input: { chapterId }, ctx }) => {
+      const chapter = await handleQuery(
+        getChapter(
+          {
+            likes: true,
+          },
+          chapterId
+        )
+      );
+      return {
+        likes: chapter.likes.length,
+        ...(ctx.session?.user?.id && {
+          likedByUser: !!chapter.likes.find(
+            (like) => like.authorId === ctx.session?.user?.id
+          ),
+        }),
+      };
+    }),
+
+  postLike: protectedProcedure
+    .input(z.object({ chapterId: z.string() }))
+    .mutation(async ({ input: { chapterId }, ctx }) => {
+      const chapter = await handleQuery(getChapter({ likes: true }, chapterId));
+      const likedByUser = chapter.likes.find(
+        (like) => like.authorId === ctx.session?.user?.id
+      );
+      if (!!likedByUser) {
+        await ctx.prisma.chapterLike.delete({ where: { id: likedByUser.id } });
+      } else {
+        await ctx.prisma.chapterLike.create({
+          data: {
+            author: { connect: { id: ctx.session.user.id } },
+            chapter: { connect: { id: chapterId } },
+          },
+        });
+      }
+    }),
+
   getComments: publicProcedure
     .input(
       z.object({
@@ -29,6 +74,7 @@ export const chapterRouter = router({
           )
         )
     ),
+
   getChapter: publicProcedure
     .input(
       z.object({

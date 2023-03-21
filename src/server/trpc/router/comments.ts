@@ -1,6 +1,8 @@
 import { protectedProcedure, router } from "../trpc";
 
+import { checkChapter } from "lib/queries/checkChapter";
 import { checkComics } from "lib/queries/checkComics";
+import { getChapter } from "lib/queries/getChapter";
 import { handleQuery } from "server/common/handle-query";
 import { z } from "zod";
 
@@ -21,7 +23,7 @@ export const commentsRouter = router({
   postCommentOnChapter: protectedProcedure
     .input(z.object({ chapterId: z.string(), content: z.string() }))
     .mutation(async ({ input: { chapterId, content }, ctx }) => {
-      await handleQuery(checkComics({ id: true }, { id: chapterId }));
+      await handleQuery(getChapter({}, chapterId));
       await ctx.prisma.chapterComment.create({
         data: {
           content,
