@@ -95,7 +95,7 @@ model Comics {
   title_ru String
 
   thumbnail   Thumbnail?
-  description String
+  description String     @db.LongText
 
   status Status @default(ongoing)
   year   Int

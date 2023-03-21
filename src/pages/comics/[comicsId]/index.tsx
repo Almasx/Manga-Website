@@ -10,11 +10,16 @@ import Button from "core/ui/primitives/Button";
 import ChapterCard from "../../../components/molecules/ChapterCard";
 import ComicsCard from "../../../components/molecules/ComicsCard";
 import type { ComicsComment } from "@prisma/client";
+import ComicsLayout from "layout/comics";
 import Comment from "../../../components/molecules/Comments";
 import CommentField from "../../../components/molecules/CommentField";
+import GridLayout from "core/ui/templates/GridLayout";
 import type { IModal } from "types/model";
 import Link from "next/link";
+import MainLayout from "layout/main";
 import Modal from "core/ui/primitives/Modal";
+import Navigation from "core/ui/templates/Navigation";
+import type { ReactNode } from "react";
 import type { RouterOutputs } from "utils/trpc";
 import Star from "../../../../public/icons/Star.svg";
 import Star3 from "../../../../public/icons/Star3.svg";
@@ -67,55 +72,76 @@ const Comics = ({
   comics,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const session = useSession();
+  const { asPath } = useRouter();
+  const { isSmallDevice, isPhone, isLaptop } = useScreen();
+
   const [showRating, setShowRating] = useState<boolean>(false);
-  const { isSmallDevice } = useScreen();
   const [tab, setTab] = useState<"chapters" | "comments">("chapters");
 
   return (
-    <div className="relative col-span-full flex flex-col gap-5 md:grid md:grid-cols-8 lg:pr-[384px] xl:pr-[480px]">
-      <>
-        <ComicsCover
-          lastChapterId={comics.chapters[0] && comics.chapters[0].id}
-          comicsId={comics.id}
-          thumbnailId={comics.thumbnail?.id as string}
-        />
+    <div className="relative col-span-full flex flex-col gap-5 pb-16 sm:pb-0 md:grid md:grid-cols-8 lg:pr-[404px] xl:pr-[500px]">
+      {isSmallDevice && (
+        <div className="-mb-5 flex h-3 items-center justify-center">
+          <div className=" h-[5.5px] w-[35vw] rounded-full bg-gray-dark-secondary" />
+        </div>
+      )}
 
-        <div className="relative flex flex-col gap-5 pt-8 md:col-span-6">
-          <article>
-            <h1 className="pb-1 text-4xl font-bold text-light">
-              {comics?.title_ru}
-            </h1>
-            <h3 className="text-2xl font-bold text-light/30">
-              {comics?.title}
-            </h3>
-          </article>
+      <ComicsCover
+        lastChapterId={comics.chapters[0] && comics.chapters[0].id}
+        comicsId={comics.id}
+        thumbnailId={comics.thumbnail?.id as string}
+      />
+
+      <div className="relative flex flex-col gap-5 md:col-span-6 md:pt-8">
+        <article>
+          <h1 className="flex items-center gap-3 pb-1 text-4xl font-bold text-light">
+            {comics?.title_ru}
+            {session.data?.user?.role === "ADMIN" && !isPhone && (
+              <Link href={`${asPath}/edit`}>
+                <Button
+                  className="!px-2 !py-1 text-base backdrop-blur-2xl"
+                  variant="secondary"
+                >
+                  <div className="flex flex-row items-center gap-2 font-normal">
+                    Отредактировать <Edit size="20" />
+                  </div>
+                </Button>
+              </Link>
+            )}
+          </h1>
+          <h3 className="text-2xl font-bold text-light/30">{comics?.title}</h3>
+        </article>
+
+        <p className="text-sm text-light">{comics?.description}</p>
+
+        {comics?.genres.length > 0 && (
           <div className="flex flex-row flex-wrap gap-2">
             {comics?.genres?.map((genre) => (
               <Badge key={genre.id}>{genre.title}</Badge>
             ))}
           </div>
-          <p className="text-sm text-light">{comics?.description}</p>
-          <ComicsStats {...comics} />
-          <div className="absolute right-0 top-8 flex items-center gap-2 text-3xl font-bold text-primary md:right-10">
-            {comics?.ratings.toFixed(1)}
-            <Star />
-            {session?.status === "authenticated" && (
-              <Button
-                variant="secondary"
-                className="!absolute right-1/2 bottom-[9px] h-3 translate-y-full translate-x-1/2 rounded-full
+        )}
+
+        <ComicsStats {...comics} />
+        <div className="absolute right-0 flex items-center gap-2 text-3xl font-bold text-primary md:top-8 ">
+          {comics?.ratings.toFixed(1)}
+          <Star />
+          {session?.status === "authenticated" && (
+            <Button
+              variant="secondary"
+              className="!absolute right-1/2 bottom-[9px] h-3 translate-y-full translate-x-1/2 rounded-full
                            bg-dark/60 px-1 text-xs font-normal backdrop-blur-md"
-                onClick={() => setShowRating(true)}
-              >
-                Оценить
-              </Button>
-            )}
-          </div>
+              onClick={() => setShowRating(true)}
+            >
+              Оценить
+            </Button>
+          )}
         </div>
-      </>
+      </div>
 
       <RecomendedList />
 
-      {isSmallDevice && (
+      {(isSmallDevice || isLaptop) && (
         <div className="col-span-full -mt-5">
           <TabBar
             packed={false}
@@ -133,12 +159,12 @@ const Comics = ({
       <ChaptersSection
         chapters={comics.chapters}
         comicsId={comics.id}
-        show={isSmallDevice ? tab === "chapters" : true}
+        show={isSmallDevice || isLaptop ? tab === "chapters" : true}
       />
       <CommentsSection
         comicsId={comics.id}
         initialData={comics.comments}
-        show={isSmallDevice ? tab === "comments" : true}
+        show={isSmallDevice || isLaptop ? tab === "comments" : true}
       />
 
       <RatingModal
@@ -164,40 +190,37 @@ const ComicsCover = ({
 }: IComicsCoverProps) => {
   const session = useSession();
   const { asPath } = useRouter();
+  const { isSmallDevice } = useScreen();
 
   return (
-    <div className="pt-8 md:col-span-2">
-      <div className="relative flex flex-col gap-5">
-        <img
-          src={`https://darkfraction.s3.eu-north-1.amazonaws.com/thumbnails/${thumbnailId}`}
-          alt="lol"
-          className="aspect-[3/4] w-full rounded-2xl text-light"
-        />
-        {session.data?.user?.role === "ADMIN" && (
-          <Link href={`${asPath}/edit`} className="absolute top-0 right-0 flex">
-            <Button className="flex-grow rounded-tl-none rounded-br-none bg-primary/80 px-3 py-3 backdrop-blur-2xl">
-              <Edit size="20" />
-            </Button>
-          </Link>
+    <div className="md:col-span-2 md:pt-8">
+      <div className="flex flex-col md:gap-5">
+        {!isSmallDevice && (
+          <img
+            src={`https://darkfraction.s3.eu-north-1.amazonaws.com/thumbnails/${thumbnailId}`}
+            alt="lol"
+            className="aspect-[3/4] w-full rounded-2xl text-light"
+          />
         )}
-
-        {session.data?.user?.role === "ADMIN" && (
-          <Link href={`${asPath}/manage`} className="flex">
-            <Button className="flex-grow">Загрузка Глав</Button>
-          </Link>
-        )}
-        {session.data?.user?.role !== "ADMIN" && lastChapterId && (
-          <div className="relative flex flex-row gap-5">
-            <Link
-              className="flex grow"
-              href={`${asPath}/chapter/${lastChapterId}`}
-            >
-              <Button className="flex-grow">Начать читать</Button>
+        <div className="overlay-gradient fixed inset-x-0 bottom-0 z-10 grow p-4 pt-8 md:relative md:p-0">
+          {session.data?.user?.role === "ADMIN" && (
+            <Link href={`${asPath}/manage`} className="flex">
+              <Button className="flex-grow">Загрузка Глав</Button>
             </Link>
+          )}
+          {session.data?.user?.role !== "ADMIN" && lastChapterId && (
+            <div className="flex flex-row gap-5">
+              <Link
+                className="flex grow"
+                href={`${asPath}/chapter/${lastChapterId}`}
+              >
+                <Button className="flex-grow">Начать читать</Button>
+              </Link>
 
-            <BookmarkButton comicsId={comicsId} />
-          </div>
-        )}
+              <BookmarkButton comicsId={comicsId} />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -338,21 +361,24 @@ const ChaptersSection = ({
     { order, comicsId },
     { initialData: chapters }
   );
-  const { isSmallDevice } = useScreen();
+  const { isSmallDevice, isLaptop } = useScreen();
 
   if (!show) {
     return <></>;
   }
 
   return (
-    <aside className="relative col-span-full flex flex-col bg-cover lg:fixed lg:right-5 lg:-mt-3 lg:-mr-5 lg:h-screen lg:w-[384px] lg:bg-gradient lg:px-5 lg:pt-8 xl:w-[480px]">
+    <aside
+      className="relative col-span-full flex flex-col bg-cover lg:fixed lg:inset-y-0 
+                 lg:right-0 lg:-mr-5 lg:h-screen lg:w-[384px] lg:bg-gradient lg:px-5 lg:pt-24 xl:w-[480px]"
+    >
       {!isSmallDevice && (
         <div className="flex flex-row items-center gap-3 pb-5 text-2xl font-bold text-light lg:gap-5 lg:pb-8 lg:text-4xl">
           <h1>Cписок глав</h1>
           <p>{data?.chapters?.length}</p>
 
           <Button
-            variant={isSmallDevice ? "secondary" : "primary"}
+            variant={isSmallDevice || isLaptop ? "secondary" : "primary"}
             content="icon"
             className="ml-auto -mt-0 h-9 w-9 rounded-2xl bg-light/20 lg:h-11 lg:w-11"
             onClick={() =>
@@ -360,7 +386,7 @@ const ChaptersSection = ({
             }
           >
             <div className={clsx(order === "desc" && "-scale-y-100")}>
-              {isSmallDevice ? (
+              {isSmallDevice || isLaptop ? (
                 <TrendUp className="block text-primary" />
               ) : (
                 <TrendUpBulk />
@@ -369,7 +395,7 @@ const ChaptersSection = ({
           </Button>
         </div>
       )}
-      <div className="no-scroll scrollbar-hide flex grow flex-col gap-4 overflow-y-auto rounded-xl lg:-ml-14 lg:pl-4 ">
+      <div className="no-scroll scrollbar-hide flex grow flex-col gap-4 overflow-y-auto rounded-xl lg:-ml-14 lg:pl-4 lg:pr-3">
         {data?.chapters?.map((chapter) => (
           <ChapterCard {...chapter} key={chapter.id} />
         ))}
@@ -434,5 +460,14 @@ const CommentsSection = ({
     </section>
   );
 };
+
+Comics.getLayout = (
+  page: ReactNode,
+  { comics }: InferGetServerSidePropsType<typeof getServerSideProps>
+) => (
+  <ComicsLayout thumbnailId={comics.thumbnail?.id as string}>
+    {page}
+  </ComicsLayout>
+);
 
 export default Comics;

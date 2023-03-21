@@ -10,6 +10,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   filter: invert(100%);
 }
 
+.overlay-gradient {
+  background: linear-gradient(181.27deg, rgba(2, 2, 2, 0) 1.08%, #020202 32.8%);
+}
+
 /* custom scrollbar */
 ::-webkit-scrollbar {
   width: 12px;

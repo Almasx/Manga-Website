@@ -21,13 +21,13 @@ export default function useScreen() {
     if (width <= media[SCREEN_PHONE]) {
       return SCREEN_PHONE;
     }
-    if (width < media[SCREEN_LAPTOP]) {
+    if (width < media[SCREEN_TABLET]) {
       return SCREEN_TABLET;
     }
-    if (width < media[SCREEN_DESKTOP]) {
+    if (width < media[SCREEN_LAPTOP]) {
       return SCREEN_LAPTOP;
     }
-    if (width < media[SCREEN_TV]) {
+    if (width < media[SCREEN_DESKTOP]) {
       return SCREEN_DESKTOP;
     }
     return SCREEN_TV;

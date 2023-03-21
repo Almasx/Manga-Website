@@ -2,13 +2,19 @@ import GridLayout from "core/ui/templates/GridLayout";
 import Navigation from "core/ui/templates/Navigation";
 import type { ReactNode } from "react";
 
-export default function MainLayout({ children }: { children: ReactNode }) {
+export default function MainLayout({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
   return (
     <div className="relative min-h-screen overflow-hidden bg-dark text-light">
       <Navigation.Wrapper auth={true}>
         <Navigation.Links />
       </Navigation.Wrapper>
-      <GridLayout>{children}</GridLayout>
+      <GridLayout className={className}>{children}</GridLayout>
     </div>
   );
 }
