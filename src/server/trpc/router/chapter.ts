@@ -75,6 +75,19 @@ export const chapterRouter = router({
         )
     ),
 
+  postComment: protectedProcedure
+    .input(z.object({ chapterId: z.string(), content: z.string() }))
+    .mutation(async ({ input: { chapterId, content }, ctx }) => {
+      await handleQuery(getChapter({}, chapterId));
+      await ctx.prisma.chapterComment.create({
+        data: {
+          content,
+          author: { connect: { id: ctx.session.user.id } },
+          chapter: { connect: { id: chapterId } },
+        },
+      });
+    }),
+
   getChapter: publicProcedure
     .input(
       z.object({

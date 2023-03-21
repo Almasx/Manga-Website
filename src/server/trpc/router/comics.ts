@@ -34,6 +34,19 @@ const comicsRouter = router({
         )
     ),
 
+  postComment: protectedProcedure
+    .input(z.object({ comicsId: z.string(), content: z.string() }))
+    .mutation(async ({ input: { comicsId, content }, ctx }) => {
+      await handleQuery(checkComics({ id: true }, { id: comicsId }));
+      await ctx.prisma.comicsComment.create({
+        data: {
+          content,
+          author: { connect: { id: ctx.session.user.id } },
+          comics: { connect: { id: comicsId } },
+        },
+      });
+    }),
+
   getChapters: publicProcedure
     .input(
       z.object({

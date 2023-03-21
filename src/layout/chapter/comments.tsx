@@ -13,10 +13,9 @@ const CommentsSection = () => {
     comicsId: query.comicsId as string,
   });
 
-  const { mutate: commentMutate } =
-    trpc.comments.postCommentOnChapter.useMutation({
-      onSuccess: () => refetch(),
-    });
+  const { mutate: commentMutate } = trpc.chapter.postComment.useMutation({
+    onSuccess: () => refetch(),
+  });
 
   return (
     <SideBar.Wrapper className="sticky top-16 !w-96 flex-shrink-0">

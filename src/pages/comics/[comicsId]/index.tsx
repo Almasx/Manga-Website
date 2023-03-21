@@ -435,10 +435,9 @@ const CommentsSection = ({
   );
   const { isSmallDevice } = useScreen();
 
-  const { mutate: commentMutate } =
-    trpc.comments.postCommentOnComics.useMutation({
-      onSuccess: () => refetch(),
-    });
+  const { mutate: commentMutate } = trpc.comics.postComment.useMutation({
+    onSuccess: () => refetch(),
+  });
 
   if (!show) {
     return <></>;
