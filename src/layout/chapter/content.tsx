@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 import useScreen from "lib/hooks/useScreen";
 
 const ContentSection = () => {
-  const { isPhone } = useScreen();
+  const { isSmallDevice } = useScreen();
   const { query } = useRouter();
 
   const [showContent, setShowSection] = useAtom(showContentAtom);
@@ -28,7 +28,7 @@ const ContentSection = () => {
     >
       <div className="flex flex-row">
         <h3 className="text-2xl font-bold text-light">Главы</h3>
-        {isPhone && (
+        {isSmallDevice && (
           <button
             className="text-light/66 ml-auto"
             onClick={() => setShowSection(false)}

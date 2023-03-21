@@ -15,21 +15,21 @@ interface IFilterSideBarProps {
 const FilterSideBar = ({ show, setShow }: IFilterSideBarProps) => {
   const { filter, resetFilter, toggleGenre, setStatus, setGenreQuery } =
     useFilterStore((state) => state, shallow);
-  const { isDesktop, isPhone } = useScreen();
+  const { isSmallDevice } = useScreen();
 
   return (
     <aside
       className={clsx(
         "fixed top-16 z-10 flex h-[calc(100vh-64px)] flex-col gap-y-10 bg-dark/80 px-[15px] pt-8 pb-5 lg:mx-0 ",
         "right-0 w-screen backdrop-blur-xl lg:w-96 lg:border-l lg:border-gray-dark-secondary lg:px-5 ",
-        !show && !isDesktop && "hidden"
+        !show && isSmallDevice && "hidden"
       )}
     >
       {/* Genres */}
       <section className="flex flex-col overflow-hidden rounded-2xl lg:grow">
         <h3 className="mb-3 flex flex-row text-xl font-bold text-light lg:text-2xl">
           Жанры
-          {!isDesktop && (
+          {isSmallDevice && (
             <button className="ml-auto" onClick={() => setShow(false)}>
               <CancelCross />
             </button>

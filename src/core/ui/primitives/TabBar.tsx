@@ -10,9 +10,14 @@ interface TabBarProps<T> {
     label: T;
   }[];
   onChange?: (value?: any) => void;
+  packed?: boolean;
 }
 
-export const TabBar = ({ tabs, onChange }: TabBarProps<string>) => {
+export const TabBar = ({
+  tabs,
+  onChange,
+  packed = true,
+}: TabBarProps<string>) => {
   const { indicatorRef, tabBarRef, setActiveIndex, activeIndex } = useTabBar<
     HTMLButtonElement,
     HTMLDivElement
@@ -30,7 +35,8 @@ export const TabBar = ({ tabs, onChange }: TabBarProps<string>) => {
               onChange && onChange(tabs[index]?.value);
             }}
             className={clsx(
-              "text-sm font-bold duration-300 lg:text-base",
+              "text-sm font-bold duration-300 ",
+              !packed && "!text-lg",
               activeIndex === index
                 ? "text-light"
                 : "text-light/30 hover:text-primary"

@@ -30,7 +30,7 @@ const ComicsCard = ({
         "border border-gray-dark-secondary p-3 ",
         [
           variant === "catalog" && "flex-col gap-y-2",
-          variant === "recomendation" && "flex-row gap-x-3",
+          variant === "recomendation" && "grow flex-row gap-x-3",
         ]
       )}
     >
