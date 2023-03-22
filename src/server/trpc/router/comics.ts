@@ -6,6 +6,7 @@ import {
 import { protectedProcedure, publicProcedure, router } from "../trpc";
 
 import { Status } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
 import { handleQuery } from "server/common/handle-query";
 import { s3CreatePresignedUrl } from "lib/aws/s3-presigned-url";
 import { z } from "zod";
@@ -37,12 +38,56 @@ const comicsRouter = router({
   postComment: protectedProcedure
     .input(z.object({ comicsId: z.string(), content: z.string() }))
     .mutation(async ({ input: { comicsId, content }, ctx }) => {
-      await handleQuery(checkComics({ id: true }, { id: comicsId }));
       await ctx.prisma.comicsComment.create({
         data: {
           content,
           author: { connect: { id: ctx.session.user.id } },
           comics: { connect: { id: comicsId } },
+        },
+      });
+    }),
+
+  getRatingComment: publicProcedure
+    .input(z.object({ commentId: z.string() }))
+    .query(async ({ input: { commentId }, ctx }) => {
+      const comment = await ctx.prisma.comicsComment.findUnique({
+        select: { upVote: true, downVote: true },
+        where: { id: commentId },
+      });
+
+      if (!comment) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Comment not found",
+        });
+      }
+
+      return comment.upVote - comment.downVote;
+    }),
+
+  postRatingComment: protectedProcedure
+    .input(
+      z.object({
+        commentId: z.string(),
+        vote: z.enum(["upvote", "downvote"]),
+        votedState: z.boolean().default(false),
+      })
+    )
+    .mutation(async ({ input: { commentId, vote, votedState }, ctx }) => {
+      await ctx.prisma.comicsComment.update({
+        where: { id: commentId },
+        data: {
+          ...(vote === "upvote"
+            ? {
+                upVote: {
+                  increment: 1 + Number(votedState),
+                },
+              }
+            : {
+                downVote: {
+                  increment: 1 + Number(votedState),
+                },
+              }),
         },
       });
     }),

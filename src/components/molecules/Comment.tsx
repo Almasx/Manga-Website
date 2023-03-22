@@ -1,15 +1,50 @@
-import { ArrowDown2, ArrowForward, ArrowUp2 } from "iconsax-react";
+import { ArrowDown2, ArrowUp2 } from "iconsax-react";
 
 import type { User } from "@prisma/client";
+import clsx from "clsx";
+import { trpc } from "utils/trpc";
+import { useState } from "react";
 
 interface ICommentProps {
+  id: string;
   content: string;
   author: User;
   createdAt: Date;
-  rating: number;
+  initialRating: number;
+  type: "comics" | "chapter";
 }
 
-const Comment = ({ content, author, createdAt, rating }: ICommentProps) => {
+const Comment = ({
+  id,
+  content,
+  author,
+  createdAt,
+  initialRating,
+  type,
+}: ICommentProps) => {
+  const [vote, setVote] = useState<"upvote" | "downvote" | null>(null);
+  const { data: rating, refetch } =
+    type === "comics"
+      ? trpc.comics.getRatingComment.useQuery(
+          { commentId: id },
+          { initialData: initialRating, enabled: vote !== null }
+        )
+      : trpc.chapter.getRatingComment.useQuery(
+          { commentId: id },
+          { initialData: initialRating, enabled: vote !== null }
+        );
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onSuccess = (_: any, variables: { vote: "upvote" | "downvote" }) => {
+    setVote(variables.vote);
+    refetch();
+  };
+
+  const { mutate: voteComment } =
+    type === "comics"
+      ? trpc.comics.postRatingComment.useMutation({ onSuccess })
+      : trpc.chapter.postRatingComment.useMutation({ onSuccess });
+
   return (
     <div className="flex flex-col gap-3 rounded-2xl border border-gray-dark p-4 text-light ">
       <div className="flex flex-row items-center gap-3">
@@ -26,7 +61,33 @@ const Comment = ({ content, author, createdAt, rating }: ICommentProps) => {
       <p className="font-base leading-5 text-light/60">{content}</p>
       <div className="flex flex-row gap-5 ">
         <div className="flex flex-row gap-3">
-          <ArrowUp2 /> {rating} <ArrowDown2 />
+          <ArrowUp2
+            className={clsx(
+              "duration-300",
+              vote === "upvote" && "text-primary"
+            )}
+            onClick={() =>
+              voteComment({
+                commentId: id,
+                vote: "upvote",
+                votedState: vote !== null,
+              })
+            }
+          />
+          {rating}
+          <ArrowDown2
+            className={clsx(
+              "duration-300",
+              vote === "downvote" && "text-primary"
+            )}
+            onClick={() =>
+              voteComment({
+                commentId: id,
+                vote: "downvote",
+                votedState: vote !== null,
+              })
+            }
+          />
         </div>
         {/* <ArrowForward className="-scale-x-100 " /> */}
       </div>

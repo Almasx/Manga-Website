@@ -161,7 +161,7 @@ model Page {
 }
 
 model ComicsComment {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -169,13 +169,15 @@ model ComicsComment {
   authorId  String
   comics    Comics   @relation(fields: [comicsId], references: [id])
   comicsId  String
+  upVote    Int      @default(0)
+  downVote  Int      @default(0)
 
   @@index([authorId])
   @@index([comicsId])
 }
 
 model ChapterComment {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -183,6 +185,8 @@ model ChapterComment {
   authorId  String
   chapter   Chapter  @relation(fields: [chapterId], references: [id])
   chapterId String
+  upVote    Int      @default(0)
+  downVote  Int      @default(0)
 
   @@index([authorId])
   @@index([chapterId])

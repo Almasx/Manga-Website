@@ -1,5 +1,6 @@
 import { protectedProcedure, publicProcedure, router } from "../trpc";
 
+import { TRPCError } from "@trpc/server";
 import { checkChapter } from "lib/queries/checkChapter";
 import { checkComics } from "lib/queries/checkComics";
 import { getChapter } from "lib/queries/getChapter";
@@ -84,6 +85,51 @@ export const chapterRouter = router({
           content,
           author: { connect: { id: ctx.session.user.id } },
           chapter: { connect: { id: chapterId } },
+        },
+      });
+    }),
+
+  getRatingComment: publicProcedure
+    .input(z.object({ commentId: z.string() }))
+    .query(async ({ input: { commentId }, ctx }) => {
+      const comment = await ctx.prisma.chapterComment.findUnique({
+        select: { upVote: true, downVote: true },
+        where: { id: commentId },
+      });
+
+      if (!comment) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Comment not found",
+        });
+      }
+
+      return comment.upVote - comment.downVote;
+    }),
+
+  postRatingComment: protectedProcedure
+    .input(
+      z.object({
+        commentId: z.string(),
+        vote: z.enum(["upvote", "downvote"]),
+        votedState: z.boolean().default(false),
+      })
+    )
+    .mutation(async ({ input: { commentId, vote, votedState }, ctx }) => {
+      await ctx.prisma.chapterComment.update({
+        where: { id: commentId },
+        data: {
+          ...(vote === "upvote"
+            ? {
+                upVote: {
+                  increment: 1 + Number(votedState),
+                },
+              }
+            : {
+                downVote: {
+                  increment: 1 + Number(votedState),
+                },
+              }),
         },
       });
     }),

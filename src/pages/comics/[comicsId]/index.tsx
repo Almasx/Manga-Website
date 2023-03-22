@@ -453,9 +453,16 @@ const CommentsSection = ({
         value={comment}
         onClick={() => comment && commentMutate({ comicsId, content: comment })}
       />
-      {comics?.comments?.map((comment) => (
-        <Comment key={comment.id} {...comment} rating={10} />
-      ))}
+      {comics?.comments?.map((comment) => {
+        return (
+          <Comment
+            type="comics"
+            key={comment.id}
+            {...comment}
+            initialRating={comment.upVote - comment.downVote}
+          />
+        );
+      })}
     </section>
   );
 };

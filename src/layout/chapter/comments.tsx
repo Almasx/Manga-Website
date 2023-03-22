@@ -34,7 +34,12 @@ const CommentsSection = () => {
             }
           />
           {chapter?.comments?.map((comment) => (
-            <Comment key={comment.id} {...comment} rating={10} />
+            <Comment
+              type="chapter"
+              key={comment.id}
+              {...comment}
+              initialRating={comment.upVote - comment.downVote}
+            />
           ))}
         </div>
       </SideBar.Section.Wrapper>
