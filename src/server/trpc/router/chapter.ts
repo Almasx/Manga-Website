@@ -196,4 +196,16 @@ export const chapterRouter = router({
         );
       }
     ),
+
+  deleteChapters: protectedProcedure
+    .input(
+      z.object({
+        chapterIds: z.array(z.string()),
+      })
+    )
+    .mutation(async ({ input: { chapterIds }, ctx }) => {
+      await ctx.prisma.chapter.deleteMany({
+        where: { id: { in: chapterIds } },
+      });
+    }),
 });

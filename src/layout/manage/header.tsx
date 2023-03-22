@@ -1,14 +1,16 @@
-import { ArrowLeft2 } from "iconsax-react";
+import { ArrowLeft2, Trash } from "iconsax-react";
+import { showAddChapterAtom, showDeleteChapterAtom } from ".";
+
 import Button from "core/ui/primitives/Button";
 import Navigation from "core/ui/templates/Navigation";
 import React from "react";
-import { showAddChapterAtom } from ".";
 import { useRouter } from "next/router";
 import { useSetAtom } from "jotai";
 
 const Header = ({ title }: { title: string }) => {
   const { back } = useRouter();
   const setShowAddChapter = useSetAtom(showAddChapterAtom);
+  const setShowDeleteChapter = useSetAtom(showDeleteChapterAtom);
 
   return (
     <Navigation.Wrapper>
@@ -17,19 +19,24 @@ const Header = ({ title }: { title: string }) => {
         Загрузка глав {title}
       </div>
 
-      {/* <BoxyTabBar
-        tabs={[
-          { label: "Одиночное", value: "/add-chapter" },
-          { label: "Множественное", value: "/add-chapters" },
-        ]}
-      /> */}
-
-      <Button
-        className="w-24 rounded-lg py-1"
-        onClick={() => setShowAddChapter(true)}
-      >
-        Загрузить
-      </Button>
+      <div className="flex gap-3">
+        <Button
+          className="aspect-square h-10 rounded-lg border-2 !bg-dark text-light/60 hover:border-red-600
+                  hover:!bg-red-800/80 hover:backdrop-blur-xl disabled:text-light/30
+                  disabled:hover:border-gray-dark-secondary disabled:hover:!bg-dark"
+          content="icon"
+          variant="secondary"
+          onClick={() => setShowDeleteChapter(true)}
+        >
+          <Trash />
+        </Button>
+        <Button
+          className="w-24 rounded-lg "
+          onClick={() => setShowAddChapter(true)}
+        >
+          Загрузить
+        </Button>
+      </div>
     </Navigation.Wrapper>
   );
 };
