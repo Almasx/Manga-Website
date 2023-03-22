@@ -111,6 +111,7 @@ const comicsRouter = router({
                 id: true,
                 title: true,
                 publicAt: true,
+                _count: { select: { pages: true } },
               },
               orderBy: { createdAt: order },
             },

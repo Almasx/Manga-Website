@@ -5,6 +5,8 @@
  */
 !process.env.SKIP_ENV_VALIDATION && (await import("./src/env/server.mjs"));
 
+import analyzer from "@next/bundle-analyzer";
+
 /** @type {import("next").NextConfig} */
 const config = {
   typescript: { ignoreBuildErrors: true },
@@ -34,4 +36,10 @@ const config = {
     ],
   },
 };
-export default config;
+
+const withBundleAnalyzer = analyzer({
+  enabled: process.env.ANALYZE === "true",
+  openAnalyzer: false,
+});
+
+export default withBundleAnalyzer(config);

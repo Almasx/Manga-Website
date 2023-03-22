@@ -13,6 +13,7 @@ import { useEffect, useRef } from "react";
 
 import AddChapterModal from "components/templates/AddChapterModal";
 import type { ArrayElement } from "utils/util-types";
+import Link from "next/link";
 import ManageChaptersLayout from "layout/manage";
 import NumberField from "core/ui/fields/NumberField";
 import TextField from "core/ui/fields/TextField";
@@ -59,6 +60,7 @@ export const getServerSideProps = async (
     };
   }
 };
+
 const AddChapters = ({
   comics,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
@@ -76,16 +78,18 @@ const AddChapters = ({
     columnHelper.display({
       id: "select",
       header: ({ table }) => (
-        <IndeterminateCheckbox
-          {...{
-            checked: table.getIsAllRowsSelected(),
-            indeterminate: table.getIsSomeRowsSelected(),
-            onChange: table.getToggleAllRowsSelectedHandler(),
-          }}
-        />
+        <div className="flex h-8 w-12 justify-center border-b border-gray-dark-secondary ">
+          <IndeterminateCheckbox
+            {...{
+              checked: table.getIsAllRowsSelected(),
+              indeterminate: table.getIsSomeRowsSelected(),
+              onChange: table.getToggleAllRowsSelectedHandler(),
+            }}
+          />
+        </div>
       ),
       cell: ({ row }) => (
-        <div className="px-1">
+        <div className="flex h-11 w-12 justify-center border-b border-gray-dark-secondary">
           <IndeterminateCheckbox
             {...{
               checked: row.getIsSelected(),
@@ -98,24 +102,65 @@ const AddChapters = ({
       ),
     }),
     columnHelper.accessor("chapterIndex", {
+      header: () => (
+        <div className="flex h-8 w-24 items-center border-b border-l  border-gray-dark-secondary px-5 text-left font-medium text-light/30">
+          Главы
+        </div>
+      ),
       cell: (info) => (
         <NumberField
           value={info.getValue().toString()}
-          className="rounded-none border-0"
+          className="!w-24 rounded-none border-0 border-b border-l"
         />
       ),
     }),
     columnHelper.accessor("volumeIndex", {
+      header: () => (
+        <div className="flex h-8 w-24 items-center border-b border-l border-gray-dark-secondary bg-dark px-5 text-left font-medium text-light/30">
+          Том
+        </div>
+      ),
       cell: (info) => (
         <NumberField
           value={info.getValue().toString()}
-          className="rounded-none border-0"
+          className="!w-24 rounded-none border-0 border-b border-l"
         />
       ),
     }),
     columnHelper.accessor("title", {
+      header: () => (
+        <div className="flex h-8 w-auto items-center border-b border-l border-gray-dark-secondary bg-dark px-5 text-left font-medium text-light/30">
+          Название
+        </div>
+      ),
+      cell: (info) => {
+        return (
+          <TextField
+            startIcon={
+              <Link
+                className="text-lg text-white/20 duration-150 hover:text-white"
+                href={`/comics/${comics.id}/chapter/${info.row.original.id}`}
+              >
+                🡥
+              </Link>
+            }
+            value={info.getValue()}
+            className="rounded-none border-t-0 border-r-0"
+          />
+        );
+      },
+    }),
+    columnHelper.accessor("_count.pages", {
+      header: () => (
+        <div className="flex h-8 w-28 items-center border-b border-l border-gray-dark-secondary bg-dark px-5 text-left font-medium text-light/30">
+          Страницы
+        </div>
+      ),
       cell: (info) => (
-        <TextField value={info.getValue()} className="rounded-none border-0" />
+        <NumberField
+          value={info.getValue().toString()}
+          className="!w-28 rounded-none border-t-0 border-r-0"
+        />
       ),
     }),
   ];
@@ -134,50 +179,53 @@ const AddChapters = ({
   return (
     <>
       <AddChapterModal chapters={chapters} onSuccess={() => refetch()} />
-      <table
-        className="divide mx-4 mt-8 h-fit w-full border-separate
-                   divide-gray-dark-secondary overflow-x-auto  rounded-xl bg-gray-dark "
-      >
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th key={header.id} colSpan={header.colSpan}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className=" p-0">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="mx-4 mt-8 h-fit w-[80vw] overflow-clip rounded-xl border border-gray-dark-secondary ">
+        <table className="-mb-1 w-full table-fixed border-collapse overflow-x-auto">
+          <thead>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <th
+                    key={header.id}
+                    colSpan={header.colSpan}
+                    className={clsx(
+                      "p-0",
+                      header.id === "title"
+                        ? "w-auto"
+                        : header.id === "select"
+                        ? "w-12"
+                        : header.id === "_count_pages"
+                        ? "w-28"
+                        : "w-24"
+                    )}
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map((row) => (
+              <tr key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id} className={clsx("p-0")}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </>
   );
 };
-
-AddChapters.getLayout = (
-  page: ReactNode,
-  { comics }: InferGetServerSidePropsType<typeof getServerSideProps>
-) => (
-  <ManageChaptersLayout {...comics} thumbnail={comics.thumbnail?.id as string}>
-    {page}
-  </ManageChaptersLayout>
-);
 
 function IndeterminateCheckbox({
   indeterminate,
@@ -193,7 +241,7 @@ function IndeterminateCheckbox({
   }, [ref, indeterminate, rest.checked]);
 
   return (
-    <label className="relative cursor-pointer">
+    <label className="relative flex cursor-pointer items-center ">
       <input
         type="checkbox"
         className={clsx(
@@ -216,5 +264,14 @@ function IndeterminateCheckbox({
     </label>
   );
 }
+
+AddChapters.getLayout = (
+  page: ReactNode,
+  { comics }: InferGetServerSidePropsType<typeof getServerSideProps>
+) => (
+  <ManageChaptersLayout {...comics} thumbnail={comics.thumbnail?.id as string}>
+    {page}
+  </ManageChaptersLayout>
+);
 
 export default AddChapters;
