@@ -11,6 +11,7 @@ import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
 import MainLayout from "layout/main";
 import { Provider } from "jotai";
+import KnockWrapper from "lib/knock/KnockWrapper";
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -32,7 +33,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     <Provider>
       <NextNProgress color="#4A54EB" />
-      <SessionProvider session={session}>{layout}</SessionProvider>
+      <SessionProvider session={session}>
+        <KnockWrapper>{layout}</KnockWrapper>
+      </SessionProvider>
     </Provider>
   );
 };

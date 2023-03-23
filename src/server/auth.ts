@@ -24,11 +24,13 @@ declare module "next-auth" {
     user: {
       id: string;
       role?: Role;
+      knockId?: string;
     } & DefaultSession["user"];
   }
 
   interface User {
     role?: Role;
+    knockId?: string;
   }
 }
 
@@ -38,6 +40,7 @@ declare module "next-auth/jwt" {
     id: string;
     role?: Role;
     premium: boolean;
+    knockId?: string;
   }
 }
 
@@ -56,6 +59,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.role = user.role;
+        token.knockId = user.knockId;
         token.premium = await isGroupDon(account?.access_token as string);
       }
       return token;
@@ -64,6 +68,7 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.id = token.id;
         session.user.role = token.role;
+        session.user.knockId = token.knockId;
       }
 
       return session;
@@ -80,12 +85,6 @@ export const authOptions: NextAuthOptions = {
   ],
 
   events: {
-    signIn: ({ account }) => {
-      isGroupDon(account?.access_token as string).then((res) =>
-        console.log(res)
-      );
-    },
-
     createUser: async (message) => {
       const bookmarksTitles = [
         "Читаю",
@@ -115,11 +114,10 @@ export const authOptions: NextAuthOptions = {
           avatar: message.user.image,
         })
         .then(async ({ id }) => {
-          const user = await prisma.user.update({
+          await prisma.user.update({
             where: { id: message.user.id },
             data: { knockId: id },
           });
-          console.log(user.knockId);
         });
     },
   },

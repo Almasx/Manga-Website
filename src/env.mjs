@@ -27,8 +27,6 @@ const server = z.object({
   AWS_BUCKET_NAME: z.string(),
   AWS_S3_REGION: z.string(),
   KNOCK_SECRET_API_KEY: z.string(),
-  NEXT_PUBLIC_KNOCK_PUBLIC_API_KEY: z.string(),
-  NEXT_PUBLIC_KNOCK_FEED_CHANNEL_ID: z.string(),
 });
 
 /**
@@ -36,6 +34,8 @@ const server = z.object({
  * built with invalid env vars. To expose them to the client, prefix them with `NEXT_PUBLIC_`.
  */
 const client = z.object({
+  NEXT_PUBLIC_KNOCK_PUBLIC_API_KEY: z.string(),
+  NEXT_PUBLIC_KNOCK_FEED_CHANNEL_ID: z.string(),
   // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
 });
 

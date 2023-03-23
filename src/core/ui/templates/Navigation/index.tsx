@@ -1,10 +1,17 @@
-import { atom, useAtom, useSetAtom } from "jotai";
+import "@knocklabs/react-notification-feed/dist/index.css";
+
+import {
+  NotificationFeedPopover,
+  NotificationIconButton,
+} from "@knocklabs/react-notification-feed";
+import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 
 import AccountModal from "./AccountModal";
 import AuthenticationModal from "./AuthenticationModal";
 import Link from "next/link";
 import clsx from "clsx";
 import { useHideOnScroll } from "lib/hooks/useHideOnScroll";
+import { useRef } from "react";
 import { useSession } from "next-auth/react";
 
 interface IWrapperProps {
@@ -14,14 +21,24 @@ interface IWrapperProps {
 }
 
 export const showAuthModalAtom = atom<boolean>(false);
+export const showNotificationsAtom = atom<boolean>(false);
+export const notifButtonRefAtom = atom<any>(null);
+
 const Wrapper = ({
   className = "",
   children = null,
   dynamicHide = false,
 }: IWrapperProps) => {
-  const { status } = useSession();
+  const { status, data } = useSession();
   const navigationBar = useHideOnScroll<HTMLDivElement>(dynamicHide);
+  const notifButtonRef = useRef(null);
+  const setNotifButtonRef = useSetAtom(notifButtonRefAtom);
+  setNotifButtonRef(notifButtonRef);
+
   const [showAuthModal, setShowAuthModal] = useAtom(showAuthModalAtom);
+  const [showNotifications, setShowNotifications] = useAtom(
+    showNotificationsAtom
+  );
 
   return (
     <>
@@ -37,10 +54,19 @@ const Wrapper = ({
       </nav>
 
       {status === "authenticated" ? (
-        <AccountModal
-          visible={showAuthModal}
-          setVisible={() => setShowAuthModal(false)}
-        />
+        <>
+          <AccountModal
+            visible={showAuthModal}
+            setVisible={() => setShowAuthModal(false)}
+          />
+          {data.user?.knockId && (
+            <NotificationFeedPopover
+              buttonRef={notifButtonRef}
+              isVisible={showNotifications}
+              onClose={() => setShowNotifications(false)}
+            />
+          )}
+        </>
       ) : (
         <AuthenticationModal
           visible={showAuthModal}
@@ -67,14 +93,25 @@ const Links = () => {
 const Auth = () => {
   const { status, data } = useSession();
   const setShow = useSetAtom(showAuthModalAtom);
+  const setShowNotifications = useSetAtom(showNotificationsAtom);
+  const notifButtonRef = useAtomValue(notifButtonRefAtom);
+
   if (status === "authenticated") {
     return (
-      <img
-        onClick={() => setShow(true)}
-        className="h-8 w-8 rounded-full"
-        src={data?.user?.image as string | undefined}
-        alt="pfp"
-      />
+      <div className="flex gap-4">
+        {data.user?.knockId && (
+          <NotificationIconButton
+            ref={notifButtonRef}
+            onClick={() => setShowNotifications((previos) => !previos)}
+          />
+        )}
+        <img
+          onClick={() => setShow(true)}
+          className="h-8 w-8 rounded-full"
+          src={data?.user?.image as string | undefined}
+          alt="pfp"
+        />
+      </div>
     );
   }
 
