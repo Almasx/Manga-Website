@@ -170,7 +170,7 @@ model ComicsComment {
   updatedAt DateTime @updatedAt
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  String
-  comics    Comics   @relation(fields: [comicsId], references: [id])
+  comics    Comics   @relation(fields: [comicsId], references: [id], onDelete: Cascade)
   comicsId  String
   upVote    Int      @default(0)
   downVote  Int      @default(0)
@@ -198,7 +198,7 @@ model ChapterComment {
 model Ratings {
   id       Int    @id @default(autoincrement())
   rating   Int
-  comics   Comics @relation(fields: [comicsId], references: [id])
+  comics   Comics @relation(fields: [comicsId], references: [id], onDelete: Cascade)
   comicsId String
   user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId   String
@@ -211,7 +211,7 @@ model ChapterLike {
   id        Int     @id @default(autoincrement())
   chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
   chapterId String
-  author    User    @relation(fields: [authorId], references: [id])
+  author    User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  String
 
   @@index([chapterId])
