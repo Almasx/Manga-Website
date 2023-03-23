@@ -8,9 +8,10 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
 import { env } from "env.mjs";
 import { prisma } from "server/db";
-import { isGroupDon } from "lib/vk/isDon";
+import { isGroupDon } from "lib/vk/api";
 import type { GetServerSidePropsContext } from "next";
 import { getToken } from "next-auth/jwt";
+import { knockClient } from "lib/knock/knock-config";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -107,6 +108,19 @@ export const authOptions: NextAuthOptions = {
           },
         },
       });
+
+      knockClient.users
+        .identify(message.user.id, {
+          ...(message.user.name && { name: message.user.name }),
+          avatar: message.user.image,
+        })
+        .then(async ({ id }) => {
+          const user = await prisma.user.update({
+            where: { id: message.user.id },
+            data: { knockId: id },
+          });
+          console.log(user.knockId);
+        });
     },
   },
 };

@@ -26,6 +26,9 @@ const server = z.object({
   AWS_S3_SECRET_ACCESS_KEY: z.string(),
   AWS_BUCKET_NAME: z.string(),
   AWS_S3_REGION: z.string(),
+  KNOCK_SECRET_API_KEY: z.string(),
+  NEXT_PUBLIC_KNOCK_PUBLIC_API_KEY: z.string(),
+  NEXT_PUBLIC_KNOCK_FEED_CHANNEL_ID: z.string(),
 });
 
 /**
@@ -54,6 +57,11 @@ const processEnv = {
   AWS_S3_SECRET_ACCESS_KEY: process.env.AWS_S3_SECRET_ACCESS_KEY,
   AWS_BUCKET_NAME: process.env.AWS_BUCKET_NAME,
   AWS_S3_REGION: process.env.AWS_S3_REGION,
+  KNOCK_SECRET_API_KEY: process.env.KNOCK_SECRET_API_KEY,
+  NEXT_PUBLIC_KNOCK_PUBLIC_API_KEY:
+    process.env.NEXT_PUBLIC_KNOCK_PUBLIC_API_KEY,
+  NEXT_PUBLIC_KNOCK_FEED_CHANNEL_ID:
+    process.env.NEXT_PUBLIC_KNOCK_FEED_CHANNEL_ID,
 };
 
 // Don't touch the part below

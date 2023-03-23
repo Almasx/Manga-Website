@@ -51,6 +51,7 @@ model User {
   image         String?   @db.Text
   accounts      Account[]
   sessions      Session[]
+  knockId       String?
 
   role            Role             @default(USER)
   bookmarks       Bookmark[]
@@ -81,7 +82,7 @@ model Bookmark {
   id    String @id @default(cuid())
   title String
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
   comics    Comics[]
@@ -124,7 +125,7 @@ model Chapter {
   volumeIndex  Int
   title        String
 
-  comics   Comics @relation(fields: [comicsId], references: [id])
+  comics   Comics @relation(fields: [comicsId], references: [id], onDelete: Cascade)
   comicsId String
 
   publicAt DateTime?
@@ -149,7 +150,7 @@ model Genre {
 model Thumbnail {
   id String @id @default(cuid())
 
-  comics   Comics @relation(fields: [comicsId], references: [id])
+  comics   Comics @relation(fields: [comicsId], references: [id], onDelete: Cascade)
   comicsId String @unique
 }
 
