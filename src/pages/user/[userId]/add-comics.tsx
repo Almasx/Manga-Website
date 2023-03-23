@@ -5,13 +5,13 @@ import ModifyComics from "components/templates/ModifyComics";
 import type { PresignedPost } from "aws-sdk/clients/s3";
 import type { ReactNode } from "react";
 import type { SubmitHandler } from "react-hook-form";
+import { api } from "utils/api";
 import { prepareFormData } from "lib/aws/prepare-form-data";
-import { trpc } from "utils/trpc";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 
 const AddComics = () => {
-  const comicsMutation = trpc.comics.postComics.useMutation();
+  const comicsMutation = api.comics.postComics.useMutation();
   const { mutate: s3Mutate, isLoading: isUploading } = useMutation({
     mutationFn: ({ url, formData }: { url: string; formData: FormData }) => {
       return fetch(url, {

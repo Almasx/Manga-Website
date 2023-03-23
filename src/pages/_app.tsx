@@ -4,7 +4,7 @@ import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import NextNProgress from "nextjs-progressbar";
 
-import { trpc } from "../utils/trpc";
+import { api } from "../utils/api";
 
 import "../styles/globals.css";
 import type { ReactElement, ReactNode } from "react";
@@ -37,5 +37,5 @@ const MyApp: AppType<{ session: Session | null }> = ({
   );
 };
 
-const TRPCApp = trpc.withTRPC(MyApp);
+const TRPCApp = api.withTRPC(MyApp);
 export default TRPCApp;

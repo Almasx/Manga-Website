@@ -1,5 +1,5 @@
 import axios from "axios";
-import { env } from "env/server.mjs";
+import { env } from "env.mjs";
 
 const VK_URI = "https://api.vk.com/method/";
 

@@ -1,4 +1,4 @@
-import prisma from "server/db/client";
+import { prisma } from "server/db";
 
 export async function subscribeComicsAndBookmarks(
   comicsId: string,

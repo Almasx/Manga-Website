@@ -17,21 +17,21 @@ import type { IModal } from "types/model";
 import Link from "next/link";
 import Modal from "core/ui/primitives/Modal";
 import type { ReactNode } from "react";
-import type { RouterOutputs } from "utils/trpc";
+import type { RouterOutputs } from "utils/api";
 import Star from "../../../../public/icons/Star.svg";
 import Star3 from "../../../../public/icons/Star3.svg";
 import { TabBar } from "core/ui/primitives/TabBar";
 import TrendUp from "../../../../public/icons/TrendUp.svg";
 import TrendUpBulk from "../../../../public/icons/TrendUpBulk.svg";
 import type { User } from "next-auth";
-import { appRouter } from "../../../server/trpc/router/_app";
+import { api } from "utils/api";
+import { appRouter } from "server/api/root";
 import clsx from "clsx";
-import { createContextInner } from "../../../server/trpc/context";
+import { createInnerTRPCContext } from "server/api/trpc";
 import { createProxySSGHelpers } from "@trpc/react-query/ssg";
-import { getServerAuthSession } from "server/common/get-server-auth-session";
+import { getServerAuthSession } from "server/auth";
 import { numberFormatter } from "utils/formaters";
 import superjson from "superjson";
-import { trpc } from "utils/trpc";
 import { useRouter } from "next/router";
 import useScreen from "lib/hooks/useScreen";
 import { useSession } from "next-auth/react";
@@ -43,7 +43,7 @@ export const getServerSideProps = async (
   const session = await getServerAuthSession(context);
   const ssgHelper = createProxySSGHelpers({
     router: appRouter,
-    ctx: createContextInner({ session }),
+    ctx: createInnerTRPCContext({ session }),
     transformer: superjson,
   });
 
@@ -283,9 +283,9 @@ const RatingModal = ({
   visible,
 }: { title: string; comicsId: string } & IModal) => {
   const [hover, setHover] = useState(0);
-  const { data } = trpc.rating.getRating.useQuery({ comicsId });
+  const { data } = api.rating.getRating.useQuery({ comicsId });
 
-  const { mutate: ratingMutate } = trpc.rating.postRating.useMutation({
+  const { mutate: ratingMutate } = api.rating.postRating.useMutation({
     onSuccess: () => setVisible(false),
   });
 
@@ -356,7 +356,7 @@ const ChaptersSection = ({
   show = true,
 }: IChapterSectionProps) => {
   const [order, setOrder] = useState<"asc" | "desc">("asc");
-  const { data } = trpc.comics.getChapters.useQuery(
+  const { data } = api.comics.getChapters.useQuery(
     { order, comicsId },
     { initialData: chapters }
   );
@@ -436,13 +436,13 @@ const CommentsSection = ({
   show = false,
 }: ICommentsSectionProps) => {
   const [comment, setComment] = useState<string | undefined>(undefined);
-  const { data: comics, refetch } = trpc.comics.getComments.useQuery(
+  const { data: comics, refetch } = api.comics.getComments.useQuery(
     { comicsId },
     { initialData }
   );
   const { isSmallDevice } = useScreen();
 
-  const { mutate: commentMutate } = trpc.comics.postComment.useMutation({
+  const { mutate: commentMutate } = api.comics.postComment.useMutation({
     onSuccess: () => refetch(),
   });
 

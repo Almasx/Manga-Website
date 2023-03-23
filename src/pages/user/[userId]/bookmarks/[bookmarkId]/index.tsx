@@ -9,12 +9,12 @@ import { Loading } from "core/ui/primitives/Spinner";
 import type { ReactNode } from "react";
 import { SearchNormal } from "iconsax-react";
 import TextField from "core/ui/fields/TextField";
-import { appRouter } from "server/trpc/router/_app";
-import { createContextInner } from "server/trpc/context";
+import { api } from "utils/api";
+import { appRouter } from "server/api/root";
+import { createInnerTRPCContext } from "server/api/trpc";
 import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 import { getSession } from "next-auth/react";
 import superjson from "superjson";
-import { trpc } from "utils/trpc";
 import useDebounce from "lib/hooks/useDebounce";
 import { useState } from "react";
 
@@ -23,7 +23,7 @@ export const getServerSideProps = async (
 ) => {
   const ssgHelper = createProxySSGHelpers({
     router: appRouter,
-    ctx: createContextInner({ session: await getSession(context) }),
+    ctx: createInnerTRPCContext({ session: await getSession(context) }),
     transformer: superjson,
   });
 
@@ -55,7 +55,7 @@ const Bookmark = ({
   const debounce = useDebounce();
 
   const [searchQuery, setSearchQuery] = useState("");
-  const { data: bookmark, isLoading } = trpc.bookmark.getBookmark.useQuery({
+  const { data: bookmark, isLoading } = api.bookmark.getBookmark.useQuery({
     bookmarkId: bookmarkId,
     query: searchQuery,
   });
@@ -87,7 +87,8 @@ const Bookmark = ({
               id={comics.id}
               title={{ title_en: comics.title, title_ru: comics.title_ru }}
               key={comics.title}
-              thumbnail={comics.thumbnail}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              thumbnail={(comics as any).thumbnail}
             />
           ))
         )}

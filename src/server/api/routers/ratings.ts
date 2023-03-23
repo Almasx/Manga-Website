@@ -1,8 +1,8 @@
-import { protectedProcedure, router } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "server/api/trpc";
 
 import { z } from "zod";
 
-export const ratingRouter = router({
+export const ratingRouter = createTRPCRouter({
   getRating: protectedProcedure
     .input(z.object({ comicsId: z.string() }))
     .query(({ ctx, input: { comicsId } }) => {

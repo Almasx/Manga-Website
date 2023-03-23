@@ -1,14 +1,14 @@
 import { checkBookmark, defaultCheckBookmark } from "lib/queries/checkBookmark";
-import { protectedProcedure, router } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "server/api/trpc";
 
 import { checkComics } from "lib/queries/checkComics";
 import { clearSubscriptions } from "lib/queries/clearSubscriptions";
-import { handleQuery } from "server/common/handle-query";
+import { handleQuery } from "utils/handle-query";
 import { isUserBookmark } from "lib/queries/isUserBookmark";
 import { subscribeComicsAndBookmarks } from "lib/queries/subscribeBookmark";
 import { z } from "zod";
 
-const bookmarkRouter = router({
+const bookmarkRouter = createTRPCRouter({
   addBookmark: protectedProcedure
     .input(
       z.object({

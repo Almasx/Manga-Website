@@ -1,6 +1,6 @@
 export const getDifferenceObject = <T extends Record<string, any>>(
-  initialObject: T,
-  modifiedObject: T
+  initialObject: Partial<T>,
+  modifiedObject: Partial<T>
 ) => {
   const differenceObject: Partial<T> = {};
   for (const key of Object.keys(modifiedObject) as Array<keyof T>) {

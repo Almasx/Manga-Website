@@ -4,13 +4,13 @@ import { signOut, useSession } from "next-auth/react";
 import CheckBoxField from "core/ui/fields/CheckBoxField";
 import Link from "next/link";
 import SideBar from "core/ui/templates/SideBar";
-import { trpc } from "utils/trpc";
+import { api } from "utils/api";
 import { useRouter } from "next/router";
 
 const AccountBar = () => {
   const { asPath } = useRouter();
   const session = useSession();
-  const { data } = trpc.user.getBookmarks.useQuery(undefined, {
+  const { data } = api.user.getBookmarks.useQuery(undefined, {
     staleTime: Infinity,
     cacheTime: Infinity,
   });

@@ -2,9 +2,9 @@ import { ArrowLeft2, ArrowRight2 } from "iconsax-react";
 
 import Navigation from "core/ui/templates/Navigation";
 import React from "react";
+import { api } from "utils/api";
 import clsx from "clsx";
 import { showContentAtom } from ".";
-import { trpc } from "utils/trpc";
 import { useRouter } from "next/router";
 import { useSetAtom } from "jotai";
 
@@ -17,7 +17,7 @@ const Header = ({
 }) => {
   const setShowIndex = useSetAtom(showContentAtom);
   const { query, push } = useRouter();
-  const { data: comics } = trpc.comics.getChapters.useQuery({
+  const { data: comics } = api.comics.getChapters.useQuery({
     comicsId: query.comicsId as string,
   });
   const contentIndex = comics?.chapters?.findIndex(

@@ -31,16 +31,16 @@ import type { ReactNode } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import TextField from "core/ui/fields/TextField";
 import TimeField from "core/ui/fields/TimeField";
-import { appRouter } from "server/trpc/router/_app";
+import { api } from "utils/api";
+import { appRouter } from "server/api/root";
 import clsx from "clsx";
-import { createContextInner } from "server/trpc/context";
+import { createInnerTRPCContext } from "server/api/trpc";
 import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 import { getAddChapterSchema } from "lib/schemas/getAddChapterSchema";
 import { getDefaultVolumeAndChapterIndex } from "utils/get-default-index";
 import { isPublic } from "utils/is-premium";
 import { prepareFormData } from "lib/aws/prepare-form-data";
 import superjson from "superjson";
-import { trpc } from "utils/trpc";
 import { useAtom } from "jotai";
 import { useMemo } from "react";
 import { useMutation } from "@tanstack/react-query";
@@ -54,7 +54,7 @@ export const getServerSideProps = async (
 ) => {
   const ssgHelper = createProxySSGHelpers({
     router: appRouter,
-    ctx: createContextInner({ session: null }),
+    ctx: createInnerTRPCContext({ session: null }),
     transformer: superjson,
   });
 
@@ -89,7 +89,7 @@ const AddChapters = ({
   const {
     data: { chapters },
     refetch,
-  } = trpc.comics.getChapters.useQuery(
+  } = api.comics.getChapters.useQuery(
     { comicsId: comics.id },
     { initialData: comics }
   );
@@ -275,7 +275,7 @@ const DeleteChapterModal = ({
   );
 
   const { mutate: deleteChapters, isLoading } =
-    trpc.chapter.deleteChapters.useMutation({
+    api.chapter.deleteChapters.useMutation({
       onSuccess: () => {
         onSuccess();
         setShowDeleteChapter(false);
@@ -327,7 +327,7 @@ const AddChapterModal = ({ chapters, onSuccess }: IAddChapterModalProps) => {
 
   const { defaultVolumeIndex, defaultChapterIndex, chapterObject } =
     getDefaultVolumeAndChapterIndex(chapters);
-  const chapterMutation = trpc.chapter.postChapter.useMutation();
+  const chapterMutation = api.chapter.postChapter.useMutation();
 
   const addChapterSchema = getAddChapterSchema(chapterObject);
   type AddChapterSchema = z.infer<typeof addChapterSchema>;

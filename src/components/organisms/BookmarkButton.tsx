@@ -2,16 +2,16 @@ import Button from "core/ui/primitives/Button";
 import DropDown from "core/ui/primitives/DropDown";
 import { Save2 } from "iconsax-react";
 import { Tab } from "core/ui/templates/SideBar/Section";
-import { trpc } from "utils/trpc";
+import { api } from "utils/api";
 import { useSession } from "next-auth/react";
 
 export const BookmarkButton = ({ comicsId }: { comicsId: string }) => {
   const session = useSession();
-  const { data: user } = trpc.user.getBookmarks.useQuery(undefined, {
+  const { data: user } = api.user.getBookmarks.useQuery(undefined, {
     staleTime: Infinity,
     cacheTime: Infinity,
   });
-  const { mutate: addBookmark } = trpc.bookmark.addBookmark.useMutation();
+  const { mutate: addBookmark } = api.bookmark.addBookmark.useMutation();
 
   if (session.data?.user?.role !== "USER" || !user?.bookmarks) {
     return <></>;

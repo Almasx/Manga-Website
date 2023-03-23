@@ -1,19 +1,19 @@
 import Comment from "components/molecules/Comment";
 import CommentField from "components/molecules/CommentField";
 import SideBar from "core/ui/templates/SideBar";
-import { trpc } from "utils/trpc";
+import { api } from "utils/api";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 const CommentsSection = () => {
   const { query } = useRouter();
   const [comment, setComment] = useState<string | undefined>(undefined);
-  const { data: chapter, refetch } = trpc.chapter.getComments.useQuery({
+  const { data: chapter, refetch } = api.chapter.getComments.useQuery({
     chapterId: query.chapterId as string,
     comicsId: query.comicsId as string,
   });
 
-  const { mutate: commentMutate } = trpc.chapter.postComment.useMutation({
+  const { mutate: commentMutate } = api.chapter.postComment.useMutation({
     onSuccess: () => refetch(),
   });
 

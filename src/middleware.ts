@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { env } from "env/server.mjs";
+import { env } from "env.mjs";
 import { withAuth } from "next-auth/middleware";
 
 export default withAuth(

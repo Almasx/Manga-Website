@@ -1,9 +1,10 @@
 import Badge from "core/ui/primitives/Badge";
 import type { ChangeEvent } from "react";
+import type { IFilter } from "lib/hooks/useFilterStore";
 import { SearchNormal } from "iconsax-react";
 import TextField from "core/ui/fields/TextField";
+import { api } from "utils/api";
 import clsx from "clsx";
-import { trpc } from "utils/trpc";
 import useDebounce from "lib/hooks/useDebounce";
 import { useGenres } from "lib/hooks/useGenres";
 
@@ -22,7 +23,7 @@ const SelectGenres = ({
   onToggleGenre,
   className = "",
 }: ISelectGenresProps) => {
-  const genres = trpc.comics.getGenres.useQuery(undefined, {
+  const genres = api.comics.getGenres.useQuery(undefined, {
     staleTime: Infinity,
     cacheTime: Infinity,
   });

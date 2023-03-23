@@ -1,5 +1,5 @@
 import type { Prisma } from "@prisma/client";
-import prisma from "server/db/client";
+import { prisma } from "server/db";
 
 export async function getChapter<S extends Prisma.ChapterInclude>(
   include: Prisma.Subset<S, Prisma.ChapterInclude>,

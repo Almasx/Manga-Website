@@ -1,4 +1,4 @@
-import prisma from "server/db/client";
+import { prisma } from "server/db";
 
 export async function isUserBookmark(userId: string, bookmarkId: string) {
   const userBookmarks = await prisma.user

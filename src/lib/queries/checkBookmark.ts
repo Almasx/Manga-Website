@@ -1,5 +1,5 @@
 import type { Prisma } from "@prisma/client";
-import prisma from "server/db/client";
+import { prisma } from "server/db";
 
 export const defaultCheckBookmark: Prisma.BookmarkSelect = {
   userId: false,

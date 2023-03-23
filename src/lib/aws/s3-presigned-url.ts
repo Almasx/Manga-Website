@@ -1,5 +1,5 @@
 import { AWS } from "lib/aws/aws-config";
-import { env } from "env/server.mjs";
+import { env } from "env.mjs";
 
 const s3 = new AWS.S3();
 const UPLOADING_TIME_LIMIT = 600;

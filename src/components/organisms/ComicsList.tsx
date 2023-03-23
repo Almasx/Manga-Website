@@ -1,14 +1,14 @@
 import ComicsCard from "../../components/molecules/ComicsCard";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Loading } from "core/ui/primitives/Spinner";
-import { trpc } from "../../utils/trpc";
+import { api } from "../../utils/api";
 import { useFilterStore } from "../../lib/hooks/useFilterStore";
 import { useMemo } from "react";
 
 const ComicsList = () => {
   const { filter } = useFilterStore((state) => state);
   const { data, fetchNextPage, hasNextPage, isFetching } =
-    trpc.comics.getCatalog.useInfiniteQuery(
+    api.comics.getCatalog.useInfiniteQuery(
       { limit: 2, ...filter, genres: filter.genres.selected },
       {
         getNextPageParam: (lastComics) =>

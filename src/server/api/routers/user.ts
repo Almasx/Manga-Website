@@ -1,8 +1,8 @@
-import { protectedProcedure, router } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "server/api/trpc";
 
 import { z } from "zod";
 
-export const userRouter = router({
+export const userRouter = createTRPCRouter({
   getBookmarks: protectedProcedure.query(({ ctx }) => {
     const bookmarks = ctx.prisma.user.findUnique({
       where: { id: ctx.session.user.id },

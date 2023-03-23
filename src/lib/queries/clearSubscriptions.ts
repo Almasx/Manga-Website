@@ -2,8 +2,8 @@
 
 import type { checkComics } from "./checkComics";
 import type { isUserBookmark } from "./isUserBookmark";
-import prisma from "server/db/client";
-import type { queryResponceData } from "server/common/handle-query";
+import { prisma } from "server/db";
+import type { queryResponceData } from "utils/handle-query";
 
 export async function clearSubscriptions(
   comics: queryResponceData<ReturnType<typeof checkComics>>,

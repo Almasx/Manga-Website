@@ -3,18 +3,16 @@ import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from "next";
-import {
-  getServerAuthSession,
-  getServerAuthToken,
-} from "server/common/get-server-auth-session";
 
 import Button from "core/ui/primitives/Button";
 import { Messages1 } from "iconsax-react";
 import React from "react";
 import type { ReactNode } from "react";
-import { appRouter } from "server/trpc/router/_app";
-import { createContextInner } from "server/trpc/context";
+import { appRouter } from "server/api/root";
+import { createInnerTRPCContext } from "server/api/trpc";
 import { createProxySSGHelpers } from "@trpc/react-query/ssg";
+import { getServerAuthToken } from "server/auth";
+import { prisma } from "server/db";
 import superjson from "superjson";
 import { useSetAtom } from "jotai";
 
@@ -23,7 +21,7 @@ export const getServerSideProps = async (
 ) => {
   const ssgHelper = createProxySSGHelpers({
     router: appRouter,
-    ctx: createContextInner({ session: null }),
+    ctx: createInnerTRPCContext({ session: null }),
     transformer: superjson,
   });
 
@@ -43,7 +41,7 @@ export const getServerSideProps = async (
           chapter.publicAt.valueOf() - new Date().valueOf() <= 0
         : true
     ) {
-      prisma?.user.update({
+      prisma.user.update({
         where: { id: token?.id },
         data: {
           chaptersRead: { connect: { id: chapterId } },

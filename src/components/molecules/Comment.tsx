@@ -1,8 +1,8 @@
 import { ArrowDown2, ArrowUp2 } from "iconsax-react";
 
 import type { User } from "@prisma/client";
+import { api } from "utils/api";
 import clsx from "clsx";
-import { trpc } from "utils/trpc";
 import { useState } from "react";
 
 interface ICommentProps {
@@ -25,11 +25,11 @@ const Comment = ({
   const [vote, setVote] = useState<"upvote" | "downvote" | null>(null);
   const { data: rating, refetch } =
     type === "comics"
-      ? trpc.comics.getRatingComment.useQuery(
+      ? api.comics.getRatingComment.useQuery(
           { commentId: id },
           { initialData: initialRating, enabled: vote !== null }
         )
-      : trpc.chapter.getRatingComment.useQuery(
+      : api.chapter.getRatingComment.useQuery(
           { commentId: id },
           { initialData: initialRating, enabled: vote !== null }
         );
@@ -42,8 +42,8 @@ const Comment = ({
 
   const { mutate: voteComment } =
     type === "comics"
-      ? trpc.comics.postRatingComment.useMutation({ onSuccess })
-      : trpc.chapter.postRatingComment.useMutation({ onSuccess });
+      ? api.comics.postRatingComment.useMutation({ onSuccess })
+      : api.chapter.postRatingComment.useMutation({ onSuccess });
 
   return (
     <div className="flex flex-col gap-3 rounded-2xl border border-gray-dark p-4 text-light ">

@@ -3,15 +3,19 @@ import {
   defaultCheckComicsSelect,
   notExistComics,
 } from "lib/queries/checkComics";
-import { protectedProcedure, publicProcedure, router } from "../trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "server/api/trpc";
 
 import { Status } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
-import { handleQuery } from "server/common/handle-query";
+import { handleQuery } from "utils/handle-query";
 import { s3CreatePresignedUrl } from "lib/aws/s3-presigned-url";
 import { z } from "zod";
 
-const comicsRouter = router({
+const comicsRouter = createTRPCRouter({
   getGenres: publicProcedure.query(({ ctx }) => ctx.prisma.genre.findMany()),
 
   getComments: publicProcedure

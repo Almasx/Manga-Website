@@ -1,14 +1,18 @@
-import { protectedProcedure, publicProcedure, router } from "../trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "server/api/trpc";
 
 import { TRPCError } from "@trpc/server";
 import { checkChapter } from "lib/queries/checkChapter";
 import { checkComics } from "lib/queries/checkComics";
 import { getChapter } from "lib/queries/getChapter";
-import { handleQuery } from "server/common/handle-query";
+import { handleQuery } from "utils/handle-query";
 import { s3CreatePresignedUrl } from "lib/aws/s3-presigned-url";
 import { z } from "zod";
 
-export const chapterRouter = router({
+export const chapterRouter = createTRPCRouter({
   getLikes: publicProcedure
     .input(
       z.object({

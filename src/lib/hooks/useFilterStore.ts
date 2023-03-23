@@ -1,4 +1,4 @@
-import type { RouterInputs } from "utils/trpc";
+import type { RouterInputs } from "utils/api";
 import { create } from "zustand";
 
 export type IFilterSort = NonNullable<

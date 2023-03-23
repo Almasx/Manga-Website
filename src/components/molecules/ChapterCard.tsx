@@ -2,10 +2,10 @@ import type { ArrayElement } from "utils/util-types";
 import { Heart } from "iconsax-react";
 import Link from "next/link";
 import { ProBadge } from "core/ui/primitives/Badge";
-import type { RouterOutputs } from "utils/trpc";
+import type { RouterOutputs } from "utils/api";
+import { api } from "utils/api";
 import clsx from "clsx";
 import { dateOptions } from "utils/formaters";
-import { trpc } from "utils/trpc";
 import { useRouter } from "next/router";
 
 const ChapterCard = ({
@@ -24,11 +24,11 @@ const ChapterCard = ({
     ? publicAt.valueOf() - new Date().valueOf() >= 0
     : false;
 
-  const { data, refetch } = trpc.chapter.getLikes.useQuery(
+  const { data, refetch } = api.chapter.getLikes.useQuery(
     { chapterId: id },
     { enabled: !packed }
   );
-  const { mutate: postLike } = trpc.chapter.postLike.useMutation({
+  const { mutate: postLike } = api.chapter.postLike.useMutation({
     onSuccess: () => refetch(),
   });
 

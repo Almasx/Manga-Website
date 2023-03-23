@@ -10,13 +10,13 @@ import ModifyComics from "components/templates/ModifyComics";
 import type { PresignedPost } from "aws-sdk/clients/s3";
 import type { ReactNode } from "react";
 import type { SubmitHandler } from "react-hook-form";
-import { appRouter } from "server/trpc/router/_app";
-import { createContextInner } from "server/trpc/context";
+import { api } from "utils/api";
+import { appRouter } from "server/api/root";
+import { createInnerTRPCContext } from "server/api/trpc";
 import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 import { getDifferenceObject } from "utils/get-difference-object";
 import router from "next/router";
 import superjson from "superjson";
-import { trpc } from "utils/trpc";
 import { useMutation } from "@tanstack/react-query";
 
 export const getServerSideProps = async (
@@ -24,7 +24,7 @@ export const getServerSideProps = async (
 ) => {
   const ssgHelper = createProxySSGHelpers({
     router: appRouter,
-    ctx: createContextInner({ session: null }),
+    ctx: createInnerTRPCContext({ session: null }),
     transformer: superjson,
   });
 
@@ -51,7 +51,7 @@ export const getServerSideProps = async (
 const EditComics = ({
   comics,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const comicsMutation = trpc.comics.putComics.useMutation();
+  const comicsMutation = api.comics.putComics.useMutation();
   const { mutateAsync: s3Mutate, isLoading: isUploading } = useMutation({
     mutationFn: ({ url, formData }: { url: string; formData: FormData }) => {
       return fetch(url, {
@@ -63,7 +63,12 @@ const EditComics = ({
 
   const onSubmit: SubmitHandler<EditComicsSchema> = async (data) => {
     const initialData = {
-      ...comics,
+      thumbnail: comics.thumbnail,
+      title: comics.title,
+      title_ru: comics.title_ru,
+      description: comics.description,
+      status: comics.status,
+      year: comics.year,
       genres: comics?.genres.map((genre) => genre.id),
     };
     const modifiedData = (({ genresQuery, ...data }) => data)(data);
@@ -71,7 +76,8 @@ const EditComics = ({
 
     console.log(putData);
     const { url, fields } = (await comicsMutation.mutateAsync({
-      ...putData,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ...(putData as any),
       id: comics.id,
     })) as PresignedPost;
 
@@ -102,7 +108,8 @@ const EditComics = ({
       <ModifyComics
         onSubmit={onSubmit}
         defaultValues={{
-          ...comics,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          ...(comics as any),
           genres: comics?.genres.map((genre) => genre.id),
         }}
       />
