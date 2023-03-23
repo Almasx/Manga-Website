@@ -154,8 +154,12 @@ const comicsRouter = router({
           title: { contains: query },
         },
         orderBy: {
-          [sort === "saved" ? "bookmarks" : sort]:
-            sort in ["ratings", "saved"] ? { _count: order } : order,
+          [sort === "saved" ? "bookmarks" : sort]: [
+            "ratings",
+            "saved",
+          ].includes(sort)
+            ? { _count: order }
+            : order,
         },
         cursor: cursor ? { id: cursor } : undefined,
         take: limit,

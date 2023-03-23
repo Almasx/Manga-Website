@@ -1,3 +1,6 @@
+import type { IFilterSort } from "../lib/hooks/useFilterStore";
+import { useFilterStore } from "../lib/hooks/useFilterStore";
+
 import Button from "core/ui/primitives/Button";
 import CatalogLayout from "layout/catalog";
 import ComicsList from "../components/organisms/ComicsList";
@@ -9,7 +12,6 @@ import TrendUp from "../../public/icons/TrendUp.svg";
 import _ from "lodash";
 import clsx from "clsx";
 import useDebounce from "../lib/hooks/useDebounce";
-import { useFilterStore } from "../lib/hooks/useFilterStore";
 
 const Catalog = () => {
   const { filter, setSort, setQuery, toggleOrder } = useFilterStore(
@@ -29,14 +31,16 @@ const Catalog = () => {
       />
       <div className="relative flex w-full flex-row justify-between">
         <TabBar
-          onChange={(value: "rating" | "saved" | "year") => {
+          onChange={(value: IFilterSort) => {
             setSort(value);
           }}
-          tabs={[
-            { label: "Новое", value: "year" },
-            { label: "Читаемые", value: "save" },
-            { label: "Лучшие", value: "rating" },
-          ]}
+          tabs={
+            [
+              { label: "Новое", value: "year" },
+              { label: "Читаемые", value: "saved" },
+              { label: "Лучшие", value: "ratings" },
+            ] satisfies { label: string; value: IFilterSort }[]
+          }
         />
         <Button
           variant="secondary"

@@ -34,4 +34,15 @@ const Badge = ({ children, active, onClick, className = "" }: BadgeProps) => {
   );
 };
 
+export const ProBadge = ({ className = "" }: { className?: string }) => (
+  <div
+    className={clsx(
+      "rounded-md  bg-primary px-2 text-xs font-bold text-white",
+      className
+    )}
+  >
+    PRO
+  </div>
+);
+
 export default Badge;

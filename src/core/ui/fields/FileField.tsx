@@ -9,11 +9,21 @@ export type IFileFieldProps = {
   initialValue?: string;
   className?: string;
   onPreview?: (e: ChangeEvent<HTMLInputElement>) => void;
+  message: string;
 } & IField<HTMLInputElement>;
 
 const FileField = forwardRef<HTMLInputElement, IFileFieldProps>(
   (
-    { name, onChange, onBlur, error, className, onPreview, initialValue },
+    {
+      name,
+      onChange,
+      onBlur,
+      error,
+      className,
+      onPreview,
+      initialValue,
+      message,
+    },
     ref
   ) => {
     const [preview, setPreview] = useState<any>(null);
@@ -45,8 +55,7 @@ const FileField = forwardRef<HTMLInputElement, IFileFieldProps>(
           />
           <div className="flex flex-col items-center  gap-3">
             <h6 className="font-base mx-1 text-center font-medium">
-              Перетащите или <span className="text-primary">Выберите </span>
-              обложку манги
+              {message}
             </h6>
             <p className="mx-2 -mt-2 text-center text-xs text-light/30">
               Поддерживает форматы .jpeg, .png, .jpg

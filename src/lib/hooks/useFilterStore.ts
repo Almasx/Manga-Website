@@ -1,4 +1,22 @@
+import type { RouterInputs } from "utils/trpc";
 import { create } from "zustand";
+
+export type IFilterSort = NonNullable<
+  RouterInputs["comics"]["getCatalog"]["sort"]
+>;
+export type IFilterStatus = NonNullable<
+  RouterInputs["comics"]["getCatalog"]["status"]
+>;
+export interface IFilter {
+  query: string;
+  sort: IFilterSort;
+  order: "asc" | "desc";
+  genres: {
+    selected: string[];
+    query: string;
+  };
+  status: IFilterStatus;
+}
 
 interface IFilterState {
   filter: IFilter;

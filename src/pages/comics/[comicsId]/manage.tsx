@@ -25,6 +25,7 @@ import Link from "next/link";
 import Modal from "core/ui/primitives/Modal";
 import NumberField from "core/ui/fields/NumberField";
 import type { PresignedPost } from "aws-sdk/clients/s3";
+import { ProBadge } from "core/ui/primitives/Badge";
 import { RadioFieldTabs } from "core/ui/primitives/TabBar";
 import type { ReactNode } from "react";
 import type { SubmitHandler } from "react-hook-form";
@@ -36,6 +37,7 @@ import { createContextInner } from "server/trpc/context";
 import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 import { getAddChapterSchema } from "lib/schemas/getAddChapterSchema";
 import { getDefaultVolumeAndChapterIndex } from "utils/get-default-index";
+import { isPublic } from "utils/is-premium";
 import { prepareFormData } from "lib/aws/prepare-form-data";
 import superjson from "superjson";
 import { trpc } from "utils/trpc";
@@ -108,7 +110,7 @@ const AddChapters = ({
     columnHelper.display({
       id: "select",
       header: ({ table }) => (
-        <div className="flex h-8 w-12 justify-center border-b border-gray-dark-secondary ">
+        <div className="flex h-8 w-12 items-center justify-center border-b border-gray-dark-secondary ">
           <IndeterminateCheckbox
             {...{
               checked: table.getIsAllRowsSelected(),
@@ -119,7 +121,7 @@ const AddChapters = ({
         </div>
       ),
       cell: ({ row }) => (
-        <div className="flex h-11 w-12 justify-center border-b border-gray-dark-secondary">
+        <div className="flex h-11 w-12 items-center justify-center border-b border-gray-dark-secondary">
           <IndeterminateCheckbox
             {...{
               checked: row.getIsSelected(),
@@ -162,6 +164,7 @@ const AddChapters = ({
         </div>
       ),
       cell: (info) => {
+        const premuim = !isPublic(info.row.original.publicAt);
         return (
           <div className="flex h-11 items-center gap-3 border-b border-l border-gray-dark bg-dark-secondary px-5 text-sm text-light">
             <Link
@@ -170,7 +173,8 @@ const AddChapters = ({
             >
               🡥
             </Link>
-            {info.getValue()}
+            <p className={clsx(premuim && "text-primary")}>{info.getValue()}</p>
+            {premuim && <ProBadge className="-ml-1 py-0.5" />}
           </div>
         );
       },
@@ -293,7 +297,8 @@ const DeleteChapterModal = ({
         <Button
           type="submit"
           variant="secondary"
-          className="w-full rounded-full px-3 py-2 font-bold text-red-600 hover:bg-red-600 hover:text-white"
+          className="w-full rounded-full px-3 py-2 font-bold text-red-600 hover:bg-red-600
+                   hover:text-white disabled:bg-red-900"
           onClick={() => deleteChapters({ chapterIds })}
           loading={isLoading}
         >
@@ -457,6 +462,7 @@ const AddChapterModal = ({ chapters, onSuccess }: IAddChapterModalProps) => {
         <div className="scrollbar-hide relative flex grow flex-col overflow-y-auto">
           <h3 className="mb-2 px-3 text-sm text-light/30">Страницы</h3>
           <FileField
+            message="Выберите страницы главы"
             className="mb-6 h-48 justify-center"
             onPreview={(e) => {
               if (e.target.files) {

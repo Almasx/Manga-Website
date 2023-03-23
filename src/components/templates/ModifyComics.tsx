@@ -67,6 +67,7 @@ const ModifyComics = ({
         className="grid grid-cols-4 gap-5 md:grid-cols-6 lg:grid-cols-10"
       >
         <FileField
+          message="Выберите обложку манги"
           className="h-full"
           error={errors.thumbnail?.message as string}
           {...register("thumbnail", { required: true })}

@@ -18,7 +18,7 @@ export function IndeterminateCheckbox({
   }, [ref, indeterminate, rest.checked]);
 
   return (
-    <label className="relative flex cursor-pointer items-center ">
+    <label className="relative flex h-[21px] cursor-pointer items-center">
       <input
         type="checkbox"
         className={clsx(

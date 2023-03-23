@@ -1,6 +1,7 @@
 import type { Chapter } from "@prisma/client";
 import { Heart } from "iconsax-react";
 import Link from "next/link";
+import { ProBadge } from "core/ui/primitives/Badge";
 import clsx from "clsx";
 import { dateOptions } from "utils/formaters";
 import { trpc } from "utils/trpc";
@@ -40,12 +41,7 @@ const ChapterCard = ({
       )}
     >
       {!packed && premium && (
-        <div
-          className="absolute top-0  z-10 -translate-x-1 -translate-y-1/2 rounded-md 
-        bg-primary px-2 text-xs font-bold text-white "
-        >
-          PRO
-        </div>
+        <ProBadge className="absolute top-0  z-10 -translate-x-1 -translate-y-1/2 " />
       )}
       <p className="mr-2 text-sm font-medium uppercase text-light/60">
         Том {volumeIndex}

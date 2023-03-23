@@ -50,7 +50,6 @@ const Button = ({
       }}
       disabled={disabled || loading}
       className={clsx(
-        className,
         "flex flex-row items-center justify-center rounded-xl",
         "relative overflow-hidden transition-colors", // others
         [
@@ -72,7 +71,8 @@ const Button = ({
             content === "text" && "text-primary ", // typography
           ],
         ],
-        "disabled:cursor-not-allowed disabled:bg-primary/80"
+        "disabled:cursor-not-allowed disabled:bg-primary/80",
+        className
       )}
       {...props}
     >

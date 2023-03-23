@@ -1,7 +1,7 @@
 import Button from "core/ui/primitives/Button";
 import DropDown from "core/ui/primitives/DropDown";
 import { Save2 } from "iconsax-react";
-import Tab from "core/ui/templates/SideBar/Section/Tab";
+import { Tab } from "core/ui/templates/SideBar/Section";
 import { trpc } from "utils/trpc";
 import { useSession } from "next-auth/react";
 
