@@ -36,6 +36,7 @@ const server = z.object({
 const client = z.object({
   NEXT_PUBLIC_KNOCK_PUBLIC_API_KEY: z.string(),
   NEXT_PUBLIC_KNOCK_FEED_CHANNEL_ID: z.string(),
+  NEXT_PUBLIC_AXIOM_INGEST_ENDPOINT: z.string(),
   // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
 });
 
@@ -62,6 +63,8 @@ const processEnv = {
     process.env.NEXT_PUBLIC_KNOCK_PUBLIC_API_KEY,
   NEXT_PUBLIC_KNOCK_FEED_CHANNEL_ID:
     process.env.NEXT_PUBLIC_KNOCK_FEED_CHANNEL_ID,
+  NEXT_PUBLIC_AXIOM_INGEST_ENDPOINT:
+    process.env.NEXT_PUBLIC_AXIOM_INGEST_ENDPOINT,
 };
 
 // Don't touch the part below

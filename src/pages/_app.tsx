@@ -5,6 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import NextNProgress from "nextjs-progressbar";
 
 import { api } from "../utils/api";
+export { reportWebVitals } from "next-axiom";
 
 import "../styles/globals.css";
 import type { ReactElement, ReactNode } from "react";

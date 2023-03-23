@@ -5,7 +5,7 @@
  */
 !process.env.SKIP_ENV_VALIDATION && (await import("./src/env.mjs"));
 
-import analyzer from "@next/bundle-analyzer";
+import { withAxiom } from "next-axiom";
 
 /** @type {import("next").NextConfig} */
 const config = {
@@ -37,9 +37,4 @@ const config = {
   },
 };
 
-const withBundleAnalyzer = analyzer({
-  enabled: process.env.ANALYZE === "true",
-  openAnalyzer: false,
-});
-
-export default withBundleAnalyzer(config);
+export default withAxiom({ config });
