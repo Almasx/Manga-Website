@@ -131,19 +131,6 @@ const AddChapters = ({
         </div>
       ),
     }),
-    columnHelper.accessor("chapterIndex", {
-      header: () => (
-        <div className="flex h-8 w-24 items-center border-b border-l  border-gray-dark-secondary px-5 text-left font-medium text-light/30">
-          Главы
-        </div>
-      ),
-      cell: (info) => (
-        <NumberField
-          value={info.getValue().toString()}
-          className="!w-24 rounded-none border-0 border-b border-l"
-        />
-      ),
-    }),
     columnHelper.accessor("volumeIndex", {
       header: () => (
         <div className="flex h-8 w-24 items-center border-b border-l border-gray-dark-secondary bg-dark px-5 text-left font-medium text-light/30">
@@ -151,10 +138,21 @@ const AddChapters = ({
         </div>
       ),
       cell: (info) => (
-        <NumberField
-          value={info.getValue().toString()}
-          className="!w-24 rounded-none border-0 border-b border-l"
-        />
+        <div className="w-24  border-0 border-b border-l border-gray-dark bg-dark-secondary px-5 py-3 text-sm text-light">
+          {info.getValue().toString()}
+        </div>
+      ),
+    }),
+    columnHelper.accessor("chapterIndex", {
+      header: () => (
+        <div className="flex h-8 w-24 items-center border-b border-l  border-gray-dark-secondary px-5 text-left font-medium text-light/30">
+          Главы
+        </div>
+      ),
+      cell: (info) => (
+        <div className="w-24  border-0 border-b border-l border-gray-dark bg-dark-secondary px-5 py-3 text-sm text-light">
+          {info.getValue().toString()}
+        </div>
       ),
     }),
     columnHelper.accessor("title", {
@@ -165,18 +163,15 @@ const AddChapters = ({
       ),
       cell: (info) => {
         return (
-          <TextField
-            startIcon={
-              <Link
-                className="text-lg text-white/20 duration-150 hover:text-white"
-                href={`/comics/${comics.id}/chapter/${info.row.original.id}`}
-              >
-                🡥
-              </Link>
-            }
-            value={info.getValue()}
-            className="rounded-none border-t-0 border-r-0"
-          />
+          <div className="flex h-11 items-center gap-3 border-b border-l border-gray-dark bg-dark-secondary px-5 text-sm text-light">
+            <Link
+              className="text-lg text-white/20 duration-150 hover:text-white"
+              href={`/comics/${comics.id}/chapter/${info.row.original.id}`}
+            >
+              🡥
+            </Link>
+            {info.getValue()}
+          </div>
         );
       },
     }),
@@ -187,10 +182,9 @@ const AddChapters = ({
         </div>
       ),
       cell: (info) => (
-        <NumberField
-          value={info.getValue().toString()}
-          className="!w-28 rounded-none border-t-0 border-r-0"
-        />
+        <div className="w-28 border-b border-l border-gray-dark bg-dark-secondary px-5 py-3 text-sm text-light">
+          {info.getValue().toString()}
+        </div>
       ),
     }),
   ];
@@ -212,7 +206,10 @@ const AddChapters = ({
       <AddChapterModal chapters={chapters} onSuccess={() => refetch()} />
       <DeleteChapterModal
         chapterIds={selectedChapterIds}
-        onSuccess={() => refetch()}
+        onSuccess={() => {
+          refetch();
+          setRowSelection({});
+        }}
       />
       <div className="h-fit w-[80vw] overflow-clip rounded-xl border border-gray-dark-secondary ">
         <table className="-mb-1 w-full table-fixed border-collapse overflow-x-auto">

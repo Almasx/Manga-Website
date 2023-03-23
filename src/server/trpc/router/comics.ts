@@ -113,7 +113,7 @@ const comicsRouter = router({
                 publicAt: true,
                 _count: { select: { pages: true } },
               },
-              orderBy: { createdAt: order },
+              orderBy: [{ volumeIndex: order }, { chapterIndex: order }],
             },
           },
           { id: comicsId }

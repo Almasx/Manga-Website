@@ -154,7 +154,7 @@ model Thumbnail {
 model Page {
   id String @id @default(cuid())
 
-  chapter   Chapter @relation(fields: [chapterId], references: [id])
+  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
   chapterId String
 
   @@index([chapterId])
@@ -183,7 +183,7 @@ model ChapterComment {
   updatedAt DateTime @updatedAt
   author    User     @relation(fields: [authorId], references: [id])
   authorId  String
-  chapter   Chapter  @relation(fields: [chapterId], references: [id])
+  chapter   Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
   chapterId String
   upVote    Int      @default(0)
   downVote  Int      @default(0)
@@ -206,7 +206,7 @@ model Ratings {
 
 model ChapterLike {
   id        Int     @id @default(autoincrement())
-  chapter   Chapter @relation(fields: [chapterId], references: [id])
+  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
   chapterId String
   author    User    @relation(fields: [authorId], references: [id])
   authorId  String
