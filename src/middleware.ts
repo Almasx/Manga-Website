@@ -5,7 +5,7 @@ import { withAuth } from "next-auth/middleware";
 export default withAuth(
   function middleware(req) {
     const { pathname } = req.nextUrl;
-    const adminRoutes: string[] = ["/add-comics", "/add-chapter", "/edit"];
+    const adminRoutes: string[] = ["/add-comics", "/manage", "/edit"];
 
     const isAdminRoute = adminRoutes.some((path) => pathname.endsWith(path));
     if (isAdminRoute && req.nextauth.token?.role !== "ADMIN") {

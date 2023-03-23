@@ -61,6 +61,7 @@ model User {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   chapterLikes ChapterLike[]
+  chaptersRead Chapter[]
 }
 
 enum Role {
@@ -133,6 +134,7 @@ model Chapter {
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
   likes     ChapterLike[]
+  userRead  User[]
 
   @@unique([chapterIndex, volumeIndex])
   @@index([comicsId])

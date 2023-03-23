@@ -28,6 +28,7 @@ import { appRouter } from "../../../server/trpc/router/_app";
 import clsx from "clsx";
 import { createContextInner } from "../../../server/trpc/context";
 import { createProxySSGHelpers } from "@trpc/react-query/ssg";
+import { getServerAuthSession } from "server/common/get-server-auth-session";
 import { numberFormatter } from "utils/formaters";
 import superjson from "superjson";
 import { trpc } from "utils/trpc";
@@ -39,9 +40,10 @@ import { useState } from "react";
 export const getServerSideProps = async (
   context: GetServerSidePropsContext<{ comicsId: string }>
 ) => {
+  const session = await getServerAuthSession(context);
   const ssgHelper = createProxySSGHelpers({
     router: appRouter,
-    ctx: createContextInner({ session: null }),
+    ctx: createContextInner({ session }),
     transformer: superjson,
   });
 
@@ -394,7 +396,15 @@ const ChaptersSection = ({
       )}
       <div className="no-scroll scrollbar-hide flex grow flex-col gap-4 overflow-y-auto rounded-xl lg:-ml-14 lg:pl-4 lg:pr-3">
         {data?.chapters?.map((chapter) => (
-          <ChapterCard {...chapter} key={chapter.id} />
+          <ChapterCard
+            read={
+              chapters.find(
+                (initialChapter) => initialChapter.id === chapter.id
+              )?.read || false
+            }
+            {...chapter}
+            key={chapter.id}
+          />
         ))}
 
         <div className="lg:h-8" />

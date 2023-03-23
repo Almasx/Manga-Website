@@ -177,14 +177,31 @@ const comicsRouter = router({
         comicsId: z.string({ required_error: "Comics id is required" }),
       })
     )
-    .query(async ({ input }) => {
-      const { comicsId } = input;
+    .query(async ({ input: { comicsId }, ctx }) => {
       const comics = await handleQuery(
         checkComics(defaultCheckComicsSelect, { id: comicsId })
       );
 
+      const user =
+        ctx.session?.user?.id &&
+        (await ctx.prisma.user.findUnique({
+          where: { id: ctx.session?.user?.id },
+          select: { chaptersRead: true },
+        }));
+
+      console.log(user && user.chaptersRead, ctx.session?.user?.id);
+
       return {
         ...comics,
+        chapters: comics.chapters.map((chapter) => ({
+          ...chapter,
+          read: user
+            ? !!user.chaptersRead.find(
+                (chapterRead) => chapterRead.id === chapter.id
+              )
+            : false,
+        })),
+
         status:
           comics.status === "ongoing"
             ? "Выпускается"

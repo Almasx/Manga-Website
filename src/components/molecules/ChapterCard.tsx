@@ -1,7 +1,8 @@
-import type { Chapter } from "@prisma/client";
+import type { ArrayElement } from "utils/util-types";
 import { Heart } from "iconsax-react";
 import Link from "next/link";
 import { ProBadge } from "core/ui/primitives/Badge";
+import type { RouterOutputs } from "utils/trpc";
 import clsx from "clsx";
 import { dateOptions } from "utils/formaters";
 import { trpc } from "utils/trpc";
@@ -13,10 +14,11 @@ const ChapterCard = ({
   volumeIndex,
   createdAt,
   publicAt,
+  read,
   packed = false,
 }: {
   packed?: boolean;
-} & Omit<Chapter, "pages" | "comicsId" | "updatedAt">) => {
+} & ArrayElement<RouterOutputs["comics"]["getComics"]["chapters"]>) => {
   const { asPath } = useRouter();
   const premium = publicAt
     ? publicAt.valueOf() - new Date().valueOf() >= 0
@@ -37,22 +39,34 @@ const ChapterCard = ({
         "flex flex-row items-center rounded-2xl border  border-gray-dark-secondary px-5",
         "relative py-3 text-light  duration-100 hover:border-2 hover:border-gray-dark",
         !packed && "bg-dark hover:scale-105",
-        packed && "border-gray-dark bg-dark/40 hover:border-white/30"
+        packed && "border-gray-dark bg-dark/40 hover:border-white/30",
+        read && "text-white/30"
       )}
     >
       {!packed && premium && (
         <ProBadge className="absolute top-0  z-10 -translate-x-1 -translate-y-1/2 " />
       )}
-      <p className="mr-2 text-sm font-medium uppercase text-light/60">
+      <p
+        className={clsx(
+          "mr-2 text-sm font-medium uppercase text-light/60",
+          read && "text-white/30"
+        )}
+      >
         Том {volumeIndex}
       </p>
-      <p className="mr-2 text-base font-bold text-light">
+      <p
+        className={clsx(
+          "mr-2 text-base font-bold text-light",
+          read && "text-white/30"
+        )}
+      >
         Глава {chapterIndex}
       </p>
       <p
         className={clsx(
           "mr-4 text-sm text-light/60",
-          premium && "text-primary"
+          premium && "text-primary",
+          read && "text-white/30"
         )}
       >
         {
@@ -72,7 +86,7 @@ const ChapterCard = ({
         >
           <Heart
             size="24"
-            className="text-primary"
+            className={clsx("text-primary", read && "text-primary/50")}
             variant={data?.likedByUser ? "Bold" : "Linear"}
           />
         </button>
