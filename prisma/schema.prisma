@@ -168,7 +168,7 @@ model ComicsComment {
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  author    User     @relation(fields: [authorId], references: [id])
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  String
   comics    Comics   @relation(fields: [comicsId], references: [id])
   comicsId  String
@@ -184,7 +184,7 @@ model ChapterComment {
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  author    User     @relation(fields: [authorId], references: [id])
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  String
   chapter   Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
   chapterId String
@@ -200,7 +200,7 @@ model Ratings {
   rating   Int
   comics   Comics @relation(fields: [comicsId], references: [id])
   comicsId String
-  user     User   @relation(fields: [userId], references: [id])
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId   String
 
   @@index([comicsId])
