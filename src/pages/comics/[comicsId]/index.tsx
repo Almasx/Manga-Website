@@ -162,7 +162,7 @@ const Comics = ({
       />
       <CommentsSection
         comicsId={comics.id}
-        initialData={comics.comments}
+        initialData={comics.comments as any}
         show={isSmallDevice || isLaptop ? tab === "comments" : true}
       />
 
