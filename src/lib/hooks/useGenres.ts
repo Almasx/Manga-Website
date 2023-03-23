@@ -1,4 +1,5 @@
 import type { Genre } from "@prisma/client";
+import type { IFilter } from "./useFilterStore";
 import { useMemo } from "react";
 
 export const useSortedGenres = (

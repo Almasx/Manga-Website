@@ -2,7 +2,7 @@ import { cloneElement, useState } from "react";
 
 import type { ButtonProps } from "core/ui/primitives/Button";
 import type { ReactElement } from "react";
-import type { TabProps } from "core/ui/templates/SideBar/Section/Tab";
+import type { TabProps } from "core/ui/templates/SideBar/Section";
 import clsx from "clsx";
 
 interface DropDownProps {
