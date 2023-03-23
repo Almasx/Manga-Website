@@ -1,27 +1,27 @@
+import { atom, useAtom, useSetAtom } from "jotai";
+
 import AccountModal from "./AccountModal";
 import AuthenticationModal from "./AuthenticationModal";
 import Link from "next/link";
 import clsx from "clsx";
 import { useHideOnScroll } from "lib/hooks/useHideOnScroll";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
 
 interface IWrapperProps {
   className?: string;
   children?: React.ReactNode;
   dynamicHide?: boolean;
-  auth?: boolean;
 }
 
+export const showAuthModalAtom = atom<boolean>(false);
 const Wrapper = ({
   className = "",
   children = null,
   dynamicHide = false,
-  auth = false,
 }: IWrapperProps) => {
-  const { status, data } = useSession();
+  const { status } = useSession();
   const navigationBar = useHideOnScroll<HTMLDivElement>(dynamicHide);
-  const [modal, setModal] = useState<boolean>(false);
+  const [showAuthModal, setShowAuthModal] = useAtom(showAuthModalAtom);
 
   return (
     <>
@@ -34,31 +34,18 @@ const Wrapper = ({
         )}
       >
         {children}
-        {!auth ? (
-          <></>
-        ) : status === "authenticated" ? (
-          <img
-            onClick={() => setModal(true)}
-            className=" h-8 w-8 rounded-full"
-            src={data?.user?.image as string | undefined}
-            alt="pfp"
-          />
-        ) : (
-          <button
-            onClick={() => setModal(true)}
-            className=" text-xs text-primary"
-          >
-            Войти
-          </button>
-        )}
       </nav>
 
-      {!auth ? (
-        <></>
-      ) : status === "authenticated" ? (
-        <AccountModal visible={modal} setVisible={() => setModal(false)} />
+      {status === "authenticated" ? (
+        <AccountModal
+          visible={showAuthModal}
+          setVisible={() => setShowAuthModal(false)}
+        />
       ) : (
-        <AuthenticationModal visible={modal} setVisible={setModal as any} />
+        <AuthenticationModal
+          visible={showAuthModal}
+          setVisible={setShowAuthModal as any}
+        />
       )}
     </>
   );
@@ -77,6 +64,27 @@ const Links = () => {
   );
 };
 
-const Navigation = { Wrapper, Links };
+const Auth = () => {
+  const { status, data } = useSession();
+  const setShow = useSetAtom(showAuthModalAtom);
+  if (status === "authenticated") {
+    return (
+      <img
+        onClick={() => setShow(true)}
+        className="h-8 w-8 rounded-full"
+        src={data?.user?.image as string | undefined}
+        alt="pfp"
+      />
+    );
+  }
+
+  return (
+    <button onClick={() => setShow(true)} className=" text-xs text-primary">
+      Войти
+    </button>
+  );
+};
+
+const Navigation = { Wrapper, Links, Auth };
 
 export default Navigation;

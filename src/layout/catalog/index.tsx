@@ -11,8 +11,9 @@ export default function CatalogLayout({ children }: { children: ReactNode }) {
   const { isSmallDevice } = useScreen();
   return (
     <div className="relative min-h-screen overflow-hidden bg-dark text-light">
-      <Navigation.Wrapper auth={true}>
+      <Navigation.Wrapper>
         <Navigation.Links />
+        <Navigation.Auth />
       </Navigation.Wrapper>
 
       <main className="relative mx-auto w-full flex-row">

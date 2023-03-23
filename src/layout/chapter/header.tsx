@@ -29,9 +29,12 @@ const Header = ({
   const followingChapter = contentIndex && comics?.chapters[contentIndex + 1];
 
   return (
-    <Navigation.Wrapper auth={true} dynamicHide={true} className="fixed z-10">
+    <Navigation.Wrapper
+      dynamicHide={true}
+      className="fixed z-10 !grid grid-cols-3"
+    >
       <Navigation.Links />
-      <div className="flex flex-row items-center gap-5 font-medium text-light">
+      <div className="flex flex-row place-content-center items-center gap-5 font-medium text-light">
         <button
           onClick={() =>
             previosChapter &&
@@ -63,6 +66,9 @@ const Header = ({
             className={clsx(!followingChapter && "text-light/30")}
           />
         </button>
+      </div>
+      <div className="flex justify-end">
+        <Navigation.Auth />
       </div>
     </Navigation.Wrapper>
   );

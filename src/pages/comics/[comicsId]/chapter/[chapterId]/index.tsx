@@ -38,23 +38,23 @@ export const getServerSideProps = async (
     const token = await getServerAuthToken(context);
     if (
       chapter.publicAt
-        ? token?.premium ||
-          chapter.publicAt.valueOf() - new Date().valueOf() >= 0
+        ? token?.role === "ADMIN" ||
+          token?.premium ||
+          chapter.publicAt.valueOf() - new Date().valueOf() <= 0
         : true
     ) {
-      console.log("token");
       return {
-        redirect: {
-          destination: "/404",
-          permanent: false,
+        props: {
+          trpcState: ssgHelper.dehydrate(),
+          chapter,
         },
       };
     }
 
     return {
-      props: {
-        trpcState: ssgHelper.dehydrate(),
-        chapter,
+      redirect: {
+        destination: "/pro",
+        permanent: false,
       },
     };
   } catch (error) {

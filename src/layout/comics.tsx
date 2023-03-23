@@ -16,8 +16,9 @@ export default function ComicsLayout({
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-dark text-light ">
-      <Navigation.Wrapper auth={true} className="fixed z-20">
+      <Navigation.Wrapper className="fixed z-20">
         <Navigation.Links />
+        <Navigation.Auth />
       </Navigation.Wrapper>
       {isSmallDevice && (
         <img
