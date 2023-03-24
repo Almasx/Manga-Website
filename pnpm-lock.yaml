@@ -16,7 +16,6 @@ specifiers:
   '@trpc/next': ^10.14.0
   '@trpc/react-query': ^10.14.0
   '@trpc/server': ^10.14.0
-  '@ts-react/form': ^1.3.0
   '@types/bcryptjs': ^2.4.2
   '@types/eslint': ^8.21.1
   '@types/lodash': ^4.14.191
@@ -26,12 +25,9 @@ specifiers:
   '@types/react-dom': ^18.0.11
   '@typescript-eslint/eslint-plugin': ^5.54.0
   '@typescript-eslint/parser': ^5.54.0
-  '@upstash/qstash': ^0.3.6
-  '@upstash/redis': ^1.20.1
   autoprefixer: ^10.4.13
   aws-sdk: ^2.1328.0
   axios: ^1.3.4
-  bcryptjs: ^2.4.3
   clsx: ^1.2.1
   eslint: ^8.35.0
   eslint-config-next: 13.1.6
@@ -40,7 +36,6 @@ specifiers:
   lodash: ^4.17.21
   next: 13.1.6
   next-auth: ^4.20.1
-  next-axiom: ^0.17.0
   next-superjson-plugin: ^0.5.6
   nextjs-progressbar: ^0.0.16
   postcss: ^8.4.21
@@ -73,21 +68,16 @@ dependencies:
   '@trpc/next': 10.14.0_qzkfoa3ozepe6zqxkpnxo2rd64
   '@trpc/react-query': 10.14.0_gqzahltmmgiv44m4moyfehsu6m
   '@trpc/server': 10.14.0
-  '@ts-react/form': 1.3.0_qjocrdu5neby52v4ynsvmdn3se
   '@types/bcryptjs': 2.4.2
   '@types/lodash': 4.14.191
-  '@upstash/qstash': 0.3.6
-  '@upstash/redis': 1.20.1
   aws-sdk: 2.1328.0
   axios: 1.3.4
-  bcryptjs: 2.4.3
   clsx: 1.2.1
   iconsax-react: 0.0.8_react@18.2.0
   jotai: 2.0.3_react@18.2.0
   lodash: 4.17.21
   next: 13.1.6_biqbaboplfbrettd7655fr4n2y
   next-auth: 4.20.1_3vryta7zmbcsw4rrqf4axjqggm
-  next-axiom: 0.17.0_next@13.1.6
   next-superjson-plugin: 0.5.6_fuifow6kfixbw2msn476lx6sqm
   nextjs-progressbar: 0.0.16_next@13.1.6+react@18.2.0
   react: 18.2.0
@@ -1389,10 +1379,6 @@ packages:
       to-fast-properties: 2.0.0
     dev: false
 
-  /@deno/shim-crypto/0.3.1:
-    resolution: {integrity: sha512-ed4pNnfur6UbASEgF34gVxR9p7Mc3qF+Ygbmjiil8ws5IhNFhPDFy5vE5hQAUA9JmVsSxXPcVLM5Rf8LOZqQ5Q==}
-    dev: false
-
   /@emotion/babel-plugin/11.10.6:
     resolution: {integrity: sha512-p2dAqtVrkhSa7xz1u/m9eHYdLi+en8NowrmXeF/dKtJpU8lCWli8RUAati7NcSl0afsBott48pdnANuD0wh9QQ==}
     dependencies:
@@ -2131,20 +2117,6 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: false
 
-  /@ts-react/form/1.3.0_qjocrdu5neby52v4ynsvmdn3se:
-    resolution: {integrity: sha512-8AaXInjff99MOQXwnKJxwvb8ODLoaglKO7yOAeScgLJj8zsemuujsf2qBrco6ZpUGsHz7Tb/nSd9k+gKSmavNw==}
-    peerDependencies:
-      '@hookform/resolvers': ^2.8.0
-      react: ^18.0.0
-      react-hook-form: ^7.39.0
-      zod: ^3.19.0
-    dependencies:
-      '@hookform/resolvers': 2.9.11_react-hook-form@7.43.4
-      react: 18.2.0
-      react-hook-form: 7.43.4_react@18.2.0
-      zod: 3.21.0
-    dev: false
-
   /@types/bcryptjs/2.4.2:
     resolution: {integrity: sha512-LiMQ6EOPob/4yUL66SZzu6Yh77cbzJFYll+ZfaPiPPFswtIlA/Fs1MzdKYA7JApHU49zQTbJGX3PDmCpIdDBRQ==}
     dev: false
@@ -2340,20 +2312,6 @@ packages:
       '@typescript-eslint/types': 5.54.0
       eslint-visitor-keys: 3.3.0
     dev: true
-
-  /@upstash/qstash/0.3.6:
-    resolution: {integrity: sha512-NKN4jbPhB5lfHoSIaU7AuQ3F+yGS20e/FBRiUuPetcKoi354wHhKj9AJFfkFT5SSeLq0XEsXRNynm8gqCS4HjQ==}
-    dependencies:
-      '@deno/shim-crypto': 0.3.1
-    dev: false
-
-  /@upstash/redis/1.20.1:
-    resolution: {integrity: sha512-mYwV8uvQROJnq5aOxmQH3KDa0E8+DRdU0zJ/VGQV84HrhQQNy0IsLFFTo97WEhZAlHcJnVbrbwqUK9disWqx/w==}
-    dependencies:
-      isomorphic-fetch: 3.0.0
-    transitivePeerDependencies:
-      - encoding
-    dev: false
 
   /acorn-jsx/5.3.2_acorn@8.8.2:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
@@ -2618,10 +2576,6 @@ packages:
 
   /base64-js/1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
-    dev: false
-
-  /bcryptjs/2.4.3:
-    resolution: {integrity: sha512-V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ==}
     dev: false
 
   /binary-extensions/2.2.0:
@@ -3984,15 +3938,6 @@ packages:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
     dev: true
 
-  /isomorphic-fetch/3.0.0:
-    resolution: {integrity: sha512-qvUtwJ3j6qwsF3jLxkZ72qCgjMysPzDfeV240JHiGZsANBYd+EEuu35v7dfrJ9Up0Ak07D7GGSkGhCHTqg/5wA==}
-    dependencies:
-      node-fetch: 2.6.9
-      whatwg-fetch: 3.6.2
-    transitivePeerDependencies:
-      - encoding
-    dev: false
-
   /jmespath/0.16.0:
     resolution: {integrity: sha512-9FzQjJ7MATs1tSpnco1K6ayiYE3figslrXA72G2HQ/n76RzvYlofyi5QM+iX4YRs/pu3yzxlVQSST23+dMDknw==}
     engines: {node: '>= 0.6.0'}
@@ -4257,16 +4202,6 @@ packages:
       uuid: 8.3.2
     dev: false
 
-  /next-axiom/0.17.0_next@13.1.6:
-    resolution: {integrity: sha512-qFdnH50SvRjJUAmNjGIYLcRc4tO/U4R1h9WUuniiwaucXAH5KhL06m7TT3WWD2U1HbulwSfC0R+NlPASOx1XlQ==}
-    engines: {node: '>=15'}
-    peerDependencies:
-      next: ^12.1.4 || ^13
-    dependencies:
-      next: 13.1.6_biqbaboplfbrettd7655fr4n2y
-      whatwg-fetch: 3.6.2
-    dev: false
-
   /next-superjson-plugin/0.5.6_fuifow6kfixbw2msn476lx6sqm:
     resolution: {integrity: sha512-vokzkgtr3axon5uXobhXJWN6/YlPOHdcAb/BeR+d0rXA3h1b5h98A+V0TgMUf+vcy9RvBqte/ppaJfkOwi4NGA==}
     peerDependencies:
@@ -4333,18 +4268,6 @@ packages:
       nprogress: 0.2.0
       prop-types: 15.8.1
       react: 18.2.0
-    dev: false
-
-  /node-fetch/2.6.9:
-    resolution: {integrity: sha512-DJm/CJkZkRjKKj4Zi4BsKVZh3ValV5IR5s7LVZnW+6YMh0W1BfNA8XSs6DLMGYlId5F3KnA70uu2qepcR08Qqg==}
-    engines: {node: 4.x || >=6.0.0}
-    peerDependencies:
-      encoding: ^0.1.0
-    peerDependenciesMeta:
-      encoding:
-        optional: true
-    dependencies:
-      whatwg-url: 5.0.0
     dev: false
 
   /node-releases/2.0.10:
@@ -5246,10 +5169,6 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
-  /tr46/0.0.3:
-    resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
-    dev: false
-
   /tsconfig-paths/3.14.2:
     resolution: {integrity: sha512-o/9iXgCYc5L/JxCHPe3Hvh8Q/2xm5Z+p18PESBU6Ff33695QnCHBEjcytY2q19ua7Mbl/DavtBOLq+oG0RCL+g==}
     dependencies:
@@ -5406,10 +5325,6 @@ packages:
       loose-envify: 1.4.0
     dev: false
 
-  /webidl-conversions/3.0.1:
-    resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
-    dev: false
-
   /webpack-bundle-analyzer/4.7.0:
     resolution: {integrity: sha512-j9b8ynpJS4K+zfO5GGwsAcQX4ZHpWV+yRiHDiL+bE0XHJ8NiPYLTNVQdlFYWxtpg9lfAQNlwJg16J9AJtFSXRg==}
     engines: {node: '>= 10.13.0'}
@@ -5427,17 +5342,6 @@ packages:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
-    dev: false
-
-  /whatwg-fetch/3.6.2:
-    resolution: {integrity: sha512-bJlen0FcuU/0EMLrdbJ7zOnW6ITZLrZMIarMUVmdKtsGvZna8vxKYaexICWPfZ8qwf9fzNq+UEIZrnSaApt6RA==}
-    dev: false
-
-  /whatwg-url/5.0.0:
-    resolution: {integrity: sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==}
-    dependencies:
-      tr46: 0.0.3
-      webidl-conversions: 3.0.1
     dev: false
 
   /which-boxed-primitive/1.0.2:

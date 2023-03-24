@@ -25,9 +25,10 @@ const comicsRouter = createTRPCRouter({
       })
     )
     .query(
-      async ({ input: { comicsId } }) =>
+      async ({ input: { comicsId }, ctx }) =>
         await handleQuery(
           checkComics(
+            ctx,
             {
               comments: {
                 include: { author: true },
@@ -103,9 +104,10 @@ const comicsRouter = createTRPCRouter({
         order: z.enum(["asc", "desc"]).default("asc"),
       })
     )
-    .query(async ({ input: { comicsId, order } }) => {
+    .query(async ({ input: { comicsId, order }, ctx }) => {
       const chapters = await handleQuery(
         checkComics(
+          ctx,
           {
             chapters: {
               select: {
@@ -132,7 +134,7 @@ const comicsRouter = createTRPCRouter({
         limit: z.number().min(2).max(30).nullish(),
         cursor: z.string().nullish(),
         query: z.string().default(""),
-        status: z.nativeEnum(Status).default("ongoing"),
+        status: z.nativeEnum(Status).nullish(),
         sort: z.enum(["saved", "year", "ratings"]).default("year"),
         genres: z.array(z.string()).default([]),
         order: z.enum(["asc", "desc"]).default("asc"),
@@ -154,7 +156,7 @@ const comicsRouter = createTRPCRouter({
           ...(input.genres.length !== 0 && {
             genres: { some: { id: { in: input.genres } } },
           }),
-          status: status,
+          ...(status && { status }),
           title: { contains: query },
         },
         orderBy: {
@@ -183,7 +185,7 @@ const comicsRouter = createTRPCRouter({
     )
     .query(async ({ input: { comicsId }, ctx }) => {
       const comics = await handleQuery(
-        checkComics(defaultCheckComicsSelect, { id: comicsId })
+        checkComics(ctx, defaultCheckComicsSelect, { id: comicsId })
       );
 
       const user =
@@ -234,7 +236,9 @@ const comicsRouter = createTRPCRouter({
     .mutation(async ({ input, ctx }) => {
       const { title, title_ru, status, year, genres, description } = input;
 
-      await handleQuery(notExistComics(defaultCheckComicsSelect, { title }));
+      await handleQuery(
+        notExistComics(ctx, defaultCheckComicsSelect, { title })
+      );
       const comics = await ctx.prisma.comics.create({
         include: { thumbnail: true },
         data: {
@@ -271,7 +275,7 @@ const comicsRouter = createTRPCRouter({
       const { title, title_ru, status, year, genres, description, id } = input;
 
       const comics = await handleQuery(
-        checkComics(defaultCheckComicsSelect, { id })
+        checkComics(ctx, defaultCheckComicsSelect, { id })
       );
       await ctx.prisma.comics.update({
         where: { id },

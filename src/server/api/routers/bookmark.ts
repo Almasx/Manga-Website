@@ -20,16 +20,14 @@ const bookmarkRouter = createTRPCRouter({
       const { bookmarkId, comicsId } = input;
 
       const comics = await handleQuery(
-        checkComics({ bookmarks: true, id: true }, { id: comicsId })
+        checkComics(ctx, { bookmarks: true, id: true }, { id: comicsId })
       );
-      await handleQuery(checkBookmark(bookmarkId));
-      const userBookmarks = await handleQuery(
-        isUserBookmark(ctx.session?.user?.id as string, bookmarkId)
-      );
+      await handleQuery(checkBookmark(ctx, bookmarkId));
+      const userBookmarks = await handleQuery(isUserBookmark(ctx, bookmarkId));
 
       // Unsubscribe Dublicate at comics & bookmarks
-      await clearSubscriptions(comics, userBookmarks);
-      await subscribeComicsAndBookmarks(comicsId, bookmarkId);
+      await clearSubscriptions(ctx, comics, userBookmarks);
+      await subscribeComicsAndBookmarks(ctx, comicsId, bookmarkId);
     }),
 
   getBookmark: protectedProcedure
@@ -43,12 +41,10 @@ const bookmarkRouter = createTRPCRouter({
       const { bookmarkId, query } = input;
 
       // Bookmarks owned by user
-      await handleQuery(
-        isUserBookmark(ctx.session?.user?.id as string, bookmarkId)
-      );
+      await handleQuery(isUserBookmark(ctx, bookmarkId));
 
       const bookmark = await handleQuery(
-        checkBookmark(bookmarkId, {
+        checkBookmark(ctx, bookmarkId, {
           ...defaultCheckBookmark,
           comics: {
             select: {

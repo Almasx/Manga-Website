@@ -2,17 +2,16 @@ import type { AppProps } from "next/app";
 import { type AppType } from "next/app";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
+
 import NextNProgress from "nextjs-progressbar";
-
-import { api } from "../utils/api";
-export { reportWebVitals } from "next-axiom";
-
-import "../styles/globals.css";
 import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
-import MainLayout from "layout/main";
 import { Provider } from "jotai";
+
 import KnockWrapper from "lib/knock/KnockWrapper";
+import MainLayout from "layout/main";
+import { api } from "../utils/api";
+import "../styles/globals.css";
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {

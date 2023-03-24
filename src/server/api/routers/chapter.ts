@@ -23,6 +23,7 @@ export const chapterRouter = createTRPCRouter({
     .query(async ({ input: { chapterId }, ctx }) => {
       const chapter = await handleQuery(
         getChapter(
+          ctx,
           {
             likes: true,
           },
@@ -42,7 +43,9 @@ export const chapterRouter = createTRPCRouter({
   postLike: protectedProcedure
     .input(z.object({ chapterId: z.string() }))
     .mutation(async ({ input: { chapterId }, ctx }) => {
-      const chapter = await handleQuery(getChapter({ likes: true }, chapterId));
+      const chapter = await handleQuery(
+        getChapter(ctx, { likes: true }, chapterId)
+      );
       const likedByUser = chapter.likes.find(
         (like) => like.authorId === ctx.session?.user?.id
       );
@@ -66,9 +69,10 @@ export const chapterRouter = createTRPCRouter({
       })
     )
     .query(
-      async ({ input: { chapterId, comicsId } }) =>
+      async ({ input: { chapterId, comicsId }, ctx }) =>
         await handleQuery(
           checkChapter(
+            ctx,
             {
               comments: {
                 include: { author: true },
@@ -84,7 +88,7 @@ export const chapterRouter = createTRPCRouter({
   postComment: protectedProcedure
     .input(z.object({ chapterId: z.string(), content: z.string() }))
     .mutation(async ({ input: { chapterId, content }, ctx }) => {
-      await handleQuery(getChapter({}, chapterId));
+      await handleQuery(getChapter(ctx, {}, chapterId));
       await ctx.prisma.chapterComment.create({
         data: {
           content,
@@ -146,9 +150,9 @@ export const chapterRouter = createTRPCRouter({
         comicsId: z.string({ required_error: "Comics id is required" }),
       })
     )
-    .query(async ({ input: { comicsId, chapterId } }) => {
+    .query(async ({ input: { comicsId, chapterId }, ctx }) => {
       const chapter = await handleQuery(
-        checkChapter({ pages: true }, chapterId, comicsId)
+        checkChapter(ctx, { pages: true }, chapterId, comicsId)
       );
       return chapter;
     }),
@@ -167,6 +171,7 @@ export const chapterRouter = createTRPCRouter({
     .mutation(async ({ input, ctx }) => {
       const comics = await handleQuery(
         checkComics(
+          ctx,
           {
             chapters: true,
             bookmarks: { select: { user: { select: { knockId: true } } } },

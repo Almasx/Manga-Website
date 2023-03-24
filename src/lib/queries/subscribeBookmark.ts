@@ -1,22 +1,23 @@
-import { prisma } from "server/db";
+import type { Context } from "server/api/trpc";
 
 export async function subscribeComicsAndBookmarks(
+  ctx: Context,
   comicsId: string,
   bookmarkId: string
 ) {
-  const bookmark = await prisma.bookmark.findUnique({
+  const bookmark = await ctx.prisma.bookmark.findUnique({
     where: { id: bookmarkId },
     include: { comics: true },
   });
 
-  const comics = await prisma.comics.findUnique({
+  const comics = await ctx.prisma.comics.findUnique({
     where: { id: comicsId },
     include: { bookmarks: true },
   });
 
   // To notify users at new publication
   if (comics && bookmark) {
-    await prisma.comics.update({
+    await ctx.prisma.comics.update({
       where: { id: comicsId },
       data: {
         bookmarks: {
@@ -24,7 +25,7 @@ export async function subscribeComicsAndBookmarks(
         },
       },
     });
-    await prisma.bookmark.update({
+    await ctx.prisma.bookmark.update({
       where: { id: bookmarkId },
       data: {
         comics: {

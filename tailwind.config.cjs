@@ -18,8 +18,8 @@ module.exports = {
         },
         gray: {
           dark: {
-            DEFAULT: "#1a1b1b",
-            secondary: "#1C1B20",
+            DEFAULT: "#1a1b1a",
+            secondary: "#1C1C1C",
           },
           light: {
             DEFAULT: "#D4D4D4",

@@ -1,5 +1,5 @@
+import type { Context } from "server/api/trpc";
 import { Prisma } from "@prisma/client";
-import { prisma } from "server/db";
 
 export const defaultCheckComicsSelect = Prisma.validator<Prisma.ComicsSelect>()(
   {
@@ -31,10 +31,11 @@ export const defaultCheckComicsSelect = Prisma.validator<Prisma.ComicsSelect>()(
 );
 
 export async function checkComics<S extends Prisma.ComicsSelect>(
+  ctx: Context,
   select: Prisma.Subset<S, Prisma.ComicsSelect>,
   where: Prisma.ComicsWhereUniqueInput
 ) {
-  const comics = await prisma.comics.findUnique<{
+  const comics = await ctx.prisma.comics.findUnique<{
     select: S;
     where: Prisma.ComicsWhereUniqueInput;
   }>({ select, where: where });
@@ -54,10 +55,11 @@ export async function checkComics<S extends Prisma.ComicsSelect>(
 }
 
 export async function notExistComics<S extends Prisma.ComicsSelect>(
+  ctx: Context,
   select: Prisma.Subset<S, Prisma.ComicsSelect>,
   where: Prisma.ComicsWhereUniqueInput
 ) {
-  const comics = await prisma.comics.findUnique<{
+  const comics = await ctx.prisma.comics.findUnique<{
     select: S;
     where: Prisma.ComicsWhereUniqueInput;
   }>({ select, where: where });

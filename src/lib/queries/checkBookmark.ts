@@ -1,5 +1,5 @@
+import type { Context } from "server/api/trpc";
 import type { Prisma } from "@prisma/client";
-import { prisma } from "server/db";
 
 export const defaultCheckBookmark: Prisma.BookmarkSelect = {
   userId: false,
@@ -17,10 +17,11 @@ export const defaultCheckBookmark: Prisma.BookmarkSelect = {
 };
 
 export async function checkBookmark(
+  ctx: Context,
   bookmarkId: string,
   BookMarkSelect?: Prisma.BookmarkSelect
 ) {
-  const bookmark = await prisma.bookmark.findUnique({
+  const bookmark = await ctx.prisma.bookmark.findUnique({
     select: { comics: true, ...BookMarkSelect },
     where: { id: bookmarkId },
   });

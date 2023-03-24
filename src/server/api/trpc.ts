@@ -57,6 +57,8 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
   });
 };
 
+export type Context = inferAsyncReturnType<typeof createInnerTRPCContext>;
+
 /**
  * 2. INITIALIZATION
  *
@@ -64,6 +66,7 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
  * ZodErrors so that you get typesafety on the frontend if your procedure fails due to validation
  * errors on the backend.
  */
+import type { inferAsyncReturnType } from "@trpc/server";
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";

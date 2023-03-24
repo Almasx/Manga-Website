@@ -1,9 +1,9 @@
-import { prisma } from "server/db";
+import type { Context } from "server/api/trpc";
 
-export async function isUserBookmark(userId: string, bookmarkId: string) {
-  const userBookmarks = await prisma.user
+export async function isUserBookmark(ctx: Context, bookmarkId: string) {
+  const userBookmarks = await ctx.prisma.user
     .findUnique({
-      where: { id: userId },
+      where: { id: ctx.session?.user.id },
       include: { bookmarks: true },
     })
     .then((user) => ({
