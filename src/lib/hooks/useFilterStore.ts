@@ -4,9 +4,7 @@ import { create } from "zustand";
 export type IFilterSort = NonNullable<
   RouterInputs["comics"]["getCatalog"]["sort"]
 >;
-export type IFilterStatus = NonNullable<
-  RouterInputs["comics"]["getCatalog"]["status"]
->;
+export type IFilterStatus = RouterInputs["comics"]["getCatalog"]["status"];
 export interface IFilter {
   query: string;
   sort: IFilterSort;
@@ -34,7 +32,7 @@ export const useFilterStore = create<IFilterState>((set) => ({
     query: "",
     sort: "year",
     order: "asc",
-    status: "ongoing",
+    status: undefined,
     genres: { selected: [], query: "" },
   },
 
@@ -105,7 +103,7 @@ export const useFilterStore = create<IFilterState>((set) => ({
         query: "",
         sort: "year",
         order: "asc",
-        status: "ongoing",
+        status: undefined,
         genres: { selected: [], query: "" },
       },
     })),

@@ -68,7 +68,7 @@ const ComicsList = () => {
   const { filter } = useFilterStore((state) => state);
   const { data, fetchNextPage, hasNextPage, isFetching } =
     api.comics.getCatalog.useInfiniteQuery(
-      { limit: 2, ...filter, genres: filter.genres.selected },
+      { limit: 18, ...filter, genres: filter.genres.selected },
       {
         getNextPageParam: (lastComics) =>
           lastComics.nextId !== undefined ? lastComics.nextId + 1 : undefined,

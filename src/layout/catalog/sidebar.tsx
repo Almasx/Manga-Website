@@ -49,21 +49,27 @@ const FilterSideBar = ({ show, setShow }: IFilterSideBarProps) => {
           Статус
         </h3>
         <CheckBoxField
-          onClick={() => setStatus("ongoing")}
+          onClick={() =>
+            setStatus(filter.status === "ongoing" ? undefined : "ongoing")
+          }
           active={filter.status === "ongoing"}
           key="ongoing"
         >
           Выпускается
         </CheckBoxField>
         <CheckBoxField
-          onClick={() => setStatus("abandoned")}
+          onClick={() =>
+            setStatus(filter.status === "abandoned" ? undefined : "abandoned")
+          }
           active={filter.status === "abandoned"}
           key="abandoned"
         >
           Заброшён
         </CheckBoxField>
         <CheckBoxField
-          onClick={() => setStatus("finished")}
+          onClick={() =>
+            setStatus(filter.status === "finished" ? undefined : "finished")
+          }
           active={filter.status === "finished"}
           key="finished"
         >

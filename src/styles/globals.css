@@ -37,3 +37,277 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 ::-webkit-scrollbar-thumb:hover {
   background-color: #2e2e35;
 }
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("../../public/fonts/TTNormsPro/TTNormsPro-Bold.eot");
+  src: local("TT Norms Pro Bold"), local("TTNormsPro-Bold"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Bold.eot?#iefix")
+      format("embedded-opentype"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Bold.woff2") format("woff2"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Bold.woff") format("woff"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraBoldItalic.eot");
+  src: local("TT Norms Pro ExtraBold Italic"),
+    local("TTNormsPro-ExtraBoldItalic"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraBoldItalic.eot?#iefix")
+      format("embedded-opentype"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraBoldItalic.woff2")
+      format("woff2"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraBoldItalic.woff")
+      format("woff"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraBoldItalic.ttf")
+      format("truetype");
+  font-weight: 800;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraLightItalic.eot");
+  src: local("TT Norms Pro ExtraLight Italic"),
+    local("TTNormsPro-ExtraLightItalic"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraLightItalic.eot?#iefix")
+      format("embedded-opentype"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraLightItalic.woff2")
+      format("woff2"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraLightItalic.woff")
+      format("woff"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraLightItalic.ttf")
+      format("truetype");
+  font-weight: 200;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("../../public/fonts/TTNormsPro/TTNormsPro-Thin.eot");
+  src: local("TT Norms Pro Thin"), local("TTNormsPro-Thin"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Thin.eot?#iefix")
+      format("embedded-opentype"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Thin.woff2") format("woff2"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Thin.woff") format("woff"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Thin.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraBold.eot");
+  src: local("TT Norms Pro ExtraBold"), local("TTNormsPro-ExtraBold"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraBold.eot?#iefix")
+      format("embedded-opentype"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraBold.woff2")
+      format("woff2"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraBold.woff")
+      format("woff"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraBold.ttf")
+      format("truetype");
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("../../public/fonts/TTNormsPro/TTNormsPro-Regular.eot");
+  src: local("TT Norms Pro Regular"), local("TTNormsPro-Regular"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Regular.eot?#iefix")
+      format("embedded-opentype"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Regular.woff2")
+      format("woff2"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Regular.woff") format("woff"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Regular.ttf")
+      format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("../../public/fonts/TTNormsPro/TTNormsPro-ThinItalic.eot");
+  src: local("TT Norms Pro Thin Italic"), local("TTNormsPro-ThinItalic"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ThinItalic.eot?#iefix")
+      format("embedded-opentype"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ThinItalic.woff2")
+      format("woff2"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ThinItalic.woff")
+      format("woff"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ThinItalic.ttf")
+      format("truetype");
+  font-weight: 100;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("../../public/fonts/TTNormsPro/TTNormsPro-Light.eot");
+  src: local("TT Norms Pro Light"), local("TTNormsPro-Light"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Light.eot?#iefix")
+      format("embedded-opentype"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Light.woff2") format("woff2"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Light.woff") format("woff"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("../../public/fonts/TTNormsPro/TTNormsPro-MediumItalic.eot");
+  src: local("TT Norms Pro Medium Italic"), local("TTNormsPro-MediumItalic"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-MediumItalic.eot?#iefix")
+      format("embedded-opentype"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-MediumItalic.woff2")
+      format("woff2"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-MediumItalic.woff")
+      format("woff"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-MediumItalic.ttf")
+      format("truetype");
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "TT Norms Pro ExtraBlack";
+  src: url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraBlackItalic.eot");
+  src: local("TT Norms Pro ExtraBlack Italic"),
+    local("TTNormsPro-ExtraBlackItalic"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraBlackItalic.eot?#iefix")
+      format("embedded-opentype"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraBlackItalic.woff2")
+      format("woff2"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraBlackItalic.woff")
+      format("woff"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraBlackItalic.ttf")
+      format("truetype");
+  font-weight: 900;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraLight.eot");
+  src: local("TT Norms Pro ExtraLight"), local("TTNormsPro-ExtraLight"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraLight.eot?#iefix")
+      format("embedded-opentype"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraLight.woff2")
+      format("woff2"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraLight.woff")
+      format("woff"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraLight.ttf")
+      format("truetype");
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("../../public/fonts/TTNormsPro/TTNormsPro-LightItalic.eot");
+  src: local("TT Norms Pro Light Italic"), local("TTNormsPro-LightItalic"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-LightItalic.eot?#iefix")
+      format("embedded-opentype"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-LightItalic.woff2")
+      format("woff2"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-LightItalic.woff")
+      format("woff"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-LightItalic.ttf")
+      format("truetype");
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("../../public/fonts/TTNormsPro/TTNormsPro-Medium.eot");
+  src: local("TT Norms Pro Medium"), local("TTNormsPro-Medium"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Medium.eot?#iefix")
+      format("embedded-opentype"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Medium.woff2") format("woff2"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Medium.woff") format("woff"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Medium.ttf")
+      format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "TT Norms Pro ExtraBlack";
+  src: url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraBlack.eot");
+  src: local("TT Norms Pro ExtraBlack"), local("TTNormsPro-ExtraBlack"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraBlack.eot?#iefix")
+      format("embedded-opentype"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraBlack.woff2")
+      format("woff2"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraBlack.woff")
+      format("woff"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-ExtraBlack.ttf")
+      format("truetype");
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("../../public/fonts/TTNormsPro/TTNormsPro-BoldItalic.eot");
+  src: local("TT Norms Pro Bold Italic"), local("TTNormsPro-BoldItalic"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-BoldItalic.eot?#iefix")
+      format("embedded-opentype"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-BoldItalic.woff2")
+      format("woff2"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-BoldItalic.woff")
+      format("woff"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-BoldItalic.ttf")
+      format("truetype");
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("../../public/fonts/TTNormsPro/TTNormsPro-BlackItalic.eot");
+  src: local("TT Norms Pro Black Italic"), local("TTNormsPro-BlackItalic"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-BlackItalic.eot?#iefix")
+      format("embedded-opentype"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-BlackItalic.woff2")
+      format("woff2"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-BlackItalic.woff")
+      format("woff"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-BlackItalic.ttf")
+      format("truetype");
+  font-weight: 900;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("../../public/fonts/TTNormsPro/TTNormsPro-Black.eot");
+  src: local("TT Norms Pro Black"), local("TTNormsPro-Black"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Black.eot?#iefix")
+      format("embedded-opentype"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Black.woff2") format("woff2"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Black.woff") format("woff"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("../../public/fonts/TTNormsPro/TTNormsPro-Italic.eot");
+  src: local("TT Norms Pro Italic"), local("TTNormsPro-Italic"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Italic.eot?#iefix")
+      format("embedded-opentype"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Italic.woff2") format("woff2"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Italic.woff") format("woff"),
+    url("../../public/fonts/TTNormsPro/TTNormsPro-Italic.ttf")
+      format("truetype");
+  font-weight: normal;
+  font-style: italic;
+}
