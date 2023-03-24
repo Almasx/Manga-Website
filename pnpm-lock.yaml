@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@formkit/auto-animate': 1.0.0-beta.6
   '@hookform/devtools': ^4.3.0
   '@hookform/resolvers': ^2.9.11
   '@knocklabs/node': ^0.4.17
@@ -54,6 +55,7 @@ specifiers:
   zustand: ^4.3.5
 
 dependencies:
+  '@formkit/auto-animate': 1.0.0-beta.6
   '@hookform/devtools': 4.3.0_zula6vjvt3wdocc4mwcxqa6nzi
   '@hookform/resolvers': 2.9.11_react-hook-form@7.43.4
   '@knocklabs/node': 0.4.17
@@ -1518,6 +1520,10 @@ packages:
     resolution: {integrity: sha512-JXdzbRiWclLVoD8sNUjR443VVlYqiYmDVT6rGUEIEHU5YJW0gaVZwV2xgM7D4arkvASqD0IlLUVjHiFuxaftRw==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
+
+  /@formkit/auto-animate/1.0.0-beta.6:
+    resolution: {integrity: sha512-PVDhLAlr+B4Xb7e+1wozBUWmXa6BFU8xUPR/W/E+TsQhPS1qkAdAsJ25keEnFrcePSnXHrOsh3tiFbEToOzV9w==}
+    dev: false
 
   /@hookform/devtools/4.3.0_zula6vjvt3wdocc4mwcxqa6nzi:
     resolution: {integrity: sha512-DTTTYJ9j+L4Nd/qj0k41WNbRF/qNQfZxbHwUupFeQWu6JOJ5Ak5ksxuoCbfSWrsXV5EPSmcfhpsDos0IOlwhsg==}

@@ -16,7 +16,7 @@ const AccountBar = () => {
   });
 
   return (
-    <SideBar.Wrapper className="fixed !w-64">
+    <SideBar.Wrapper className="scrollbar-hide fixed z-10 !w-64 bg-dark/40 backdrop-blur-xl">
       <section className="flex flex-row items-center gap-4 px-5 py-8">
         {session.data?.user?.image && (
           <img
@@ -67,7 +67,7 @@ const AccountBar = () => {
             >
               <SideBar.Section.Tab
                 active={asPath.includes(bookmark.id)}
-                classNames="rounded-xl"
+                className="rounded-xl"
               >
                 {bookmark.title}
               </SideBar.Section.Tab>

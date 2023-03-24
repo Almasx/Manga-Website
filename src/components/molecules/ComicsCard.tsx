@@ -26,8 +26,8 @@ const ComicsCard = ({
     <Link
       href={`/comics/${id}`}
       className={clsx(
-        "flex cursor-pointer rounded-2xl text-left",
-        "border border-gray-dark-secondary p-3 ",
+        "flex cursor-pointer rounded-2xl bg-dark text-left",
+        "relative z-10 border border-gray-dark-secondary p-3",
         [
           variant === "catalog" && "flex-col gap-y-2",
           variant === "recomendation" && "grow flex-row gap-x-3",
@@ -38,7 +38,7 @@ const ComicsCard = ({
         className={clsx(
           "relative grow",
 
-          variant === "recomendation" && "aspect-square w-2/5"
+          variant === "recomendation" && "aspect-square w-1/2"
         )}
       >
         <img
@@ -65,7 +65,7 @@ const ComicsCard = ({
       <div
         className={clsx(
           variant === "catalog" && "relative",
-          variant === "recomendation" && "flex-grow"
+          variant === "recomendation" && "w-1/2"
         )}
       >
         <h3
@@ -90,7 +90,7 @@ export const ComicsCardLoading = ({
 }) => (
   <div
     className={clsx(
-      "flex cursor-pointer rounded-2xl text-left ",
+      "relative z-10 flex cursor-pointer rounded-2xl bg-dark text-left",
       "border border-gray-dark-secondary p-3 ",
       [
         variant === "catalog" && "flex-col gap-y-2",
@@ -108,8 +108,8 @@ export const ComicsCardLoading = ({
       <div
         className={clsx(
           "h-full w-full animate-pulse rounded-2xl text-light",
-          "mb-4 flex h-48 items-center justify-center rounded bg-gray-300 dark:bg-dark-tertiary",
-          variant === "catalog" && "aspect-[3/4]"
+          " flex h-48 items-center justify-center rounded bg-gray-300 dark:bg-dark-tertiary",
+          variant === "catalog" && "mb-4 aspect-[3/4]"
         )}
       >
         <svg
@@ -127,7 +127,7 @@ export const ComicsCardLoading = ({
     <div
       className={clsx(
         variant === "catalog" && "relative",
-        variant === "recomendation" && "flex-grow"
+        variant === "recomendation" && "grow pt-1"
       )}
     >
       {/* <h3

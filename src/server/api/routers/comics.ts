@@ -8,6 +8,7 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "server/api/trpc";
+import { knockClient, workflows } from "lib/knock/knock-config";
 
 import { Status } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
@@ -79,8 +80,9 @@ const comicsRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input: { commentId, vote, votedState }, ctx }) => {
-      await ctx.prisma.comicsComment.update({
+      const comment = await ctx.prisma.comicsComment.update({
         where: { id: commentId },
+        select: { author: { select: { knockId: true } }, content: true },
         data: {
           ...(vote === "upvote"
             ? {
@@ -95,6 +97,14 @@ const comicsRouter = createTRPCRouter({
               }),
         },
       });
+      comment.author.knockId &&
+        knockClient.workflows.trigger(workflows.rateComment, {
+          recipients: [comment.author.knockId],
+          data: {
+            comment_body: comment.content,
+            variableKey: "Rated on comics",
+          },
+        });
     }),
 
   getChapters: publicProcedure
@@ -175,6 +185,31 @@ const comicsRouter = createTRPCRouter({
         catalog,
         nextId: catalog.length === limit ? catalog[1]?.id : undefined,
       };
+    }),
+
+  getRecommendedComics: publicProcedure
+    .input(
+      z.object({
+        genres: z.array(z.string()).default([]),
+      })
+    )
+    .query(async ({ input: { genres }, ctx }) => {
+      const recommendation = await ctx.prisma.comics.findMany({
+        where: {
+          ...(genres.length !== 0 && {
+            genres: { some: { id: { in: genres } } },
+          }),
+        },
+        include: { ratings: true, thumbnail: true },
+        take: 5,
+      });
+
+      return recommendation.map((comics) => ({
+        ...comics,
+        rating:
+          comics.ratings.reduce((acc, rating) => acc + rating.rating, 0) /
+          comics.ratings.length,
+      }));
     }),
 
   getComics: publicProcedure

@@ -22,11 +22,11 @@ const Modal = ({
   return (
     <div
       className={clsx(
-        "fixed inset-0 z-20 h-screen",
+        "fixed inset-0 z-20 h-screen duration-150",
         backgroundBlur && " bg-dark/10 backdrop-blur-md",
         backgroundBlack && "bg-dark/60",
-        !visible && "hidden",
-        visible && "flex items-center justify-center"
+        !visible && "invisible opacity-0",
+        visible && "visible flex items-center justify-center opacity-100"
       )}
       onClick={() => setVisible()}
     >

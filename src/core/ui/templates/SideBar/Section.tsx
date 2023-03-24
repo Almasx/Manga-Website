@@ -28,23 +28,26 @@ export const Header = ({ text, className }: IHeader) => {
 
 export interface TabProps {
   children: ReactNode;
-  classNames?: string;
+  className?: string;
+  activeClassName?: string;
   active: boolean;
   onClick?: (event?: unknown) => void;
 }
 
 export const Tab = ({
   children,
-  classNames = "",
+  className = "",
+  activeClassName = "",
   active,
   onClick,
 }: TabProps) => {
   return (
     <li
       className={clsx(
-        "flex flex-row gap-3 py-3 px-5 font-medium hover:bg-dark-secondary hover:text-light",
-        active && "bg-dark-secondary text-light",
-        classNames
+        "flex flex-row gap-3 py-3 px-5 font-medium duration-150 hover:bg-dark-tertiary hover:text-light",
+        active && "bg-dark-tertiary text-light",
+        active && activeClassName,
+        className
       )}
       onClick={onClick}
     >

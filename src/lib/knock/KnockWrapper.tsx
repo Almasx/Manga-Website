@@ -11,6 +11,7 @@ const KnockWrapper = ({ children }: { children: ReactNode }) => {
   if (data?.user?.knockId) {
     return (
       <KnockFeedProvider
+        colorMode="dark"
         apiKey={env.NEXT_PUBLIC_KNOCK_PUBLIC_API_KEY}
         feedId={env.NEXT_PUBLIC_KNOCK_FEED_CHANNEL_ID}
         userId={data?.user?.knockId}

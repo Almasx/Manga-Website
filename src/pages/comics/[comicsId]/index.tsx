@@ -1,3 +1,9 @@
+import ChapterCard, {
+  ChapterCardLoading,
+} from "../../../components/molecules/ChapterCard";
+import ComicsCard, {
+  ComicsCardLoading,
+} from "../../../components/molecules/ComicsCard";
 import { Edit, Like1, Save2, Star1 } from "iconsax-react";
 import type {
   GetServerSidePropsContext,
@@ -7,8 +13,6 @@ import type {
 import Badge from "../../../core/ui/primitives/Badge";
 import { BookmarkButton } from "components/organisms/BookmarkButton";
 import Button from "core/ui/primitives/Button";
-import ChapterCard from "../../../components/molecules/ChapterCard";
-import ComicsCard from "../../../components/molecules/ComicsCard";
 import type { ComicsComment } from "@prisma/client";
 import ComicsLayout from "layout/comics";
 import Comment from "../../../components/molecules/Comment";
@@ -138,7 +142,7 @@ const Comics = ({
         </div>
       </div>
 
-      <RecomendedList />
+      <RecommendedList genres={comics.genres.map((genre) => genre.id)} />
 
       {(isSmallDevice || isLaptop) && (
         <div className="col-span-full -mt-5">
@@ -204,16 +208,20 @@ const ComicsCover = ({
         <div className="overlay-gradient fixed inset-x-0 bottom-0 z-10 grow p-4 pt-8 md:relative md:p-0">
           {session.data?.user?.role === "ADMIN" && (
             <Link href={`${asPath}/manage`} className="flex">
-              <Button className="flex-grow">Загрузка Глав</Button>
+              <div className="flex grow items-center justify-center rounded-xl bg-primary py-2  font-bold">
+                Загрузка Глав
+              </div>
             </Link>
           )}
           {session.data?.user?.role !== "ADMIN" && lastChapterId && (
-            <div className="flex flex-row gap-5">
+            <div className="flex flex-row gap-3">
               <Link
                 className="flex grow"
                 href={`${asPath}/chapter/${lastChapterId}`}
               >
-                <Button className="flex-grow">Начать читать</Button>
+                <div className="flex grow items-center justify-center rounded-xl bg-primary py-2  font-bold">
+                  Начать читать
+                </div>
               </Link>
 
               <BookmarkButton comicsId={comicsId} />
@@ -325,24 +333,35 @@ const RatingModal = ({
   );
 };
 
-const RecomendedList = () => (
-  <section className="col-span-full lg:col-span-2 lg:col-start-1">
-    <h3 className="pb-2 text-xl font-bold text-light md:pb-3 md:text-2xl lg:pb-5">
-      Похожие
-    </h3>
-    <div className="scrollbar-hide flex flex-row gap-4 overflow-x-auto lg:flex-col ">
-      {Array(5).fill(
-        <ComicsCard
-          rating={4.6}
-          thumbnail={{ id: "1", comicsId: "w" }}
-          title={{ title_ru: "Элисед", title_en: "Eliceed" }}
-          variant="recomendation"
-          id={""}
-        />
-      )}
-    </div>
-  </section>
-);
+const RecommendedList = ({ genres }: { genres: string[] }) => {
+  const { data: recommendation, isLoading } =
+    api.comics.getRecommendedComics.useQuery({
+      genres,
+    });
+
+  return (
+    <section className="col-span-full lg:col-span-2 lg:col-start-1">
+      <h3 className="pb-2 text-xl font-bold text-light md:pb-3 md:text-2xl lg:pb-5">
+        Похожие
+      </h3>
+      <div className="scrollbar-hide flex flex-row gap-4 overflow-x-auto lg:flex-col ">
+        {isLoading
+          ? Array(5).fill(<ComicsCardLoading variant="recomendation" />)
+          : recommendation!.map((comics) => (
+              <ComicsCard
+                variant="recomendation"
+                id={comics.id}
+                key={comics.id}
+                title={{ title_en: comics.title, title_ru: comics.title_ru }}
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                thumbnail={comics.thumbnail!}
+                rating={comics.ratings.length}
+              />
+            ))}
+      </div>
+    </section>
+  );
+};
 
 interface IChapterSectionProps {
   comicsId: string;
@@ -355,10 +374,10 @@ const ChaptersSection = ({
   comicsId,
   show = true,
 }: IChapterSectionProps) => {
-  const [order, setOrder] = useState<"asc" | "desc">("asc");
+  const [order, setOrder] = useState<"asc" | "desc">("desc");
   const { data } = api.comics.getChapters.useQuery(
     { order, comicsId },
-    { initialData: chapters }
+    { initialData: chapters, refetchOnWindowFocus: true, refetchOnMount: true }
   );
   const { isSmallDevice, isLaptop } = useScreen();
 
@@ -394,22 +413,28 @@ const ChaptersSection = ({
           </Button>
         </div>
       )}
-      <div className="no-scroll scrollbar-hide flex grow flex-col gap-4 overflow-y-auto rounded-xl lg:-ml-14 lg:pl-4 lg:pr-3">
-        {data?.chapters?.map((chapter) => (
-          <ChapterCard
-            read={
-              chapters.find(
-                (initialChapter) => initialChapter.id === chapter.id
-              )?.read || false
-            }
-            {...chapter}
-            key={chapter.id}
-          />
-        ))}
+      {!data?.chapters ? (
+        <div className="no-scroll scrollbar-hide flex grow flex-col gap-4 overflow-y-auto rounded-xl lg:-ml-14 lg:pl-4 lg:pr-3">
+          {Array(8).fill(<ChapterCardLoading />)}
+          <div className="lg:h-8" />
+        </div>
+      ) : chapters?.length > 0 ? (
+        <div className="no-scroll scrollbar-hide flex grow flex-col gap-4 overflow-y-auto rounded-xl lg:-ml-14 lg:pl-4 lg:pr-3">
+          {data?.chapters?.map((chapter) => (
+            <ChapterCard
+              read={
+                chapters.find(
+                  (initialChapter) => initialChapter.id === chapter.id
+                )?.read || false
+              }
+              {...chapter}
+              key={chapter.id}
+            />
+          ))}
 
-        <div className="lg:h-8" />
-      </div>
-      {!data?.chapters?.length && (
+          <div className="lg:h-8" />
+        </div>
+      ) : (
         <div className="absolute inset-0 z-10 grid place-items-center backdrop-blur-md">
           <div className="mx-12 rounded-xl bg-dark/40 p-3">
             Упс! Похоже, еще нет загруженных глав. Зайдите позже, чтобы увидеть,

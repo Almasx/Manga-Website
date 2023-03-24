@@ -168,47 +168,63 @@ export const chapterRouter = createTRPCRouter({
         pagesLenght: z.number(),
       })
     )
-    .mutation(async ({ input, ctx }) => {
-      const comics = await handleQuery(
-        checkComics(
-          ctx,
-          {
-            chapters: true,
-            bookmarks: { select: { user: { select: { knockId: true } } } },
-            title: true,
+    .mutation(
+      async ({
+        input: {
+          publicAt,
+          volumeIndex,
+          chapterIndex,
+          comicsId,
+          title,
+          pagesLenght,
+        },
+        ctx,
+      }) => {
+        const comics = await handleQuery(
+          checkComics(
+            ctx,
+            {
+              chapters: true,
+              bookmarks: { select: { user: { select: { knockId: true } } } },
+              title: true,
+            },
+            { id: comicsId }
+          )
+        );
+
+        const chapter = await ctx.prisma.chapter.create({
+          include: { pages: true },
+          data: {
+            publicAt,
+            volumeIndex,
+            chapterIndex,
+            comicsId,
+            title,
+            pages: { createMany: { data: Array(pagesLenght).fill({}) } },
           },
-          { id: input.comicsId }
-        )
-      );
+        });
 
-      const chapter = await ctx.prisma.chapter.create({
-        include: { pages: true },
-        data: {
-          ...input,
-          pages: { createMany: { data: Array(input.pagesLenght).fill({}) } },
-        },
-      });
+        knockClient.workflows.trigger(workflows.chapterPublication, {
+          recipients: comics.bookmarks
+            .map((bookmark) => bookmark.user.knockId)
+            .filter((knockId) => knockId !== null) as string[],
+          data: {
+            chapterIndex: chapter.chapterIndex,
+            comics: comics.title,
+            variableKey: "New chapter",
+          },
+        });
 
-      knockClient.workflows.trigger(workflows.chapterPublication, {
-        recipients: comics.bookmarks
-          .map((bookmark) => bookmark.user.knockId)
-          .filter((knockId) => knockId !== null) as string[],
-        data: {
-          chapterIndex: chapter.chapterIndex,
-          comics: comics.title,
-        },
-      });
-
-      return Promise.all(
-        chapter.pages.map((page) => {
-          const url = s3CreatePresignedUrl(
-            `${input.comicsId}/volume_${chapter.volumeIndex}_chapter_${chapter.chapterIndex}/${page.id}`
-          );
-          console.log(url);
-          return url;
-        })
-      );
-    }),
+        return Promise.all(
+          chapter.pages.map((page) => {
+            const url = s3CreatePresignedUrl(
+              `${comicsId}/volume_${chapter.volumeIndex}_chapter_${chapter.chapterIndex}/${page.id}`
+            );
+            return url;
+          })
+        );
+      }
+    ),
 
   deleteChapters: protectedProcedure
     .input(

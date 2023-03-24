@@ -1,6 +1,7 @@
 <svg
       viewBox="0 0 18 21"
-      className="h-4 w-4 fill-primary"
+      width="24"
+      heigth="24"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path

@@ -13,6 +13,7 @@ interface DropDownProps {
 const DropDown = ({ header, options }: DropDownProps) => {
   const [dropDownShow, setDropdownShow] = useState(false);
   const [dropDownOption, setDropDownOption] = useState<number>(0);
+
   const clonedHeader = cloneElement(header, {
     onClick: () => setDropdownShow((previos) => !previos),
   });
@@ -29,15 +30,15 @@ const DropDown = ({ header, options }: DropDownProps) => {
   return (
     <div className="text-light">
       {clonedHeader}
-      {dropDownShow && (
-        <ul
-          className={clsx(
-            "absolute top-full right-0 left-0 z-10 translate-y-3 rounded-xl border border-gray-dark-secondary bg-dark"
-          )}
-        >
-          {clonedOptions}
-        </ul>
-      )}
+      <ul
+        className={clsx(
+          " absolute top-full right-0 left-0 z-10 translate-y-3 overflow-clip ",
+          "rounded-xl border border-gray-dark-secondary bg-dark/60 backdrop-blur-2xl duration-150",
+          dropDownShow ? "visible opacity-100" : "invisible opacity-0"
+        )}
+      >
+        {clonedOptions}
+      </ul>
     </div>
   );
 };

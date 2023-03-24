@@ -95,4 +95,43 @@ const ChapterCard = ({
   );
 };
 
+export const ChapterCardLoading = () => (
+  <div
+    className={clsx(
+      "flex flex-row items-center gap-2.5 rounded-2xl  border border-gray-dark-secondary px-5",
+      "relative  bg-dark py-4 text-light duration-100 hover:border-2 hover:border-gray-dark"
+    )}
+  >
+    <div className="h-4 w-24 animate-pulse  rounded-full bg-gray-300 dark:bg-gray-dark-secondary" />
+    <div className="h-4 w-32 animate-pulse  rounded-full bg-gray-200 dark:bg-gray-dark" />
+    {/* <p
+      className={clsx(
+        "mr-2 text-sm font-medium uppercase text-light/60",
+      )}
+    >
+      Том {volumeIndex}
+    </p>
+    <p
+      className={clsx(
+        "mr-2 text-base font-bold text-light",
+        read && "text-white/30"
+      )}
+    >
+      Глава {chapterIndex}
+    </p>
+    <p
+      className={clsx(
+        "mr-4 text-sm text-light/60",
+        premium && "text-primary",
+        read && "text-white/30"
+      )}
+    >
+      {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (publicAt ?? createdAt).toLocaleDateString("ru", dateOptions as any)
+      }
+    </p> */}
+  </div>
+);
+
 export default ChapterCard;

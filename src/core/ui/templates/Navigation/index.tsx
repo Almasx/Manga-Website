@@ -1,13 +1,12 @@
 import "@knocklabs/react-notification-feed/dist/index.css";
 
+import { AccountModal, AuthenticationModal } from "./auth";
 import {
   NotificationFeedPopover,
   NotificationIconButton,
 } from "@knocklabs/react-notification-feed";
 import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 
-import AccountModal from "./AccountModal";
-import AuthenticationModal from "./AuthenticationModal";
 import Link from "next/link";
 import clsx from "clsx";
 import { useHideOnScroll } from "lib/hooks/useHideOnScroll";

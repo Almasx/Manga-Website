@@ -32,7 +32,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
 
   return (
     <Provider>
-      <NextNProgress color="#4A54EB" />
+      <NextNProgress color="#4A54EB" options={{ showSpinner: false }} />
       <SessionProvider session={session}>
         <KnockWrapper>{layout}</KnockWrapper>
       </SessionProvider>

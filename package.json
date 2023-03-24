@@ -13,6 +13,7 @@
     "db:migrate": "prisma migrate dev"
   },
   "dependencies": {
+    "@formkit/auto-animate": "1.0.0-beta.6",
     "@hookform/devtools": "^4.3.0",
     "@hookform/resolvers": "^2.9.11",
     "@knocklabs/node": "^0.4.17",
