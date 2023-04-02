@@ -26,7 +26,7 @@ const FilterSideBar = ({ show, setShow }: IFilterSideBarProps) => {
       )}
     >
       {/* Genres */}
-      <section className="flex flex-col overflow-hidden rounded-2xl lg:grow">
+      <section className="flex flex-col overflow-clip rounded-2xl lg:grow">
         <h3 className="mb-3 flex flex-row text-xl font-bold text-light lg:text-2xl">
           Жанры
           {isSmallDevice && (

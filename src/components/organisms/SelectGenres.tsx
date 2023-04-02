@@ -31,7 +31,7 @@ const SelectGenres = ({
   const debounce = useDebounce();
 
   return (
-    <div className={clsx("flex flex-col ", className)}>
+    <div className={clsx("flex flex-col overflow-clip", className)}>
       <TextField
         placeholder="пр: детектив, драма..."
         endIcon={<SearchNormal size="20" className="text-light/30 " />}

@@ -141,7 +141,7 @@ const comicsRouter = createTRPCRouter({
   getCatalog: publicProcedure
     .input(
       z.object({
-        limit: z.number().min(2).max(30).nullish(),
+        limit: z.number().min(2).max(30).default(10),
         cursor: z.string().nullish(),
         query: z.string().default(""),
         status: z.nativeEnum(Status).nullish(),
@@ -150,42 +150,48 @@ const comicsRouter = createTRPCRouter({
         order: z.enum(["asc", "desc"]).default("asc"),
       })
     )
-    .query(async ({ input, ctx }) => {
-      const { cursor, query, status, sort, order } = input;
-      const limit = input.limit ?? 10;
-
-      const catalog = await ctx.prisma.comics.findMany({
-        select: {
-          thumbnail: true,
-          title: true,
-          title_ru: true,
-          id: true,
-          ratings: true,
-        },
-        where: {
-          ...(input.genres.length !== 0 && {
-            genres: { some: { id: { in: input.genres } } },
-          }),
-          ...(status && { status }),
-          title: { contains: query },
-        },
-        orderBy: {
-          [sort === "saved" ? "bookmarks" : sort]: [
-            "ratings",
-            "saved",
-          ].includes(sort)
-            ? { _count: order }
-            : order,
-        },
-        cursor: cursor ? { id: cursor } : undefined,
-        take: limit,
-      });
-
-      return {
-        catalog,
-        nextId: catalog.length === limit ? catalog[1]?.id : undefined,
-      };
-    }),
+    .query(
+      async ({
+        input: { cursor, query, status, sort, order, limit, genres },
+        ctx,
+      }) => {
+        const catalog = await ctx.prisma.comics.findMany({
+          select: {
+            thumbnail: true,
+            title: true,
+            title_ru: true,
+            id: true,
+            ratings: true,
+          },
+          where: {
+            ...(genres.length !== 0 && {
+              genres: { some: { id: { in: genres } } },
+            }),
+            ...(status && { status }),
+            title: { contains: query },
+          },
+          orderBy: {
+            [sort === "saved" ? "bookmarks" : sort]: [
+              "ratings",
+              "saved",
+            ].includes(sort)
+              ? { _count: order }
+              : order,
+          },
+          cursor: cursor ? { id: cursor } : undefined,
+          take: limit + 1,
+        });
+        let nextId: string | undefined = undefined;
+        if (catalog.length > limit) {
+          const nextItem = catalog.pop(); // return the last item from the array
+          nextId = nextItem?.id;
+        }
+        return {
+          catalog,
+          nextId,
+        };
+      }
+    ),
 
   getRecommendedComics: publicProcedure
     .input(

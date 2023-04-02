@@ -1,9 +1,11 @@
 import type { IFilterSort } from "../lib/hooks/useFilterStore";
 import { useFilterStore } from "../lib/hooks/useFilterStore";
+import { useInView } from "react-intersection-observer";
 
 import Button from "core/ui/primitives/Button";
 import CatalogLayout from "layout/catalog";
 import type { ReactNode } from "react";
+import { useEffect } from "react";
 import { useMemo } from "react";
 import { SearchNormal } from "iconsax-react";
 import { TabBar } from "core/ui/primitives/TabBar";
@@ -13,8 +15,6 @@ import _ from "lodash";
 import clsx from "clsx";
 import useDebounce from "../lib/hooks/useDebounce";
 import ComicsCard, { ComicsCardLoading } from "components/molecules/ComicsCard";
-import { Loading } from "core/ui/primitives/Spinner";
-import InfiniteScroll from "react-infinite-scroll-component";
 import { api } from "utils/api";
 
 const Catalog = () => {
@@ -24,7 +24,7 @@ const Catalog = () => {
   const debounce = useDebounce();
 
   return (
-    <main className="mr-0 flex h-[calc(100vh-64px)] flex-col px-4 pt-8 lg:mr-[384px]">
+    <main className="mr-0 flex flex-col px-4 pt-8 lg:mr-[384px]">
       <h3 className="mb-3 text-xl font-bold text-light md:text-2xl">Каталог</h3>
       <TextField
         placeholder="пр: ванпачмен"
@@ -66,14 +66,14 @@ const Catalog = () => {
 
 const ComicsList = () => {
   const { filter } = useFilterStore((state) => state);
-  const { data, fetchNextPage, hasNextPage, isFetching } =
+  const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } =
     api.comics.getCatalog.useInfiniteQuery(
-      { limit: 18, ...filter, genres: filter.genres.selected },
+      { limit: 12, ...filter, genres: filter.genres.selected },
       {
-        getNextPageParam: (lastComics) =>
-          lastComics.nextId !== undefined ? lastComics.nextId + 1 : undefined,
+        getNextPageParam: (lastComics) => lastComics.nextId,
       }
     );
+  const { ref, inView } = useInView();
 
   const catalog = useMemo(
     () =>
@@ -86,15 +86,13 @@ const ComicsList = () => {
     [data]
   );
 
-  if (isFetching) {
-    return (
-      <div className="mt-5 grid grid-cols-2 gap-5 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-6">
-        {Array(6).fill(<ComicsCardLoading />)}
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage, hasNextPage]);
 
-  if (catalog === undefined || catalog.catalog.length === 0) {
+  if (catalog && catalog.catalog.length === 0) {
     return (
       <div className="flex h-auto grow items-center justify-center text-4xl font-medium text-light/20">
         Манга не найдена...
@@ -103,17 +101,9 @@ const ComicsList = () => {
   }
 
   return (
-    <InfiniteScroll
-      dataLength={catalog ? catalog.catalog.length : 0}
-      next={() => {
-        fetchNextPage();
-      }}
-      hasMore={!!hasNextPage}
-      loader={<Loading />}
-      className="mt-5 grid grid-cols-2 gap-5 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-6 "
-    >
+    <div className="mt-5 grid grid-cols-2 gap-5 overflow-y-auto sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-6">
       {data &&
-        catalog.catalog.map((comics) => (
+        catalog?.catalog.map((comics) => (
           <ComicsCard
             id={comics.id}
             key={comics.id}
@@ -123,7 +113,12 @@ const ComicsList = () => {
             rating={comics.ratings.length}
           />
         ))}
-    </InfiniteScroll>
+      {isFetching || isFetchingNextPage ? (
+        Array(6).fill(<ComicsCardLoading />)
+      ) : (
+        <div className="col-span-full h-2" ref={ref}></div>
+      )}
+    </div>
   );
 };
 
