@@ -162,6 +162,7 @@ const comicsRouter = createTRPCRouter({
             title_ru: true,
             id: true,
             ratings: true,
+            external_thumbnail: true,
           },
           where: {
             ...(genres.length !== 0 && {
@@ -235,8 +236,6 @@ const comicsRouter = createTRPCRouter({
           where: { id: ctx.session?.user?.id },
           select: { chaptersRead: true },
         }));
-
-      console.log(user && user.chaptersRead, ctx.session?.user?.id);
 
       return {
         ...comics,

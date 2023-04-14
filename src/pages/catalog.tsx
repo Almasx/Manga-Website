@@ -109,7 +109,9 @@ const ComicsList = () => {
             key={comics.id}
             title={{ title_en: comics.title, title_ru: comics.title_ru }}
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            thumbnail={comics.thumbnail!}
+            {...(comics.thumbnail
+              ? { thumbnail: comics.thumbnail }
+              : { external_link: comics.external_thumbnail as string })}
             rating={comics.ratings.length}
           />
         ))}

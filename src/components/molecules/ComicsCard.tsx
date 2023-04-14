@@ -2,83 +2,123 @@ import Link from "next/link";
 import Star from "../../../public/icons/Star2.svg";
 import type { Thumbnail } from "@prisma/client";
 import clsx from "clsx";
+import { useState } from "react";
 
-export interface ComicsCardProps {
+export type IThumbnail =
+  | {
+      thumbnail: Thumbnail;
+      external_link?: string;
+    }
+  | {
+      thumbnail?: Thumbnail;
+      external_link: string;
+    };
+
+export type ComicsCardProps = {
   id: string;
   title: {
     title_en: string;
     title_ru: string;
   };
-  thumbnail: Thumbnail;
   rating?: number;
-  variant?: "recomendation" | "catalog";
-}
+  variant?: "recomendation" | "catalog" | "bookmark";
+} & IThumbnail;
 
 const ComicsCard = ({
   id,
   title,
   thumbnail,
+  external_link,
   rating,
   variant = "catalog",
 }: ComicsCardProps) => {
   const { title_en, title_ru } = title;
+  const [showMore, setShowMore] = useState<boolean>(false);
+
+  const header = (
+    <div
+      className={clsx(
+        variant === "catalog" && "relative",
+        variant === "recomendation" && "w-1/2"
+      )}
+    >
+      <h3
+        className={clsx(
+          " font-bold text-light",
+          variant === "catalog" && "text-sm",
+          variant === "recomendation" && "text-base"
+        )}
+      >
+        {title_ru}
+      </h3>
+      <h6 className=" text-xs text-light/60">{title_en}</h6>
+    </div>
+  );
+
   return (
     <Link
       href={`/comics/${id}`}
+      onMouseEnter={() => variant === "bookmark" && setShowMore(true)}
+      onMouseLeave={() => variant === "bookmark" && setShowMore(false)}
       className={clsx(
         "flex cursor-pointer rounded-2xl bg-dark text-left",
         "relative z-10 border border-gray-dark-secondary p-3",
         [
-          variant === "catalog" && "flex-col gap-y-2",
-          variant === "recomendation" && "grow flex-row gap-x-3",
+          variant === "catalog" && "gap-y-2 ",
+          variant === "recomendation" && "grow gap-x-3",
+          variant === "bookmark" &&
+            "gap-y-2 hover:col-span-2  hover:grid hover:grid-cols-2",
         ]
       )}
     >
-      <div
-        className={clsx(
-          "relative grow",
-
-          variant === "recomendation" && "aspect-square w-1/2"
-        )}
-      >
-        <img
-          src={`https://darkfraction.s3.eu-north-1.amazonaws.com/thumbnails/${thumbnail?.id}`}
-          alt="lol"
+      <div className="flex grow flex-col gap-3">
+        <div
           className={clsx(
-            "h-full w-full rounded-2xl text-light",
-            variant === "catalog" && "aspect-[3/4]"
-          )}
-        />
-        {rating !== undefined && (
-          <div
-            className={clsx(
-              "flex flex-row items-center gap-x-1 bg-dark/80 px-[6px] py-1 backdrop-blur-2xl",
-              "absolute bottom-0 right-0 rounded-tl-xl rounded-br-md"
-            )}
-          >
-            <Star />
-            <p className="text-xs text-light/60 ">{rating.toFixed(1)}</p>
-          </div>
-        )}
-      </div>
-
-      <div
-        className={clsx(
-          variant === "catalog" && "relative",
-          variant === "recomendation" && "w-1/2"
-        )}
-      >
-        <h3
-          className={clsx(
-            " font-bold text-light",
-            variant === "catalog" && "text-sm",
-            variant === "recomendation" && "text-base"
+            "relative grow",
+            variant === "recomendation" && "aspect-square w-1/2"
           )}
         >
-          {title_ru}
-        </h3>
-        <h6 className=" text-xs text-light/60">{title_en}</h6>
+          <img
+            src={
+              external_link ??
+              `https://darkfraction.s3.eu-north-1.amazonaws.com/thumbnails/${thumbnail?.id}`
+            }
+            alt="lol"
+            className={clsx(
+              "h-full w-full rounded-2xl bg-gray-dark-secondary text-light",
+              variant === "catalog" && "aspect-[3/4]"
+            )}
+          />
+          {rating !== undefined && (
+            <div
+              className={clsx(
+                "flex flex-row items-center gap-x-1 bg-dark/80 px-[6px] py-1 backdrop-blur-2xl",
+                "absolute bottom-0 right-0 rounded-tl-xl rounded-br-md"
+              )}
+            >
+              <Star />
+              <p className="text-xs text-light/60 ">{rating.toFixed(1)}</p>
+            </div>
+          )}
+        </div>
+
+        {!showMore && header}
+        {showMore && (
+          <Link
+            className="flex grow"
+            href={`${"asPath"}/chapter/${"lastChapterId"}`}
+          >
+            <div
+              className="flex grow items-center justify-center rounded-xl
+                          bg-light py-2 text-sm font-bold text-dark"
+            >
+              Начать читать
+            </div>
+          </Link>
+        )}
       </div>
+
+      {showMore && <div className="grow bg-primary ">{header}</div>}
     </Link>
   );
 };

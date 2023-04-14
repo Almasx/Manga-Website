@@ -18,6 +18,7 @@ import ComicsLayout from "layout/comics";
 import Comment from "../../../components/molecules/Comment";
 import CommentField from "../../../components/molecules/CommentField";
 import type { IModal } from "types/model";
+import type { IThumbnail } from "../../../components/molecules/ComicsCard";
 import Link from "next/link";
 import Modal from "core/ui/primitives/Modal";
 import type { ReactNode } from "react";
@@ -92,7 +93,9 @@ const Comics = ({
       <ComicsCover
         lastChapterId={comics.chapters[0] && comics.chapters[0].id}
         comicsId={comics.id}
-        thumbnailId={comics.thumbnail?.id as string}
+        {...(comics.thumbnail
+          ? { thumbnail: comics.thumbnail }
+          : { external_link: comics.external_thumbnail as string })}
       />
 
       <div className="relative flex flex-col gap-5 md:col-span-6 md:pt-8">
@@ -180,16 +183,16 @@ const Comics = ({
   );
 };
 
-interface IComicsCoverProps {
+type IComicsCoverProps = {
   lastChapterId?: string;
   comicsId: string;
-  thumbnailId: string;
-}
+} & IThumbnail;
 
 const ComicsCover = ({
   lastChapterId,
   comicsId,
-  thumbnailId,
+  external_link,
+  thumbnail,
 }: IComicsCoverProps) => {
   const session = useSession();
   const { asPath } = useRouter();
@@ -200,7 +203,10 @@ const ComicsCover = ({
       <div className="flex flex-col md:gap-5">
         {!isSmallDevice && (
           <img
-            src={`https://darkfraction.s3.eu-north-1.amazonaws.com/thumbnails/${thumbnailId}`}
+            src={
+              external_link ??
+              `https://darkfraction.s3.eu-north-1.amazonaws.com/thumbnails/${thumbnail?.id}`
+            }
             alt="lol"
             className="aspect-[3/4] w-full rounded-2xl text-light"
           />
