@@ -101,7 +101,7 @@ const Home = ({ catalog }: InferGetStaticPropsType<typeof getStaticProps>) => {
             Максимальное удобство
           </h3>
           <p className="mb-3 text-light/80">
-            Платформа "все в одном", созданная для беспрепятственного чтения
+            Платформа “все в одном”, созданная для беспрепятственного чтения
             манги
           </p>
           <div className="text-sm text-[#969696]">
