@@ -50,10 +50,13 @@ const Button = ({
       }}
       disabled={disabled || loading}
       className={clsx(
-        "flex flex-row items-center justify-center rounded-xl",
+        "flex flex-row items-center justify-center rounded-lg sm:rounded-xl",
         "relative overflow-hidden transition-colors", // others
         [
-          content === "text" && ["box-content px-3 py-2", "font-bold"],
+          content === "text" && [
+            "box-content px-3 py-2 text-sm sm:text-base",
+            "font-semibold sm:font-bold ",
+          ],
           content === "icon" && ["box-border "],
         ],
         [
@@ -62,8 +65,9 @@ const Button = ({
             content === "text" && "text-light ", // typography
           ],
           variant === "secondary" && [
-            "border border-gray-dark", // box model
-            "bg-transparent hover:bg-dark-secondary", // background
+            "border border-gray-dark !font-medium", // box model
+            "bg-dark/60 hover:bg-dark-secondary", // background
+            " backdrop-blur-xl",
             content === "text" && "text-light/60", // typography
           ],
           variant === "text" && [
