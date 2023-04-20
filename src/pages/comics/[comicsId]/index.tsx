@@ -350,20 +350,23 @@ const RecommendedList = ({ genres }: { genres: string[] }) => {
       <h3 className="pb-2 text-xl font-bold text-light md:pb-3 md:text-2xl lg:pb-5">
         Похожие
       </h3>
-      <div className="scrollbar-hide flex flex-row gap-4 overflow-x-auto lg:flex-col ">
-        {isLoading
-          ? Array(5).fill(<ComicsCardLoading variant="recomendation" />)
-          : recommendation!.map((comics) => (
-              <ComicsCard
-                variant="recomendation"
-                id={comics.id}
-                key={comics.id}
-                title={{ title_en: comics.title, title_ru: comics.title_ru }}
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                thumbnail={comics.thumbnail!}
-                rating={comics.ratings.length}
-              />
-            ))}
+      <div className="scrollbar-hide w-full overflow-x-auto">
+        <div className=" flex w-[300vw] flex-row gap-4 sm:w-[160vw] md:w-[120vw] lg:w-auto lg:flex-col ">
+          {isLoading
+            ? Array(5).fill(<ComicsCardLoading variant="recomendation" />)
+            : recommendation!.map((comics) => (
+                <ComicsCard
+                  variant="recomendation"
+                  id={comics.id}
+                  key={comics.id}
+                  title={{ title_en: comics.title, title_ru: comics.title_ru }}
+                  {...(comics.thumbnail
+                    ? { thumbnail: comics.thumbnail }
+                    : { external_link: comics.external_thumbnail as string })}
+                  rating={comics.ratings.length}
+                />
+              ))}
+        </div>
       </div>
     </section>
   );
@@ -509,7 +512,11 @@ Comics.getLayout = (
   page: ReactNode,
   { comics }: InferGetServerSidePropsType<typeof getServerSideProps>
 ) => (
-  <ComicsLayout thumbnailId={comics.thumbnail?.id as string}>
+  <ComicsLayout
+    {...(comics.thumbnail
+      ? { thumbnail: comics.thumbnail }
+      : { external_link: comics.external_thumbnail as string })}
+  >
     {page}
   </ComicsLayout>
 );

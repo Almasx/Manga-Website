@@ -44,12 +44,13 @@ const ComicsCard = ({
     >
       <h3
         className={clsx(
-          " font-bold text-light",
+          "font-bold text-light",
           variant === "catalog" && "text-sm",
           variant === "recomendation" && "text-base"
         )}
       >
-        {title_ru}
+        {title_ru.substring(0, 15)}
+        {title_ru.length > 14 && "..."}
       </h3>
       <h6 className=" text-xs text-light/60">{title_en}</h6>
     </div>
@@ -71,11 +72,16 @@ const ComicsCard = ({
         ]
       )}
     >
-      <div className="flex grow flex-col gap-3">
+      <div
+        className={clsx(
+          "flex gap-3",
+          variant === "recomendation" ? "grow" : "flex-col"
+        )}
+      >
         <div
           className={clsx(
-            "relative grow",
-            variant === "recomendation" && "aspect-square w-1/2"
+            "relative ",
+            variant === "recomendation" && "aspect-square w-1/2 grow"
           )}
         >
           <img
@@ -85,8 +91,8 @@ const ComicsCard = ({
             }
             alt="lol"
             className={clsx(
-              "h-full w-full rounded-2xl bg-gray-dark-secondary text-light",
-              variant === "catalog" && "aspect-[3/4]"
+              "w-full rounded-2xl bg-gray-dark-secondary text-light",
+              variant === "catalog" ? "aspect-[3/5]" : "h-full"
             )}
           />
           {rating !== undefined && (

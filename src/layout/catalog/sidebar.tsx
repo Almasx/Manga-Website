@@ -15,25 +15,26 @@ interface IFilterSideBarProps {
 const FilterSideBar = ({ show, setShow }: IFilterSideBarProps) => {
   const { filter, resetFilter, toggleGenre, setStatus, setGenreQuery } =
     useFilterStore((state) => state, shallow);
-  const { isSmallDevice } = useScreen();
+  const { isSmallDevice, isLaptop } = useScreen();
 
   return (
     <aside
       className={clsx(
         "fixed top-16 z-10 flex h-[calc(100vh-64px)] flex-col gap-y-10 bg-dark/80 px-[15px] pt-8 pb-5 lg:mx-0 ",
         "right-0 w-screen backdrop-blur-xl lg:w-96 lg:border-l lg:border-gray-dark-secondary lg:px-5 ",
-        !show && isSmallDevice && "hidden"
+        !show && (isSmallDevice || isLaptop) && "hidden"
       )}
     >
       {/* Genres */}
       <section className="flex flex-col overflow-clip rounded-2xl lg:grow">
         <h3 className="mb-3 flex flex-row text-xl font-bold text-light lg:text-2xl">
           Жанры
-          {isSmallDevice && (
-            <button className="ml-auto" onClick={() => setShow(false)}>
-              <CancelCross />
-            </button>
-          )}
+          {isSmallDevice ||
+            (isLaptop && (
+              <button className="ml-auto" onClick={() => setShow(false)}>
+                <CancelCross />
+              </button>
+            ))}
         </h3>
         <SelectGenres
           selected={filter.genres.selected}

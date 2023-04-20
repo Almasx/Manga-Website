@@ -8,22 +8,22 @@ import { useState } from "react";
 
 export default function CatalogLayout({ children }: { children: ReactNode }) {
   const [showSideBar, setShowSideBar] = useState<boolean>(false);
-  const { isSmallDevice } = useScreen();
+  const { isSmallDevice, isLaptop } = useScreen();
   return (
     <div className="relative min-h-screen overflow-hidden bg-dark text-light">
-      <Navigation.Wrapper>
+      <Navigation.Wrapper className="fixed z-20">
         <Navigation.Links />
         <Navigation.Auth />
       </Navigation.Wrapper>
 
-      <main className="relative mx-auto w-full flex-row">
+      <main className="relative mx-auto mt-16 w-full flex-row">
         {children}
         <FilterSideBar show={showSideBar} setShow={setShowSideBar} />
       </main>
-      {isSmallDevice && (
-        <div className="fixed bottom-4 right-4">
+      {(isSmallDevice || isLaptop) && !showSideBar && (
+        <div className="fixed bottom-4 right-4 z-10">
           <Button
-            className="z-10 h-9 w-9 rounded-2xl text-light"
+            className=" h-9 w-9 rounded-2xl text-light"
             content="icon"
             onClick={() => setShowSideBar(true)}
           >

@@ -1,16 +1,17 @@
 import GridLayout from "core/ui/templates/GridLayout";
+import type { IThumbnail } from "components/molecules/ComicsCard";
 import Navigation from "core/ui/templates/Navigation";
 import type { ReactNode } from "react";
 import useScreen from "lib/hooks/useScreen";
 
-interface IComicsLayoutProps {
+type IComicsLayoutProps = {
   children: ReactNode;
-  thumbnailId: string;
-}
+} & IThumbnail;
 
 export default function ComicsLayout({
   children,
-  thumbnailId,
+  thumbnail,
+  external_link,
 }: IComicsLayoutProps) {
   const { isSmallDevice } = useScreen();
 
@@ -22,7 +23,10 @@ export default function ComicsLayout({
       </Navigation.Wrapper>
       {isSmallDevice && (
         <img
-          src={`https://darkfraction.s3.eu-north-1.amazonaws.com/thumbnails/${thumbnailId}`}
+          src={
+            external_link ??
+            `https://darkfraction.s3.eu-north-1.amazonaws.com/thumbnails/${thumbnail?.id}`
+          }
           alt="lol"
           className="fixed aspect-[3/4] w-screen"
         />
