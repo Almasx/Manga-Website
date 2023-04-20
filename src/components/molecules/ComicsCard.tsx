@@ -39,7 +39,7 @@ const ComicsCard = ({
     <div
       className={clsx(
         variant === "catalog" && "relative",
-        variant === "recomendation" && "w-1/2"
+        variant === "recomendation" && "w-[calc(50%-20px)]"
       )}
     >
       <h3
